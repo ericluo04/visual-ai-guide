@@ -108,7 +108,14 @@ code { font-family: var(--font-mono); font-size: 0.86em; background: var(--surfa
 /* Page grid */
 .page { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); gap: 56px; padding-block: 40px 96px; }
 .rail { position: sticky; top: 90px; align-self: start; max-height: calc(100vh - 110px); overflow-y: auto; }
-.rail ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: s; }
+.rail ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: s -1; }
+.legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.legend .paper { align-content: start; }
+.legend .cite { display: flex; align-items: center; gap: 8px; min-height: 26px; font-weight: 600; }
+.legend .track-sample { font-family: var(--font-display); }
+.legend .track-sample svg { width: 16px; height: 16px; color: var(--accent); }
+.legend .mkt-head { font-size: 0.95rem; }
+.ctag { font: 600 0.72rem var(--font-mono); color: var(--accent); background: var(--accent-soft); padding: 3px 7px; border-radius: 6px; }
 .rail a { display: flex; gap: 10px; align-items: baseline; padding: 6px 10px; border-radius: 6px; color: var(--muted); text-decoration: none; font-size: 0.9rem; line-height: 1.35; }
 .rail a::before { counter-increment: s; content: counter(s, decimal-leading-zero); font: 500 0.72rem var(--font-mono); color: var(--muted); opacity: 0.7; }
 .rail a:hover { background: var(--surface-2); color: var(--fg); }
@@ -246,16 +253,7 @@ details.code summary .ttl { min-width: 0; }
 /* Hero figure */
 .adfig { width: 100%; max-width: 320px; height: auto; display: block; }
 .adfig text { font-family: var(--font-mono); }
-.adfig .reveal { transform-box: fill-box; transform-origin: left center; animation: reveal 6.5s ease-in-out -2.4s infinite; }
-.adfig .scanline { animation: scanline 6.5s ease-in-out -2.4s infinite; }
-.adfig .scanfx { animation: scanfx 6.5s ease-in-out -2.4s infinite; }
-@keyframes reveal { 0% { transform: scaleX(0); } 45%, 100% { transform: scaleX(1); } }
-@keyframes scanline { 0% { transform: translateX(0); opacity: 1; } 45% { transform: translateX(170px); opacity: 1; } 52%, 100% { transform: translateX(170px); opacity: 0; } }
-@keyframes scanfx { 0%, 84% { opacity: 1; } 96%, 100% { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) {
-  .adfig .reveal, .adfig .scanfx { animation: none; transform: none; opacity: 1; }
-  .adfig .scanline { display: none; }
-}
+/* The hero scan is driven by one script clock (see "Hero scan" below), not CSS keyframes. */
 .codewrap { position: relative; border-top: 1px solid var(--line); }
 pre { margin: 0; padding: 14px 16px; overflow-x: auto; font: 400 0.8rem/1.6 var(--font-mono); tab-size: 4; }
 pre code { background: none; padding: 0; font-size: inherit; color: var(--fg); }
@@ -296,7 +294,7 @@ footer .wrap { display: grid; gap: 6px; }
       <a href="#predict">Predict</a>
       <a href="#inference">Inference</a>
       <a href="#generate-images">Images</a>
-      <a href="#video-analyze">Analyze video</a>
+      <a href="#video-analyze">Embed/analyze video</a>
       <a href="#video-generate">Generate video</a>
       <a href="#current">Stay current</a>
       <a href="#more-tools">More tools</a>
@@ -311,18 +309,19 @@ footer .wrap { display: grid; gap: 6px; }
 <div class="wrap page" id="top">
   <aside class="rail" aria-label="On this page">
     <ol id="railList">
+      <li><a href="#how-to-read">How to read this guide</a></li>
       <li><a href="#choose">Choose a method</a></li>
       <li><a href="#represent">Embed images</a></li>
       <li><a href="#label">Label with a VLM</a></li>
       <li><a href="#predict">Predict outcomes</a></li>
       <li><a href="#inference">Inference with predicted variables</a></li>
       <li><a href="#generate-images">Generate images</a></li>
-      <li><a href="#video-analyze">Analyze videos</a></li>
+      <li><a href="#video-analyze">Embed/analyze videos</a></li>
       <li><a href="#video-generate">Generate videos</a></li>
       <li><a href="#current">Stay current</a></li>
       <li><a href="#more-tools">More tools</a></li>
     </ol>
-    <p class="rail-note">Checked November 2026. Open = downloadable weights. Closed = API only.</p>
+    <p class="rail-note">Checked 17 November 2026.</p>
   </aside>
 
   <main>
@@ -337,8 +336,6 @@ footer .wrap { display: grid; gap: 6px; }
     <p class="sub">A practitioner guide to the current tools for turning images and video into data, predicting outcomes from them, and generating new ones. Each section names the best open and closed options, gives a short Python example, points to the benchmark that tracks the field, and cites a marketing paper that uses the method.</p>
     <div class="meta">
       <span class="chip">Checked 17 Nov 2026</span>
-      <span class="chip open"><span class="dot"></span>open: weights you can download</span>
-      <span class="chip closed"><span class="dot"></span>closed: API only</span>
     </div>
   </div>
   <figure style="margin:0">
@@ -445,10 +442,34 @@ footer .wrap { display: grid; gap: 6px; }
     </svg>
   </figure>
 </section>
-<div class="note" style="margin-top:28px">
-  <h4>Why the benchmarks matter more than the picks</h4>
-  <p>The best tool for each task changes every few months, so treat every pick here as a dated starting point. The "Track it" box in each section links the leaderboard that shows the current order.</p>
-</div>
+<section class="s" id="how-to-read">
+  <header>
+    <h2>How to read this guide</h2>
+    <p class="lede">Every section is built from the same few pieces. Here is what each one means.</p>
+  </header>
+  <div class="legend">
+    <div class="paper">
+      <p class="cite"><span class="badge open">open</span> <span class="badge closed">closed</span></p>
+      <p class="what">Open models are ones you can download, run on your own computer or server, fine-tune, and rerun exactly years later. Read the licence, since many limit commercial use. Closed models run on a company's servers: you send images through an API and pay per use. They are often the strongest, but the company can change or retire them.</p>
+    </div>
+    <div class="paper">
+      <p class="cite track-sample"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</p>
+      <p class="what">The best tool for each task changes every few months, so every pick here is a starting point dated 17 November 2026. The Track it box at the end of each section links the leaderboards that rank current models. Check them before you start a project.</p>
+    </div>
+    <div class="paper">
+      <p class="cite mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</p>
+      <p class="what">Published marketing papers that use the method, each with a sentence on how they used it.</p>
+    </div>
+    <div class="paper">
+      <p class="cite"><span class="ctag">&lt;/&gt;</span> Show code</p>
+      <p class="what">Short Python examples, folded away until you open them. They follow the model cards and official docs, and most were not run, so check the linked page before you rely on one.</p>
+    </div>
+    <div class="paper">
+      <p class="cite">Where to start</p>
+      <p class="what">Not sure which tool you need? The <a href="#choose">decision guide</a> asks two or three questions and points to a section. Tools for measuring specific things, such as logos, text, faces, and gaze, are in the <a href="#more-tools">More tools</a> tab.</p>
+    </div>
+  </div>
+</section>
 <section class="s" id="choose">
   <header>
     <h2>Choose a method</h2>
@@ -524,7 +545,7 @@ footer .wrap { display: grid; gap: 6px; }
           { label: "A model trained on my products", next: leaf("#generate-images", [
             p("LoRA on FLUX.2 [klein] 4B", "open", "Apache 2.0, so a brand partner can use the outputs."),
             p("LoRA on Qwen-Image-2.1", "open", "Higher quality, research use only.")]) } ] } },
-      { label: "Analyze videos", hint: "Ads, short-form posts, livestreams", href: "#video-analyze", next: {
+      { label: "Embed/analyze videos", hint: "Ads, short-form posts, livestreams", href: "#video-analyze", next: {
         q: "What do you need from each video?", options: [
           { label: "Answers to coded questions", next: leaf("#video-analyze", [p("Gemini 4", "closed", "Reads video with audio."), p("Qwen3.6-27B", "open", "One 80 GB GPU.")], REG) },
           { label: "One vector per clip", next: leaf("#video-analyze", [
@@ -739,7 +760,7 @@ heat = (P[0] @ probe.coef_).reshape(H, W)   # per-patch contribution for image 0
     <tbody>
       <tr><td><span class="name">Qwen3.8-27B</span><br><small>Alibaba Qwen</small></td><td><span class="badge open">open</span></td><td>The current Qwen release, natively multimodal, Apache 2.0. Thinking mode is on by default, so turn it off for labeling. Qwen3.5-4B and 9B are the small versions.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen3.8-27B">HF</a><a href="https://huggingface.co/Qwen/Qwen3.5-9B">9B</a></span></td></tr>
       <tr><td><span class="name">Gemma 4</span><br><small>Google, E4B to 31B</small></td><td><span class="badge open">open</span></td><td>Apache 2.0. The 31B ranks above Qwen3.8 on Vision Arena, and the E4B runs on a laptop-class GPU.</td><td><span class="links"><a href="https://huggingface.co/google/gemma-4-31B-it">31B</a><a href="https://huggingface.co/google/gemma-4-E4B-it">E4B</a></span></td></tr>
-      <tr><td><span class="name">Molmo 2 8B</span><br><small>Ai2</small></td><td><span class="badge open">open</span></td><td>Open weights and open training data. Choose it when a referee asks what the model was trained on. Weaker overall.</td><td><span class="links"><a href="https://huggingface.co/allenai/Molmo2-8B">HF</a></span></td></tr>
+      <tr><td><span class="name">Molmo 2 8B</span><br><small>Ai2</small></td><td><span class="badge open">open</span></td><td>Open weights and open training data. Choose it when you need to report what the model was trained on. Weaker overall.</td><td><span class="links"><a href="https://huggingface.co/allenai/Molmo2-8B">HF</a></span></td></tr>
       <tr><td><span class="name">Claude</span><br><small>Anthropic</small></td><td><span class="badge closed">closed</span></td><td>Claude Fable 5 ranks first on Vision Arena. Haiku 5.5 is the low-cost tier for labeling at scale.</td><td><span class="links"><a href="https://platform.claude.com/docs/en/about-claude/models/overview">Docs</a></span></td></tr>
       <tr><td><span class="name">Gemini</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td>Gemini 4 and the 3.x Flash models. Flash is the low-cost tier, and the same API also reads video.</td><td><span class="links"><a href="https://aistudio.google.com/docs/models">Docs</a></span></td></tr>
       <tr><td><span class="name">GPT-6</span><br><small>OpenAI</small></td><td><span class="badge closed">closed</span></td><td>Every GPT-6 model accepts images. GPT-6 Luna is the low-cost tier.</td><td><span class="links"><a href="https://developers.openai.com/api/docs/models">Docs</a></span></td></tr>
@@ -749,7 +770,7 @@ heat = (P[0] @ probe.coef_).reshape(H, W)   # per-patch contribution for image 0
   <div class="stack">
     <p class="prose">The top 15 models on Vision Arena are separated by less than their confidence intervals, so treat the frontier as one tier and choose on price, data policy, and whether you need to rerun the model later. For labeling thousands of images, the low-cost tiers and batch APIs matter more than the top rank. For a fast first pass on simple categories, <a href="#represent">SigLIP 2 zero-shot scores</a> are cheaper still.</p>
 
-    <h3>A labeling workflow that survives review</h3>
+    <h3>A labeling workflow</h3>
     <div class="prose">
       <p>The workflow below follows the split-sample framework of <a href="https://doi.org/10.1126/sciadv.abg2652">Egami, Fong, Grimmer, Roberts, and Stewart (2022, Science Advances)</a>. Their paper is about text, and the same logic carries over to images: develop the measure on one part of the data and use it, unchanged, on another.</p>
       <ol>
@@ -1031,6 +1052,16 @@ summary(fit)</code></pre></div>
       <p>Most top open image models allow research use but not commercial use, and MiniMax H3-Image excludes several countries entirely. Anything you train on top of a model carries the same licence, so start from an Apache 2.0 model such as FLUX.2 [klein] 4B if a brand partner will use the images.</p>
     </div>
 
+    <div class="mkt">
+      <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
+      <ul class="mkt-list">
+        <li><p class="cite">Hartmann, Jochen, Yannick Exner, and Samuel Domdey (2025). "The Power of Generative Marketing: Can Generative AI Create Superhuman Visual Marketing Content?" International Journal of Research in Marketing 42(1): 13–31. <a href="https://doi.org/10.1016/j.ijresmar.2024.09.002">doi</a></p>
+          <p>Generates marketing images with text-to-image models and compares them with human-made images in 254,400 evaluations. The generated images match or beat human ones on quality, realism, and aesthetics.</p></li>
+        <li><p class="cite">Daviet, Remi, and Yohei Nishimura (2026). "Leveraging Generative Artificial Intelligence to Create Visual Content in Digital Advertising." Marketing Science 45(5): 893–912. <a href="https://doi.org/10.1287/mksc.2024.1130">doi</a></p>
+          <p>Pairs an image generator with Bayesian neural networks that learn from campaign results which images earn clicks. The generated ads beat a professional designer's on click-through in a live campaign.</p></li>
+      </ul>
+    </div>
+
     <h3>Fine-tune a generator on your own products</h3>
     <div class="prose">
       <p>You can teach an open model what your product or brand style looks like. The standard tool is LoRA, the same small add-on described in <a href="#predict">Predict outcomes</a>: the original model stays untouched, and a small file learns your product from your own photos.</p>
@@ -1078,13 +1109,31 @@ with open("bottle.png", "wb") as f:
 # Editing: client.images.edit(model=..., image=[open("a.png", "rb")], prompt=...)</code></pre></div>
     </details>
 
+    <div class="mkt">
+      <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
+      <ul class="mkt-list">
+        <li><p class="cite">Heitmann, Mark, Tijmen P. J. Jansen, Martin Reisenbichler, and David A. Schweidel (2026). "Picture Perfect: Engaging Customers with Visual Generative AI." Journal of Marketing 90(4): 74–96. <a href="https://doi.org/10.1177/00222429251356993">doi</a></p>
+          <p>Fine-tunes Stable Diffusion on marketing metrics such as attention and interest, and on brand personality traits such as ruggedness and luxury, each learned from a few example images and added to the prompt. The generated ads match or beat conventionally produced ads on those metrics, and raters see the trait-tuned ads as more rugged or luxurious than the brand's real ads.</p></li>
+      </ul>
+    </div>
+
     <h3>Design notes for stimuli</h3>
     <div class="prose">
       <ul>
         <li>An image generator starts every picture from random noise, and a number called the seed fixes that noise. To change one attribute and hold everything else fixed, keep the seed the same and change only the prompt or the strength of your LoRA. Closed APIs do not let you fix the seed.</li>
         <li>Asking a model to edit an image ("make the bottle green") can also change things you did not ask for. Measure how much the rest of the image changed and report it as a manipulation check.</li>
-        <li>Closed models are retired without much notice. Generate the full stimulus set once and archive the files with their prompts, the model name, and the date. If a referee may ask for new stimuli, use an open model and keep a copy of it.</li>
+        <li>Closed models are retired without much notice. Generate the full stimulus set once and archive the files with their prompts, the model name, and the date. If you may need new stimuli later, use an open model and keep a copy of it.</li>
         <li>Gemini images carry a hidden SynthID watermark, and OpenAI states that its images carry C2PA content credentials. Open models add no marking. For field studies shown to EU consumers, Article 50 of the EU AI Act requires that generated images be marked in a machine-readable way.</li>
+      </ul>
+    </div>
+
+    <div class="mkt">
+      <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
+      <ul class="mkt-list">
+        <li><p class="cite">Sisodia, Ankit, Alex Burnap, and Vineet Kumar (2025). "Generative Interpretable Visual Design: Using Disentanglement for Visual Conjoint Analysis." Journal of Marketing Research 62(3): 405–428. <a href="https://doi.org/10.1177/00222437241276736">doi</a></p>
+          <p>Trains a disentangled variational autoencoder, guided by product metadata, to find separate and interpretable visual traits of watch designs. New designs generated along those traits let a conjoint study measure preferences for looks.</p></li>
+        <li><p class="cite">Luo, Lan E., and Olivier Toubia (2026). "Frontiers: Discrimination Against Femininity in Headshots: A Field Experiment with AI-Enabled Controllable Stimuli Generation." Marketing Science, online ahead of print. <a href="https://doi.org/10.1287/mksc.2024.1176">doi</a></p>
+          <p>Uses StyleGAN2 and CLIP text prompts to find the generator settings that control how feminine a face looks, then changes only those to make headshots that differ in femininity and nothing else. A field experiment with Meta ads tests the headshots on a tutoring site.</p></li>
       </ul>
     </div>
 
@@ -1098,27 +1147,12 @@ with open("bottle.png", "wb") as f:
         <li><a href="https://github.com/PKU-YuanGroup/ImgEdit">ImgEdit-Bench</a><span>Fixed prompts; its detail-preservation score measures whether an edit leaves the rest of the image alone.</span></li>
       </ul>
     </div>
-    <div class="mkt">
-      <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
-      <ul class="mkt-list">
-        <li><p class="cite">Hartmann, Jochen, Yannick Exner, and Samuel Domdey (2025). "The Power of Generative Marketing: Can Generative AI Create Superhuman Visual Marketing Content?" International Journal of Research in Marketing 42(1): 13–31. <a href="https://doi.org/10.1016/j.ijresmar.2024.09.002">doi</a></p>
-          <p>Generates marketing images with text-to-image models and compares them with human-made images in 254,400 evaluations. The generated images match or beat human ones on quality, realism, and aesthetics.</p></li>
-        <li><p class="cite">Heitmann, Mark, Tijmen P. J. Jansen, Martin Reisenbichler, and David A. Schweidel (2026). "Picture Perfect: Engaging Customers with Visual Generative AI." Journal of Marketing 90(4): 74–96. <a href="https://doi.org/10.1177/00222429251356993">doi</a></p>
-          <p>Fine-tunes an open-source image generator on marketing metrics such as attention and interest. The generated ads match or beat conventionally produced ads on those metrics.</p></li>
-        <li><p class="cite">Luo, Lan E., and Olivier Toubia (2026). "Frontiers: Discrimination Against Femininity in Headshots: A Field Experiment with AI-Enabled Controllable Stimuli Generation." Marketing Science, online ahead of print. <a href="https://doi.org/10.1287/mksc.2024.1176">doi</a></p>
-          <p>Uses StyleGAN2 and CLIP text prompts to find the generator settings that control how feminine a face looks, then changes only those to make headshots that differ in femininity and nothing else. A field experiment with Meta ads tests the headshots on a tutoring site.</p></li>
-        <li><p class="cite">Sisodia, Ankit, Alex Burnap, and Vineet Kumar (2025). "Generative Interpretable Visual Design: Using Disentanglement for Visual Conjoint Analysis." Journal of Marketing Research 62(3): 405–428. <a href="https://doi.org/10.1177/00222437241276736">doi</a></p>
-          <p>Trains a disentangled variational autoencoder, guided by product metadata, to find separate and interpretable visual traits of watch designs. New designs generated along those traits let a conjoint study measure preferences for looks.</p></li>
-        <li><p class="cite">Daviet, Remi, and Yohei Nishimura (2026). "Leveraging Generative Artificial Intelligence to Create Visual Content in Digital Advertising." Marketing Science 45(5): 893–912. <a href="https://doi.org/10.1287/mksc.2024.1130">doi</a></p>
-          <p>Pairs an image generator with Bayesian neural networks that learn from campaign results which images earn clicks. The generated ads beat a professional designer's on click-through in a live campaign.</p></li>
-      </ul>
-    </div>
   </div>
 </section>
 
 <section class="s" id="video-analyze">
   <header>
-    <h2>Analyze videos</h2>
+    <h2>Embed/analyze videos</h2>
     <p class="lede">Turn videos you already have, such as ads, short-form posts, and livestreams, into data. The same two moves as for images apply: ask a model coded questions, or turn each video into an embedding.</p>
   </header>
   <div class="stack" style="margin-top:0">
@@ -1178,11 +1212,10 @@ print(reply.output_text)</code></pre></div>
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
+        <li><p class="cite">Zhou, Mi, George H. Chen, Pedro Ferreira, and Michael D. Smith (2021). "Consumer Behavior in the Online Classroom: Using Video Analytics and Machine Learning to Understand the Consumption of Video Courseware." Journal of Marketing Research 58(6): 1079–1100. <a href="https://doi.org/10.1177/00222437211042013">doi</a></p>
+          <p>Samples one frame every ten seconds from 771 MasterClass videos, measures instructor faces and emotions, motion, and color in each frame with off-the-shelf vision tools, and averages them into video-level features. A gradient-boosting model then predicts whether each viewer finishes a video and watches the next one.</p></li>
         <li><p class="cite">Cascio Rizzo, Giovanni Luca, Jonah Berger, and Mi Zhou (2026). "Talking with Your Hands: How Hand Gestures Influence Communication." Journal of Marketing Research 63(3): 518–537. <a href="https://doi.org/10.1177/00222437251385922">doi</a></p>
-          <p>Measures hand movement in over 2,100 presentation videos with video-processing tools and uses a large multimodal model to classify gesture types in almost 200,000 segments. Experiments then link illustrative gestures to persuasion.</p></li>
-        <li><p class="cite">Bharadwaj, Neeraj, Michel Ballings, Prasad A. Naik, Miller Moore, and Mustafa Murat Arat (2022). "A New Livestream Retail Analytics Framework to Assess the Sales Impact of Emotional Displays." Journal of Marketing 86(1): 27–47. <a href="https://doi.org/10.1177/00222429211013042">doi</a></p>
-          <p>Detects salespeople's faces and codes six facial expressions in 99,451 livestream sales pitches, then links the expressions to sales.</p></li>
-      </ul>
+          <p>Measures hand movement in over 2,100 presentation videos with video-processing tools and uses a large multimodal model to classify gesture types in almost 200,000 segments. Experiments then link illustrative gestures to persuasion.</p></li>      </ul>
     </div>
   </div>
 </section>
@@ -1272,7 +1305,7 @@ export_to_video(frames, "pour.mp4", fps=24)</code></pre></div>
       <ul>
         <li>Record the exact model ID or checkpoint, the library version, and the date for every model you use. Hugging Face pages show a commit hash; cite it.</li>
         <li>Archive every output the paper depends on: embeddings, labels, generated images and videos. Closed models are retired on short notice.</li>
-        <li>Prefer open weights for any measurement a referee may ask you to rerun or extend.</li>
+        <li>Prefer open weights for any measurement you may need to rerun or extend.</li>
       </ul>
     </div>
 
@@ -1474,6 +1507,28 @@ function bottleCover(x0, y0, w, h) {
   h.innerHTML = s;
 })();
 
+/* Hero scan: one clock sets the reveal width, the scan line, and the fade in the same frame,
+   so the loop restarts without a flash. Reduced motion shows the finished heatmap, still. */
+(function () {
+  var clip = document.querySelector(".adfig .reveal"), line = document.querySelector(".adfig .scanline"), fx = document.querySelector(".adfig .scanfx");
+  if (!clip || !line || !fx) return;
+  var W = 170, P = 6500, t0 = performance.now() - 0.37 * P;
+  function ease(x) { return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
+  function draw(p) {
+    var w = p < 0.45 ? W * ease(p / 0.45) : W;
+    var lo = p < 0.45 ? 1 : p < 0.52 ? 1 - (p - 0.45) / 0.07 : 0;
+    var fo = p < 0.84 ? 1 : p < 0.96 ? 1 - (p - 0.84) / 0.12 : 0;
+    clip.setAttribute("width", w.toFixed(2));
+    line.setAttribute("transform", "translate(" + w.toFixed(2) + " 0)");
+    line.setAttribute("opacity", lo.toFixed(3));
+    fx.setAttribute("opacity", fo.toFixed(3));
+  }
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) { draw(0.6); return; }
+  function tick(now) { draw(((now - t0) % P) / P); requestAnimationFrame(tick); }
+  requestAnimationFrame(tick);
+})();
+
 /* Embedding diagrams: the hero ad photo as a thumbnail, turned into one vector or into a grid of scored squares */
 (function () {
   function thumb() {   // the hero photo, scaled into an 80 x 80 box with rounded corners
@@ -1573,13 +1628,21 @@ function selectText(w) { var r = document.createRange(); r.selectNodeContents(w.
 (function () {
   var links = Array.prototype.slice.call(document.querySelectorAll("#railList > li > a"));
   var secs = links.map(function (a) { return document.querySelector(a.getAttribute("href")); }).filter(Boolean);
-  if (!("IntersectionObserver" in window) || !secs.length) return;
-  var io = new IntersectionObserver(function (es) {
-    es.forEach(function (e) {
-      if (e.isIntersecting) links.forEach(function (a) { a.classList.toggle("active", a.getAttribute("href") === "#" + e.target.id); });
-    });
-  }, { rootMargin: "-30% 0px -60% 0px" });
-  secs.forEach(function (s) { io.observe(s); });
+  // Scroll-position check rather than IntersectionObserver: inside the cross-origin preview frame,
+  // Chromium ignores the observer's rootMargin, which made the wrong section light up.
+  if (!secs.length) return;
+  var ticking = false;
+  function update() {
+    ticking = false;
+    var line = innerHeight * 0.3, cur = null;
+    secs.forEach(function (s) { if (s.offsetParent && s.getBoundingClientRect().top <= line) cur = s; });
+    links.forEach(function (a) { a.classList.toggle("active", !!cur && a.getAttribute("href") === "#" + cur.id); });
+  }
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", onScroll);
+  addEventListener("hashchange", onScroll);
+  update();
 })();
 </script>
 <script>
