@@ -114,6 +114,16 @@ code { font-family: var(--font-mono); font-size: 0.86em; background: var(--surfa
 .rail a:hover { background: var(--surface-2); color: var(--fg); }
 .rail a.active { background: var(--accent-soft); color: var(--fg); }
 .rail a.active::before { color: var(--accent); opacity: 1; }
+.rail li.has-sub { position: relative; }
+.rail li.has-sub > a { padding-right: 32px; }
+.rail-tog { position: absolute; top: 3px; right: 2px; width: 26px; height: 26px; border: 0; border-radius: 6px; background: transparent; color: var(--muted); cursor: pointer; display: grid; place-items: center; }
+.rail-tog:hover { background: var(--surface-2); color: var(--fg); }
+.rail-tog::before { content: ""; width: 6px; height: 6px; border-right: 1.6px solid currentColor; border-bottom: 1.6px solid currentColor; transform: rotate(-45deg); transition: transform 0.15s; }
+.rail-tog[aria-expanded="true"]::before { transform: rotate(45deg); }
+.rail .rail-sub { list-style: none; margin: 2px 0 6px; padding: 0 0 0 30px; display: grid; gap: 1px; }
+.rail .rail-sub[hidden] { display: none; }
+.rail .rail-sub a { font-size: 0.82rem; padding: 4px 8px; }
+.rail .rail-sub a::before { content: none; counter-increment: none; }
 .rail .rail-note { margin-top: 18px; padding: 0 10px; font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
 main { min-width: 0; max-width: var(--col); }
 @media (max-width: 900px) { .page { grid-template-columns: minmax(0, 1fr); gap: 0; padding-top: 24px; } .rail { display: none; } }
@@ -1495,18 +1505,43 @@ document.querySelectorAll(".codewrap").forEach(function (w) {
 });
 function selectText(w) { var r = document.createRange(); r.selectNodeContents(w.querySelector("code")); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
 
+/* Rail subsections: built from each section's h3 headings, collapsed by default */
+(function () {
+  var rail = document.getElementById("railList"); if (!rail) return;
+  function slug(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+  Array.prototype.forEach.call(rail.children, function (li) {
+    var a = li.querySelector("a"), sec = a && document.querySelector(a.getAttribute("href"));
+    if (!sec) return;
+    var hs = Array.prototype.filter.call(sec.querySelectorAll("h3"), function (h) { return !h.closest(".guide"); });
+    if (!hs.length) return;
+    var ul = document.createElement("ul"); ul.className = "rail-sub"; ul.hidden = true;
+    hs.forEach(function (h) {
+      if (!h.id) h.id = sec.id + "-" + slug(h.textContent);
+      var sl = document.createElement("li"), sa = document.createElement("a");
+      sa.href = "#" + h.id; sa.textContent = h.textContent; sl.appendChild(sa); ul.appendChild(sl);
+    });
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "rail-tog"; b.setAttribute("aria-expanded", "false");
+    b.setAttribute("aria-label", "Show subsections of " + a.textContent);
+    b.addEventListener("click", function () { var open = ul.hidden; ul.hidden = !open; b.setAttribute("aria-expanded", String(open)); });
+    li.classList.add("has-sub"); li.appendChild(b); li.appendChild(ul);
+  });
+})();
+
 /* Two views: the core guide and the More tools tab, switched by the hash */
 (function () {
   var g = document.getElementById("view-guide"), m = document.getElementById("view-more");
   if (!g || !m) return;
   if ("scrollRestoration" in history && location.hash === "#more-tools") history.scrollRestoration = "manual";
   function route() {
-    var more = location.hash === "#more-tools";
+    var hid = location.hash.slice(1), target = hid && document.getElementById(hid);
+    var more = hid === "more-tools" || !!(target && m.contains(target));
     var changed = g.hidden !== more;
     g.hidden = more; m.hidden = !more;
     document.querySelectorAll("[data-view]").forEach(function (a) {
       if ((a.getAttribute("data-view") === "more") === more) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
     });
+    if (more && hid !== "more-tools") { if (changed) target.scrollIntoView(); return; }
     if (more) { window.scrollTo(0, 0); setTimeout(function () { window.scrollTo(0, 0); }, 0); return; }
     var id = location.hash.slice(1), el = id && id !== "top" && document.getElementById(id);
     if (changed) { if (el) el.scrollIntoView(); else window.scrollTo(0, 0); }
@@ -1518,7 +1553,7 @@ function selectText(w) { var r = document.createRange(); r.selectNodeContents(w.
 
 /* Rail highlight */
 (function () {
-  var links = Array.prototype.slice.call(document.querySelectorAll("#railList a"));
+  var links = Array.prototype.slice.call(document.querySelectorAll("#railList > li > a"));
   var secs = links.map(function (a) { return document.querySelector(a.getAttribute("href")); }).filter(Boolean);
   if (!("IntersectionObserver" in window) || !secs.length) return;
   var io = new IntersectionObserver(function (es) {
