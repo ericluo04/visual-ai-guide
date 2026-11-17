@@ -331,36 +331,68 @@ footer .wrap { display: grid; gap: 6px; }
     </div>
   </div>
   <figure style="margin:0">
-    <svg class="adfig" viewBox="0 0 300 262" role="img" aria-label="An ad for a bottle of sparkling water. A scan line sweeps across the photo and reveals a heatmap of product presence over the bottle, next to a card showing a predicted click-through rate of plus 18 percent">
+    <svg class="adfig" viewBox="0 0 300 262" role="img" aria-label="A wine ad: a bottle of red wine and a filled glass on a wooden table in warm light. A scan line sweeps across the photo and reveals a heatmap of product presence over the bottle but not the glass, next to a card showing a predicted click-through rate of plus 18 percent">
       <defs>
-        <linearGradient id="adBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--accent-soft)"/><stop offset="1" style="stop-color:var(--surface-2)"/></linearGradient>
-        <linearGradient id="adBottle" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:var(--accent);stop-opacity:.72"/><stop offset=".45" style="stop-color:var(--accent)"/><stop offset="1" style="stop-color:var(--accent);stop-opacity:.58"/></linearGradient>
+        <radialGradient id="wallG" cx="0.28" cy="0.22" r="0.95"><stop offset="0" stop-color="#9a7558"/><stop offset=".42" stop-color="#4c372a"/><stop offset="1" stop-color="#1a120e"/></radialGradient>
+        <linearGradient id="tableG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5634"/><stop offset="1" stop-color="#3e2313"/></linearGradient>
+        <linearGradient id="sheenG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffd9ad" stop-opacity=".28"/><stop offset=".55" stop-color="#ffd9ad" stop-opacity="0"/></linearGradient>
+        <linearGradient id="glassG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0c2118"/><stop offset=".16" stop-color="#2c5d43"/><stop offset=".3" stop-color="#143829"/><stop offset=".74" stop-color="#091a12"/><stop offset=".9" stop-color="#1f4332"/><stop offset="1" stop-color="#0a1a12"/></linearGradient>
+        <linearGradient id="capG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#36080f"/><stop offset=".35" stop-color="#9a2338"/><stop offset=".62" stop-color="#5c0f1f"/><stop offset="1" stop-color="#24060c"/></linearGradient>
+        <linearGradient id="labelG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#cdbfa5"/><stop offset=".3" stop-color="#f4ecdc"/><stop offset=".72" stop-color="#ece1cc"/><stop offset="1" stop-color="#bfb096"/></linearGradient>
+        <linearGradient id="wineG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8c1a2e"/><stop offset="1" stop-color="#3a0710"/></linearGradient>
+        <linearGradient id="specG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".25" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity=".08"/></linearGradient>
+        <radialGradient id="vigG" cx="0.5" cy="0.45" r="0.75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".45"/></radialGradient>
+        <filter id="softBlur" x="-50%" y="-200%" width="200%" height="500%"><feGaussianBlur stdDeviation="2.6"/></filter>
+        <filter id="tightBlur" x="-50%" y="-200%" width="200%" height="500%"><feGaussianBlur stdDeviation="0.9"/></filter>
+        <filter id="woodF" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.008 0.42" numOctaves="3" seed="7"/><feColorMatrix values="0 0 0 0 0.16  0 0 0 0 0.08  0 0 0 0 0.03  1.5 0 0 0 -0.55"/></filter>
+        <filter id="grainF" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"/><feColorMatrix type="saturate" values="0"/></filter>
         <clipPath id="adClip"><rect x="30" y="20" width="170" height="152" rx="10"/></clipPath>
+        <clipPath id="tableClip"><polygon points="30,127 205,117 205,175 30,175"/></clipPath>
         <clipPath id="revealClip"><rect class="reveal" x="30" y="20" width="170" height="152"/></clipPath>
         <g id="adPhoto">
-          <rect x="30" y="20" width="170" height="152" style="fill:url(#adBg)"/>
-          <ellipse cx="115" cy="154" rx="26" ry="4.5" style="fill:var(--fg);opacity:.14"/>
-          <rect x="107" y="34" width="16" height="11" rx="2.5" style="fill:var(--fg);opacity:.82"/>
-          <path d="M109 44 h12 v14 c0 6 12 10 12 22 v62 c0 6 -4 10 -10 10 h-16 c-6 0 -10 -4 -10 -10 v-62 c0 -12 12 -16 12 -22 z" style="fill:url(#adBottle)"/>
-          <rect x="102" y="84" width="3.5" height="52" rx="1.75" style="fill:var(--surface);opacity:.45"/>
-          <rect x="99" y="100" width="32" height="22" rx="2" style="fill:var(--surface);opacity:.92"/>
-          <text x="115" y="114" text-anchor="middle" style="font-family:var(--font-display);font-size:7px;font-weight:700;letter-spacing:.08em;fill:var(--accent)">LUMEN</text>
+          <rect x="30" y="20" width="175" height="155" fill="url(#wallG)"/>
+          <polygon points="30,127 205,117 205,175 30,175" fill="url(#tableG)"/>
+          <rect x="30" y="112" width="175" height="63" filter="url(#woodF)" clip-path="url(#tableClip)"/>
+          <polygon points="30,127 205,117 205,175 30,175" fill="url(#sheenG)"/>
+          <polyline points="30,127 205,117" fill="none" stroke="#c48a5c" stroke-opacity=".45" stroke-width=".8"/>
+          <ellipse cx="137" cy="146" rx="30" ry="4.6" fill="#000" opacity=".55" filter="url(#softBlur)"/>
+          <ellipse cx="183" cy="139.5" rx="15" ry="2.8" fill="#000" opacity=".4" filter="url(#softBlur)"/>
+          <ellipse cx="112" cy="147.6" rx="15.5" ry="2.3" fill="#000" opacity=".65" filter="url(#tightBlur)"/>
+          <path d="M108 30 h8 v32 c0 10 11 12 11 22 v58 q0 6 -15 6 q-15 0 -15 -6 v-58 c0 -10 11 -12 11 -22 z" fill="url(#glassG)"/>
+          <rect x="107.4" y="27.5" width="9.2" height="21" rx="1.6" fill="url(#capG)"/>
+          <rect x="107.4" y="45.5" width="9.2" height="1.2" fill="#e2b56a" opacity=".55"/>
+          <rect x="100.6" y="88" width="2.6" height="50" rx="1.3" fill="url(#specG)"/>
+          <path d="M103 80 q3 -6 7 -9" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.1" stroke-linecap="round"/>
+          <rect x="125" y="88" width="1" height="50" fill="#f0c896" opacity=".28"/>
+          <rect x="99.5" y="100" width="25" height="30" rx="1" fill="url(#labelG)"/>
+          <text x="112" y="110.5" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="5.4" letter-spacing=".9" fill="#3a1a12">LUMEN</text>
+          <line x1="105" y1="113.4" x2="119" y2="113.4" stroke="#9a2338" stroke-width=".45"/>
+          <text x="112" y="119.5" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="3.6" letter-spacing=".5" fill="#5a3a2c">RESERVA</text>
+          <text x="112" y="125.5" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="3.6" fill="#5a3a2c">2021</text>
+          <path d="M171 92 C171 109 176 116 182 116 C188 116 193 109 193 92 Z" fill="#fff" fill-opacity=".07" stroke="#f3dcc0" stroke-opacity=".45" stroke-width=".7"/>
+          <path d="M171.5 101 C172 110 176.5 115.3 182 115.3 C187.5 115.3 192 110 192.5 101 Z" fill="url(#wineG)"/>
+          <ellipse cx="182" cy="101" rx="10.5" ry="1.4" fill="#a52a40"/>
+          <path d="M173.6 95 C173.8 105 176 111 179 113.5" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width=".8" stroke-linecap="round"/>
+          <line x1="182" y1="116" x2="182" y2="137.5" stroke="#f3dcc0" stroke-opacity=".5" stroke-width="1.1"/>
+          <ellipse cx="182" cy="138.3" rx="8" ry="1.7" fill="none" stroke="#f3dcc0" stroke-opacity=".5" stroke-width=".8"/>
+          <rect x="30" y="20" width="175" height="155" fill="url(#vigG)"/>
+          <rect x="30" y="20" width="175" height="155" filter="url(#grainF)" opacity=".07"/>
         </g>
       </defs>
       <rect x="18" y="8" width="194" height="244" rx="16" style="fill:var(--surface);stroke:var(--line)"/>
       <g clip-path="url(#adClip)">
         <use href="#adPhoto"/>
         <g class="scanfx" clip-path="url(#revealClip)">
-          <rect x="30" y="20" width="170" height="152" style="fill:var(--surface);opacity:.62"/>
+          <rect x="30" y="20" width="170" height="152" fill="#0d0806" opacity=".5"/>
           <g id="heroHeat"></g>
         </g>
         <g class="scanline">
-          <rect x="24" y="20" width="12" height="152" style="fill:var(--mk);opacity:.16"/>
+          <rect x="24" y="20" width="12" height="152" style="fill:var(--mk);opacity:.18"/>
           <rect x="29" y="20" width="2" height="152" style="fill:var(--mk)"/>
         </g>
       </g>
-      <text x="30" y="195" style="font-family:var(--font-display);font-size:14px;font-weight:700;fill:var(--fg)">Lumen Sparkling</text>
-      <text x="30" y="211" style="font-family:var(--font-body);font-size:9.5px;fill:var(--muted)">Light, bright, zero sugar.</text>
+      <text x="30" y="195" style="font-family:var(--font-display);font-size:14px;font-weight:700;fill:var(--fg)">Lumen Reserva</text>
+      <text x="30" y="211" style="font-family:var(--font-body);font-size:9.5px;fill:var(--muted)">Aged in oak. Poured with care.</text>
       <rect x="30" y="222" width="64" height="20" rx="10" style="fill:var(--fg)"/>
       <text x="62" y="235.5" text-anchor="middle" style="font-family:var(--font-body);font-size:9px;font-weight:600;fill:var(--surface)">Shop now</text>
       <rect x="150" y="30" width="144" height="46" rx="12" style="fill:var(--surface);stroke:var(--line)"/>
@@ -593,6 +625,7 @@ vectors = [e.values for e in result.embeddings]   # 3 lists of 768 floats</code>
       <p>An embedding has hundreds or thousands of columns, often more than you have images, so ordinary least squares breaks down. Use a high-dimensional regression that shrinks or selects coefficients. Common choices are ridge, lasso, and elastic net, with the amount of shrinkage chosen by cross-validation. Bayesian versions such as spike-and-slab or horseshoe priors do the same job and give full uncertainty. Use the logistic versions for a yes or no outcome.</p>
       <p>Be careful with squeezing the embedding into a handful of principal components (PCA). PCA keeps the directions where images vary most, and those need not be the ones that matter for your outcome. A few linear directions can also lose much of what a nonlinear model encoded.</p>
       <p>Often the image is a control and the question is about something else: the effect of price, a promotion, or a model's face in the ad. Double machine learning (DML) handles this case. It uses flexible models to predict both the outcome and the variable of interest from the embedding, then estimates the effect from what those models cannot explain, with valid standard errors. <a href="https://www.pywhy.org/EconML/spec/estimation/dml.html">EconML</a> and <a href="https://docs.doubleml.org/stable/guide/basics.html">DoubleML</a> implement it in Python.</p>
+      <p>A growing literature treats images as confounders directly. <a href="https://doi.org/10.1073/pnas.2530532123">Imai and Nakamura (2026, PNAS)</a> read a compact summary of each image from inside the generative model that made it, then adjust for that summary with machine learning, so the effect of one image feature is not credited to features that tend to appear with it. Their paper points to further work, such as <a href="https://arxiv.org/abs/2402.01785">DoubleMLDeep (Klaassen et al. 2024)</a>, which runs double machine learning with image and text controls.</p>
     </div>
     <details class="code">
       <summary><span class="ttl">Effect of price, with the image embedding as a control</span> <span class="lang">python · econml</span></summary>
@@ -1372,15 +1405,13 @@ for concept in ["logo", "person", "bottle"]:
 })();
 
 /* Bottle shape shared by the hero heatmap and the embedding diagrams (hero photo coordinates) */
-function inBottle(x, y) {
-  var d = Math.abs(x - 115);
-  if (y >= 34 && y < 44) return d <= 8;
-  if (y >= 44 && y < 58) return d <= 6;
-  if (y >= 58 && y < 80) { var t = (y - 58) / 22; t = t * t * (3 - 2 * t); return d <= 6 + 12 * t; }
-  if (y >= 80 && y <= 152) {
-    if (y > 142) { var dx = Math.max(0, d - 8), dy = y - 142; return dx * dx + dy * dy <= 100; }
-    return d <= 18;
-  }
+function inBottle(x, y) {   // the wine bottle: foil top, neck, sloped shoulders, body, curved base
+  var d = Math.abs(x - 112);
+  if (y >= 27.5 && y < 48) return d <= 4.6;
+  if (y >= 48 && y < 62) return d <= 4;
+  if (y >= 62 && y < 84) { var t = (y - 62) / 22; t = t * t * (3 - 2 * t); return d <= 4 + 11 * t; }
+  if (y >= 84 && y <= 142) return d <= 15;
+  if (y > 142 && y <= 148) { var q = (y - 142) / 6; return d <= 15 * Math.sqrt(Math.max(0, 1 - q * q)); }
   return false;
 }
 /* Share of a cell covered by the bottle, from a 4 x 4 grid of sample points */
@@ -1411,8 +1442,7 @@ function bottleCover(x0, y0, w, h) {
 /* Embedding diagrams: the hero ad photo as a thumbnail, turned into one vector or into a grid of scored squares */
 (function () {
   function thumb() {   // the hero photo, scaled into an 80 x 80 box with rounded corners
-    return '<svg x="0" y="8" width="80" height="80" viewBox="34 16 162 162" style="overflow:hidden">' +
-      '<rect x="34" y="16" width="162" height="162" rx="14" style="fill:url(#adBg)"/>' +
+    return '<svg x="0" y="8" width="80" height="80" viewBox="36 20 152 152" style="overflow:hidden">' +
       '<use href="#adPhoto"/></svg>' +
       '<rect x="0" y="8" width="80" height="80" rx="7" style="fill:none;stroke:var(--line)"/>';
   }
@@ -1431,13 +1461,13 @@ function bottleCover(x0, y0, w, h) {
   var p = document.getElementById("vizPatch");
   if (p) {
     var lines = "", heat = "";
-    var N = 10, step = 80 / N, unit = 162 / N;   // 10 x 10 patches; unit = patch size in hero photo coordinates
+    var N = 10, step = 80 / N, unit = 152 / N;   // 10 x 10 patches; unit = patch size in hero photo coordinates
     for (var k = 1; k < N; k++) {
       lines += '<line x1="' + k * step + '" y1="8" x2="' + k * step + '" y2="88" style="stroke:var(--surface);stroke-opacity:.7;stroke-width:0.8"/>' +
                '<line x1="0" y1="' + (8 + k * step) + '" x2="80" y2="' + (8 + k * step) + '" style="stroke:var(--surface);stroke-opacity:.7;stroke-width:0.8"/>';
     }
     for (var r = 0; r < N; r++) for (var c = 0; c < N; c++) {
-      var v = 0.06 + 0.9 * bottleCover(34 + c * unit, 16 + r * unit, unit, unit);
+      var v = 0.06 + 0.9 * bottleCover(36 + c * unit, 20 + r * unit, unit, unit);
       heat += '<rect x="' + (132 + c * step) + '" y="' + (8 + r * step) + '" width="' + (step - 0.9) + '" height="' + (step - 0.9) + '" rx="1.2" style="fill:var(--mk);opacity:' + v.toFixed(2) + '"/>';
     }
     p.innerHTML = thumb() + lines + arrow() + heat + '<text x="222" y="52">a map</text>';
