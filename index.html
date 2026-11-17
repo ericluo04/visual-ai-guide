@@ -267,9 +267,6 @@ pre code { background: none; padding: 0; font-size: inherit; color: var(--fg); }
 .token.function, .token.class-name, .token.decorator { color: var(--tk-fn); }
 .token.operator, .token.punctuation { color: var(--muted); }
 
-.tabs { display: inline-flex; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); margin-bottom: 28px; }
-.tabs a { padding: 6px 14px; border-radius: 7px; font: 500 0.86rem var(--font-body); color: var(--muted); text-decoration: none; }
-.tabs a[aria-current="page"] { background: var(--surface); color: var(--fg); box-shadow: 0 1px 2px rgb(0 0 0 / 0.12); }
 .pick-row .btn { margin-top: 4px; }
 footer { border-top: 1px solid var(--line); padding-block: 28px 48px; font-size: 0.84rem; color: var(--muted); }
 footer .wrap { display: grid; gap: 6px; }
@@ -320,16 +317,12 @@ footer .wrap { display: grid; gap: 6px; }
       <li><a href="#video-generate">Generate videos</a></li>
       <li><a href="#current">Stay current</a></li>
       <li><a href="#more-tools">More tools</a></li>
+      <li><a href="#companion">Companion resources</a></li>
     </ol>
     <p class="rail-note">Checked 17 November 2026.</p>
   </aside>
 
   <main>
-<nav class="tabs" aria-label="Views">
-  <a href="#top" data-view="guide" aria-current="page">Core guide</a>
-  <a href="#more-tools" data-view="more">More tools</a>
-</nav>
-<div id="view-guide">
 <section class="hero">
   <div>
     <h1>Visual AI for Marketing Research</h1>
@@ -463,7 +456,7 @@ footer .wrap { display: grid; gap: 6px; }
     </div>
     <div class="paper">
       <p class="cite">Where to start</p>
-      <p class="what">Not sure which tool you need? The <a href="#choose">decision guide</a> asks two or three questions and points to a section. Tools for measuring specific things, such as logos, text, faces, and gaze, are in the <a href="#more-tools">More tools</a> tab.</p>
+      <p class="what">Not sure which tool you need? The <a href="#choose">decision guide</a> asks two or three questions and points to a section. Tools for measuring specific things, such as logos, text, faces, and gaze, are in the <a href="#more-tools">More tools</a> section.</p>
     </div>
   </div>
 </section>
@@ -707,7 +700,8 @@ print(est.effect(), est.effect_interval())   # price effect and its 95% interval
         <li><p class="cite">Dew, Ryan (2025). "Adaptive Preference Measurement with Unstructured Data." Management Science 71(5): 3996–4012. <a href="https://doi.org/10.1287/mnsc.2023.03775">doi</a></p>
           <p>Embeds product photos and text, reduces the embeddings with PCA, and uses them as inputs to a nonparametric utility model, so products need no hand-coded attributes. An adaptive survey picks which products to show next by Bayesian optimization, and the fitted utility can be read to recover how consumers value specific attributes.</p></li>
         <li><p class="cite">Compiani, Giovanni, Ilya Morozov, and Stephan Seiler (2026). "Demand Estimation with Text and Image Data." RAND Journal of Economics. <a href="https://doi.org/10.1111/1756-2171.70052">doi</a></p>
-          <p>Extracts embeddings of product photos with pretrained image networks and of product text with language models, then enters them as product attributes in a mixed logit demand model. The embeddings let the data reveal which products substitute for each other.</p></li>      </ul>
+          <p>Extracts embeddings of product photos with pretrained image networks and of product text with language models, then enters them as product attributes in a mixed logit demand model. The embeddings let the data reveal which products substitute for each other.</p></li>
+      </ul>
     </div>
 
     <h3>Heatmaps from patch embeddings</h3>
@@ -885,7 +879,10 @@ print("out-of-fold R2:", 1 - ((y - yhat) ** 2).sum() / ((y - y.mean()) ** 2).sum
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
         <li><p class="cite">Liu, Liu, Daria Dzyabura, and Natalie Mizik (2020). "Visual Listening In: Extracting Brand Image Portrayed on Social Media." Marketing Science 39(4): 669–686. <a href="https://doi.org/10.1287/mksc.2020.1226">doi</a></p>
-          <p>Adapts a pretrained convolutional network to a new task (transfer learning) so it predicts the brand attributes a consumer photo conveys, from a modest set of labeled photos.</p></li>      </ul>
+          <p>Adapts a pretrained convolutional network to a new task (transfer learning) so it predicts the brand attributes a consumer photo conveys, from a modest set of labeled photos.</p></li>
+        <li><p class="cite">Dzyabura, Daria, Siham El Kihal, John R. Hauser, and Marat Ibragimov (2023). "Leveraging the Power of Images in Managing Product Return Rates." Marketing Science 42(6): 1125–1142. <a href="https://doi.org/10.1287/mksc.2023.1451">doi</a></p>
+          <p>Predicts how often each fashion item will be returned from its product images, using features from a pretrained image network as inputs to a machine-learning model. Interpretable image features then show which visual traits go with higher returns.</p></li>
+      </ul>
     </div>
 
     <h3>Fine-tune a model on your own data</h3>
@@ -949,6 +946,8 @@ model.print_trainable_parameters()
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
+        <li><p class="cite">Hartmann, Jochen, Mark Heitmann, Christina Schamp, and Oded Netzer (2021). "The Power of Brand Selfies." Journal of Marketing Research 58(6): 1159–1177. <a href="https://doi.org/10.1177/00222437211037258">doi</a></p>
+          <p>Fine-tunes a pretrained image network (VGG-16) to sort brand posts into packshots, brand selfies, and consumer selfies, and explains the classifier with Grad-CAM. The maps show that the network tells a brand selfie by the hand holding the product and a consumer selfie by the face.</p></li>
         <li><p class="cite">Yang, Jeremy, Juanjuan Zhang, and Yuhan Zhang (2025). "Engagement That Sells: Influencer Video Advertising on TikTok." Marketing Science 44(2): 247–267. <a href="https://doi.org/10.1287/mksc.2021.0107">doi</a></p>
           <p>Trains a 3D convolutional network to predict engagement with TikTok influencer videos and explains it with gradient-based saliency maps that show which pixels, second by second, drive the prediction. Overlapping that map with where the product appears gives a score that predicts sales.</p></li>
         <li><p class="cite">Fong, Hortense, Vineet Kumar, and K. Sudhir (2025). "A Theory-Based Explainable Deep Learning Architecture for Music Emotion." Marketing Science 44(1): 196–219. <a href="https://doi.org/10.1287/mksc.2022.0323">doi</a></p>
@@ -1217,7 +1216,8 @@ print(reply.output_text)</code></pre></div>
         <li><p class="cite">Zhou, Mi, George H. Chen, Pedro Ferreira, and Michael D. Smith (2021). "Consumer Behavior in the Online Classroom: Using Video Analytics and Machine Learning to Understand the Consumption of Video Courseware." Journal of Marketing Research 58(6): 1079–1100. <a href="https://doi.org/10.1177/00222437211042013">doi</a></p>
           <p>Samples one frame every ten seconds from 771 MasterClass videos, measures instructor faces and emotions, motion, and color in each frame with off-the-shelf vision tools, and averages them into video-level features. A gradient-boosting model then predicts whether each viewer finishes a video and watches the next one.</p></li>
         <li><p class="cite">Cascio Rizzo, Giovanni Luca, Jonah Berger, and Mi Zhou (2026). "Talking with Your Hands: How Hand Gestures Influence Communication." Journal of Marketing Research 63(3): 518–537. <a href="https://doi.org/10.1177/00222437251385922">doi</a></p>
-          <p>Measures hand movement in over 2,100 presentation videos with video-processing tools and uses a large multimodal model to classify gesture types in almost 200,000 segments. Experiments then link illustrative gestures to persuasion.</p></li>      </ul>
+          <p>Measures hand movement in over 2,100 presentation videos with video-processing tools and uses a large multimodal model to classify gesture types in almost 200,000 segments. Experiments then link illustrative gestures to persuasion.</p></li>
+      </ul>
     </div>
   </div>
 </section>
@@ -1311,24 +1311,9 @@ export_to_video(frames, "pour.mp4", fps=24)</code></pre></div>
       </ul>
     </div>
 
-    <h3>Companion resources</h3>
-    <div class="two">
-      <div class="paper">
-        <span class="tag">Responsible AI use in research</span>
-        <p class="cite"><a href="https://questionableresearch.ai/">questionableresearch.ai</a>, the companion site to Blanchard, Duani, Garvey, Netzer, and Oh (2025). "New Tools, New Rules: A Practical Guide to Effective and Responsible Generative AI Use for Surveys and Experiments in Research." Journal of Marketing 89(6): 119–139. <a href="https://doi.org/10.1177/00222429251349882">doi</a></p>
-        <p class="what">R and SPSS tutorials for coding open-ended responses with an LLM, a hosted coding app, notes on API costs and data privacy, and sample preregistrations for validating LLM coding. The site covers text, but its validation logic carries over to images.</p>
-      </div>
-      <div class="paper">
-        <span class="tag">Image metrics pipeline</span>
-        <p class="cite"><a href="https://github.com/digital-marketing-tum/image-analyzer">Image Analyzer</a>, from Exner, Yannick, Maximilian Konrad, and Jochen Hartmann (2025). "Image Analyzer: A Framework and Pipeline to Analyze Image Metrics." <a href="https://doi.org/10.2139/ssrn.5776702">SSRN 5776702</a></p>
-        <p class="what">Open-source code that extracts 49 image metrics in eleven groups, from color and composition to human presence, text, and generated descriptions. Runs as a Colab notebook, a no-code app, or Python. AGPL-3.0.</p>
-      </div>
-    </div>
   </div>
 </section>
-</div>
-<div id="view-more" hidden>
-<section class="s" id="more-tools" style="padding-top:8px">
+<section class="s" id="more-tools">
   <header>
     <h2>More tools</h2>
     <p class="lede">Specialized tools for measuring specific things in an image: where an object is and how much of the frame it covers, what text the ad contains, whether a face looks at the camera, and where viewers are likely to look. They are useful for building interpretable features and controls, but most projects need the core guide first.</p>
@@ -1442,17 +1427,54 @@ for concept in ["logo", "person", "bottle"]:
     <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
     <ul class="mkt-list">
       <li><p class="cite">Ye, Jianping, Michel Wedel, and Rik Pieters (2026). "AdGazer: Improving Contextual Advertising with Theory-Informed Machine Learning." Journal of Marketing 90(4): 122–144. <a href="https://doi.org/10.1177/00222429251396114">doi</a></p>
-        <p>Trains a model on eye-tracking data to predict how much attention a display ad and its brand get on the page where the ad appears. Topic labels of the ad and the page, coded by a multimodal LLM, are among its inputs.</p></li>
+        <p>Trains a model on eye-tracking data to predict how much attention a display ad and its brand get on the page where the ad appears. A multimodal LLM extracts topics that measure how well the ad matches the page, and these enter the model as inputs.</p></li>
     </ul>
   </div>
 
   <h3>Aesthetics and low-level features</h3>
   <div class="prose">
-    <p>Aesthetic scorers predict how photography-contest raters would rate an image, so a high score does not mean an ad persuades. <a href="https://huggingface.co/q-future/one-align">OneAlign (Q-Align)</a> is the strongest documented scorer (MIT licence, Spearman 0.82 on the AVA benchmark). <a href="https://github.com/chaofengc/IQA-PyTorch">pyiqa</a> puts dozens of quality metrics behind one API under a non-commercial licence. For transparent pixel statistics, <a href="https://github.com/Gabrock94/pyaesthetics">pyaesthetics</a> computes brightness, Hasler and Süsstrunk colorfulness, and visual complexity, and <a href="https://github.com/kargaranamir/visual-clutter">visual-clutter</a> computes Feature Congestion clutter. Cite the original measures, such as <a href="https://doi.org/10.1509/jmkg.74.5.048">Pieters, Wedel, and Batra (2010, Journal of Marketing)</a> for visual complexity in ads. Resize and re-encode every image the same way before comparing file-size measures.</p>
-    <p>To extract many of these at once, <a href="https://github.com/digital-marketing-tum/image-analyzer">Image Analyzer</a> (Exner, Konrad, and Hartmann 2025) computes 49 image metrics through a notebook, an app, or Python.</p>
+    <p>Aesthetic scorers predict how photography-contest raters would rate an image, so a high score does not mean an ad persuades. Pixel statistics, such as brightness or clutter, are transparent formulas you can state in a methods section.</p>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Tool</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
+    <tbody>
+      <tr><td><span class="name">Q-ReAlign</span><br><small>Q-Future, 0.8B to 9B</small></td><td><span class="badge open">open</span></td><td class="rel">Jun 2026</td><td>Scores each image from 1 to 5 for aesthetics or for technical quality. The 9B reaches Spearman 0.83 on the AVA benchmark. Apache 2.0 weights.</td><td><span class="links"><a href="https://huggingface.co/q-future/Q-ReAlign-Pro-9B">HF</a><a href="https://github.com/Q-Future/Q-ReAlign">GitHub</a></span></td></tr>
+      <tr><td><span class="name">OneAlign (Q-Align)</span><br><small>Q-Future</small></td><td><span class="badge open">open</span></td><td class="rel">Dec 2023</td><td>The earlier scorer from the same group, Spearman 0.82 on AVA and widely cited. The weights are MIT, but the training code is non-commercial.</td><td><span class="links"><a href="https://huggingface.co/q-future/one-align">HF</a><a href="https://arxiv.org/abs/2312.17090">Paper</a></span></td></tr>
+      <tr><td><span class="name">pyiqa</span></td><td><span class="badge open">open</span></td><td class="rel">Jul 2026</td><td>More than 100 quality and aesthetic metrics behind one Python API, including Q-ReAlign and NIMA. Non-commercial licence.</td><td><span class="links"><a href="https://github.com/chaofengc/IQA-PyTorch">GitHub</a></span></td></tr>
+      <tr><td><span class="name">pyaesthetics</span></td><td><span class="badge open">open</span></td><td class="rel">Mar 2026</td><td>Pixel statistics: brightness, contrast, Hasler and Süsstrunk colorfulness, visual complexity, symmetry, and the share of the image covered by text. GPL-3.0.</td><td><span class="links"><a href="https://github.com/Gabrock94/pyaesthetics">GitHub</a></span></td></tr>
+      <tr><td><span class="name">visual-clutter</span></td><td><span class="badge open">open</span></td><td class="rel">Aug 2023</td><td>Feature Congestion clutter as a score and a map, plus Subband Entropy. MIT. Runs on Linux and macOS only.</td><td><span class="links"><a href="https://github.com/kargaranamir/visual-clutter">GitHub</a></span></td></tr>
+      <tr><td><span class="name">Image Analyzer</span><br><small>Exner, Konrad, Hartmann</small></td><td><span class="badge open">open</span></td><td class="rel">Nov 2025</td><td>Many of these measures at once (aesthetic scores, color, composition, blur, text, faces, objects, captions) through a notebook, an app, or Python. AGPL-3.0.</td><td><span class="links"><a href="https://github.com/digital-marketing-tum/image-analyzer">GitHub</a></span></td></tr>
+      <tr><td><span class="name">Everypixel Aesthetics API</span><br><small>Everypixel</small></td><td><span class="badge closed">closed</span></td><td class="rel">Service</td><td>A paid API that returns a 0 to 1 quality score, with separate endpoints for stock photos and user posts.</td><td><span class="links"><a href="https://labs.everypixel.com/api/docs">Docs</a></span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="prose" style="margin-top:14px">Cite the original measures, such as <a href="https://doi.org/10.1509/jmkg.74.5.048">Pieters, Wedel, and Batra (2010, Journal of Marketing)</a> for visual complexity in ads. Resize and re-encode every image the same way before comparing file-size measures.</p>
+  <div class="mkt" style="margin-top:14px">
+    <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
+    <ul class="mkt-list">
+      <li><p class="cite">Zhang, Shunyuan, Dokyun Lee, Param Vir Singh, and Kannan Srinivasan (2022). "What Makes a Good Image? Airbnb Demand Analytics Leveraging Interpretable Image Features." Management Science 68(8): 5644–5666. <a href="https://doi.org/10.1287/mnsc.2021.4175">doi</a></p>
+        <p>Computes 12 interpretable photo attributes covering composition, color, and the figure-ground relationship, and relates them to demand for 7,423 Airbnb listings. Listings with verified photos had 8.98% higher occupancy.</p></li>
+      <li><p class="cite">Zhang, Mengxia, and Lan Luo (2023). "Can Consumer-Posted Photos Serve as a Leading Indicator of Restaurant Survival? Evidence from Yelp." Management Science 69(1): 25–50. <a href="https://doi.org/10.1287/mnsc.2022.4359">doi</a></p>
+        <p>Computes hand-designed photo attributes, such as brightness and composition, and labels photo content with a pretrained model, for 755,758 Yelp photos of 17,719 restaurants. In a model of restaurant survival, what the photos show (such as the share of food photos) predicts survival better than how they were taken.</p></li>
+    </ul>
   </div>
 </section>
-</div>
+<section class="s" id="companion">
+  <header>
+    <h2>Companion resources</h2>
+  </header>
+  <div class="stack">
+    <div class="paper">
+      <span class="tag">Responsible AI use in research</span>
+      <p class="cite"><a href="https://questionableresearch.ai/">questionableresearch.ai</a>, the companion site to Blanchard, Duani, Garvey, Netzer, and Oh (2025). "New Tools, New Rules: A Practical Guide to Effective and Responsible Generative AI Use for Surveys and Experiments in Research." Journal of Marketing 89(6): 119–139. <a href="https://doi.org/10.1177/00222429251349882">doi</a></p>
+      <p class="what">R and SPSS tutorials for coding open-ended responses with an LLM, a hosted coding app, notes on API costs and data privacy, and sample preregistrations for validating LLM coding. The site covers text, but its validation logic carries over to images.</p>
+    </div>
+    <div class="paper">
+      <span class="tag">Image metrics pipeline</span>
+      <p class="cite"><a href="https://github.com/digital-marketing-tum/image-analyzer">Image Analyzer</a>, from Exner, Yannick, Maximilian Konrad, and Jochen Hartmann (2025). "Image Analyzer: A Framework and Pipeline to Analyze Image Metrics." <a href="https://doi.org/10.2139/ssrn.5776702">SSRN 5776702</a></p>
+      <p class="what">Open-source code that extracts 49 image metrics in eleven groups, from color and composition to human presence, text, and generated descriptions. Runs as a Colab notebook, a no-code app, or Python. AGPL-3.0.</p>
+    </div>
+  </div>
+</section>
   </main>
 </div>
 
@@ -1608,29 +1630,6 @@ function selectText(w) { var r = document.createRange(); r.selectNodeContents(w.
     b.addEventListener("click", function () { var open = ul.hidden; ul.hidden = !open; b.setAttribute("aria-expanded", String(open)); });
     li.classList.add("has-sub"); li.appendChild(b); li.appendChild(ul);
   });
-})();
-
-/* Two views: the core guide and the More tools tab, switched by the hash */
-(function () {
-  var g = document.getElementById("view-guide"), m = document.getElementById("view-more");
-  if (!g || !m) return;
-  if ("scrollRestoration" in history && location.hash === "#more-tools") history.scrollRestoration = "manual";
-  function route() {
-    var hid = location.hash.slice(1), target = hid && document.getElementById(hid);
-    var more = hid === "more-tools" || !!(target && m.contains(target));
-    var changed = g.hidden !== more;
-    g.hidden = more; m.hidden = !more;
-    document.querySelectorAll("[data-view]").forEach(function (a) {
-      if ((a.getAttribute("data-view") === "more") === more) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
-    });
-    if (more && hid !== "more-tools") { if (changed) target.scrollIntoView(); return; }
-    if (more) { window.scrollTo(0, 0); setTimeout(function () { window.scrollTo(0, 0); }, 0); return; }
-    var id = location.hash.slice(1), el = id && id !== "top" && document.getElementById(id);
-    if (changed) { if (el) el.scrollIntoView(); else window.scrollTo(0, 0); }
-  }
-  window.addEventListener("hashchange", route);
-  window.addEventListener("load", function () { if (location.hash === "#more-tools") window.scrollTo(0, 0); });
-  route();
 })();
 
 /* Rail highlight */
