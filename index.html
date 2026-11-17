@@ -222,8 +222,8 @@ details.code summary .ttl { min-width: 0; }
 .mkt { border-radius: 14px; background: var(--mk-soft); padding: 18px 20px; display: grid; gap: 12px; }
 .mkt-head { display: flex; align-items: center; gap: 10px; font: 650 1.05rem var(--font-display); color: var(--mk); }
 .mkt-head svg { width: 20px; height: 20px; flex: none; }
-.mkt-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-.mkt-list li { display: grid; gap: 4px; padding-top: 12px; border-top: 1px solid color-mix(in srgb, var(--mk) 25%, transparent); font-size: 0.92rem; }
+.mkt-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.mkt-list li { display: grid; gap: 4px; padding-top: 10px; border-top: 1px solid color-mix(in srgb, var(--mk) 25%, transparent); font-size: 0.92rem; }
 .mkt-list li:first-child { border-top: 0; padding-top: 0; }
 .mkt-list .cite { font-weight: 600; }
 .mkt-list a { color: var(--mk); }
@@ -667,10 +667,8 @@ print(est.effect(), est.effect_interval())   # price effect and its 95% interval
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
-        <li><p class="cite">Compiani, Giovanni, Ilya Morozov, and Stephan Seiler (2026). "Demand Estimation with Text and Image Data." RAND Journal of Economics. <a href="https://doi.org/10.1111/1756-2171.70052">doi</a></p>
-          <p>Embeddings of product photos and text enter a demand model as product attributes, which lets the model learn which products substitute for each other. In a book-choice experiment, the embedding-based model predicted second choices better than a standard logit.</p></li>
-        <li><p class="cite">Cao, Jingcun, Xiaolin Li, and Lingling Zhang (2025). "Is Relevancy Everything? A Deep-Learning Approach to Understand the Effect of Image-Text Congruence." Management Science 71(12): 10579–10602. <a href="https://doi.org/10.1287/mnsc.2022.01896">doi</a></p>
-          <p>Image and text representations score how well each image on a reading platform matches its text description. Preference is U-shaped in that score, and experiments test why.</p></li>
+        <li><p class="cite">Compiani, Giovanni, Ilya Morozov, and Stephan Seiler (2026). "Demand Estimation with Text and Image Data." RAND Journal of Economics. <a href="https://doi.org/10.1111/1756-2171.70052">doi</a></p></li>
+        <li><p class="cite">Cao, Jingcun, Xiaolin Li, and Lingling Zhang (2025). "Is Relevancy Everything? A Deep-Learning Approach to Understand the Effect of Image-Text Congruence." Management Science 71(12): 10579–10602. <a href="https://doi.org/10.1287/mnsc.2022.01896">doi</a></p></li>
       </ul>
     </div>
 
@@ -711,8 +709,7 @@ heat = (P[0] @ probe.coef_).reshape(H, W)   # per-patch contribution for image 0
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
-        <li><p class="cite">Feng, Xiaohang (Flora), Charis X. Li, and Shunyuan Zhang (2025). "Visual Uniqueness in Peer-to-Peer Marketplaces: Machine Learning Model Development, Validation, and Application." Journal of Consumer Research 52(4): 800–825. <a href="https://doi.org/10.1093/jcr/ucaf021">doi</a></p>
-          <p>A model trained without any labels on 481,747 Airbnb photos scores how unique each photo looks, and a heatmap shows which regions make it unique: bookshelves and a bicycle on the wall make a bedroom stand out, while standard appliances make a kitchen look common. The maps lined up with where human participants clicked on the photos.</p></li>
+        <li><p class="cite">Feng, Xiaohang (Flora), Charis X. Li, and Shunyuan Zhang (2025). "Visual Uniqueness in Peer-to-Peer Marketplaces: Machine Learning Model Development, Validation, and Application." Journal of Consumer Research 52(4): 800–825. <a href="https://doi.org/10.1093/jcr/ucaf021">doi</a></p></li>
       </ul>
     </div>
   </div>
@@ -788,10 +785,8 @@ def label_image(path):
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
-        <li><p class="cite">Liu, Liu, Daria Dzyabura, and Natalie Mizik (2020). "Visual Listening In: Extracting Brand Image Portrayed on Social Media." Marketing Science 39(4): 669–686. <a href="https://doi.org/10.1287/mksc.2020.1226">doi</a></p>
-          <p>A deep learning model scores the brand attributes that consumer photos on social media convey, for 56 apparel and beverage brands. Aggregated by brand, the scores track survey measures of brand perception.</p></li>
-        <li><p class="cite">Ye, Jianping, Michel Wedel, and Rik Pieters (2026). "AdGazer: Improving Contextual Advertising with Theory-Informed Machine Learning." Journal of Marketing 90(4): 122–144. <a href="https://doi.org/10.1177/00222429251396114">doi</a></p>
-          <p>A multimodal LLM labels the topics of 3,531 display ads and the pages they appear on, to measure how well each ad fits its context. Those labels help predict how long people look at the ad and the brand.</p></li>
+        <li><p class="cite">Liu, Liu, Daria Dzyabura, and Natalie Mizik (2020). "Visual Listening In: Extracting Brand Image Portrayed on Social Media." Marketing Science 39(4): 669–686. <a href="https://doi.org/10.1287/mksc.2020.1226">doi</a></p></li>
+        <li><p class="cite">Ye, Jianping, Michel Wedel, and Rik Pieters (2026). "AdGazer: Improving Contextual Advertising with Theory-Informed Machine Learning." Journal of Marketing 90(4): 122–144. <a href="https://doi.org/10.1177/00222429251396114">doi</a></p></li>
       </ul>
     </div>
   </div>
@@ -848,10 +843,8 @@ print("out-of-fold R2:", 1 - ((y - yhat) ** 2).sum() / ((y - y.mean()) ** 2).sum
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
-        <li><p class="cite">Liu, Liu, Daria Dzyabura, and Natalie Mizik (2020). "Visual Listening In: Extracting Brand Image Portrayed on Social Media." Marketing Science 39(4): 669–686. <a href="https://doi.org/10.1287/mksc.2020.1226">doi</a></p>
-          <p>A pretrained image network, adapted with transfer learning, predicts which brand attributes a consumer photo conveys. The predictions, aggregated by brand, track how consumers perceive 56 brands in surveys.</p></li>
-        <li><p class="cite">Zhang, Shunyuan, Dokyun Lee, Param Vir Singh, and Kannan Srinivasan (2022). "What Makes a Good Image? Airbnb Demand Analytics Leveraging Interpretable Image Features." Management Science 68(8): 5644–5666. <a href="https://doi.org/10.1287/mnsc.2021.4175">doi</a></p>
-          <p>Deep learning scores 12 interpretable attributes of listing photos, which then explain differences in demand across properties.</p></li>
+        <li><p class="cite">Liu, Liu, Daria Dzyabura, and Natalie Mizik (2020). "Visual Listening In: Extracting Brand Image Portrayed on Social Media." Marketing Science 39(4): 669–686. <a href="https://doi.org/10.1287/mksc.2020.1226">doi</a></p></li>
+        <li><p class="cite">Zhang, Shunyuan, Dokyun Lee, Param Vir Singh, and Kannan Srinivasan (2022). "What Makes a Good Image? Airbnb Demand Analytics Leveraging Interpretable Image Features." Management Science 68(8): 5644–5666. <a href="https://doi.org/10.1287/mnsc.2021.4175">doi</a></p></li>
       </ul>
     </div>
 
@@ -917,8 +910,7 @@ model.print_trainable_parameters()
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
-        <li><p class="cite">Yang, Jeremy, Juanjuan Zhang, and Yuhan Zhang (2025). "Engagement That Sells: Influencer Video Advertising on TikTok." Marketing Science 44(2): 247–267. <a href="https://doi.org/10.1287/mksc.2021.0107">doi</a></p>
-          <p>A model trained to predict engagement with TikTok influencer videos produces a heatmap of which pixels, second by second, drive that prediction. A second map tracks where the product is. How much the two overlap measures whether engagement lands on the product, and that score predicts sales.</p></li>
+        <li><p class="cite">Yang, Jeremy, Juanjuan Zhang, and Yuhan Zhang (2025). "Engagement That Sells: Influencer Video Advertising on TikTok." Marketing Science 44(2): 247–267. <a href="https://doi.org/10.1287/mksc.2021.0107">doi</a></p></li>
       </ul>
     </div>
   </div>
@@ -987,10 +979,8 @@ summary(fit)</code></pre></div>
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
-        <li><p class="cite">Allon, Gad, Daniel Chen, Zhenling Jiang, and Dennis Zhang (2023). "Machine Learning and Prediction Errors in Causal Inference." Working paper. <a href="https://doi.org/10.2139/ssrn.4480696">SSRN 4480696</a></p>
-          <p>When a machine-learned variable feeds a second regression, the second-stage estimate can be far off even when the first-stage model looks accurate. The paper shows how to correct it when unbiased training data exist.</p></li>
-        <li><p class="cite">Wei, Yanhao, and Nikhil Malik (2026). "Estimation Bias from Machine-Learned Features in Econometric Models." Accepted at Management Science. <a href="https://doi.org/10.2139/ssrn.4113608">SSRN 4113608</a></p>
-          <p>Their running example is whether a pet appears in rental listing photos. The detector's mistakes pick up other parts of the photo that also move demand, and the paper corrects that bias.</p></li>
+        <li><p class="cite">Allon, Gad, Daniel Chen, Zhenling Jiang, and Dennis Zhang (2023). "Machine Learning and Prediction Errors in Causal Inference." Working paper. <a href="https://doi.org/10.2139/ssrn.4480696">SSRN 4480696</a></p></li>
+        <li><p class="cite">Wei, Yanhao, and Nikhil Malik (2026). "Estimation Bias from Machine-Learned Features in Econometric Models." Accepted at Management Science. <a href="https://doi.org/10.2139/ssrn.4113608">SSRN 4113608</a></p></li>
       </ul>
     </div>
   </div>
@@ -1090,16 +1080,11 @@ with open("bottle.png", "wb") as f:
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
-        <li><p class="cite">Hartmann, Jochen, Yannick Exner, and Samuel Domdey (2025). "The Power of Generative Marketing: Can Generative AI Create Superhuman Visual Marketing Content?" International Journal of Research in Marketing 42(1): 13–31. <a href="https://doi.org/10.1016/j.ijresmar.2024.09.002">doi</a></p>
-          <p>Across 254,400 human evaluations, AI-generated marketing images matched or beat images made by people on quality, realism, and aesthetics.</p></li>
-        <li><p class="cite">Heitmann, Mark, Tijmen P. J. Jansen, Martin Reisenbichler, and David A. Schweidel (2026). "Picture Perfect: Engaging Customers with Visual Generative AI." Journal of Marketing 90(4): 74–96. <a href="https://doi.org/10.1177/00222429251356993">doi</a></p>
-          <p>The authors fine-tune an open image generator on marketing metrics such as attention and interest. The generated ads match or beat conventionally produced ads on those metrics.</p></li>
-        <li><p class="cite">Luo, Lan E., and Olivier Toubia (2026). "Frontiers: Discrimination Against Femininity in Headshots: A Field Experiment with AI-Enabled Controllable Stimuli Generation." Marketing Science, online ahead of print. <a href="https://doi.org/10.1287/mksc.2024.1176">doi</a></p>
-          <p>An image generator changes only how feminine a tutor's headshot looks while holding pose, background, hair, and clothing fixed. In a field experiment with Meta ads for a tutoring site, more feminine headshots lowered visitors' later actions in the sign-up funnel by 2.3% to 4%.</p></li>
-        <li><p class="cite">Sisodia, Ankit, Alex Burnap, and Vineet Kumar (2025). "Generative Interpretable Visual Design: Using Disentanglement for Visual Conjoint Analysis." Journal of Marketing Research 62(3): 405–428. <a href="https://doi.org/10.1177/00222437241276736">doi</a></p>
-          <p>A generative model learns separate, interpretable visual traits of watch designs and creates new designs along them, so a conjoint study can measure preferences for looks.</p></li>
-        <li><p class="cite">Daviet, Remi, and Yohei Nishimura (2026). "Leveraging Generative Artificial Intelligence to Create Visual Content in Digital Advertising." Marketing Science 45(5): 893–912. <a href="https://doi.org/10.1287/mksc.2024.1130">doi</a></p>
-          <p>Generated ad images, refined as campaign results came in, earned higher and steadier click-through than a professional designer's in a live campaign.</p></li>
+        <li><p class="cite">Hartmann, Jochen, Yannick Exner, and Samuel Domdey (2025). "The Power of Generative Marketing: Can Generative AI Create Superhuman Visual Marketing Content?" International Journal of Research in Marketing 42(1): 13–31. <a href="https://doi.org/10.1016/j.ijresmar.2024.09.002">doi</a></p></li>
+        <li><p class="cite">Heitmann, Mark, Tijmen P. J. Jansen, Martin Reisenbichler, and David A. Schweidel (2026). "Picture Perfect: Engaging Customers with Visual Generative AI." Journal of Marketing 90(4): 74–96. <a href="https://doi.org/10.1177/00222429251356993">doi</a></p></li>
+        <li><p class="cite">Luo, Lan E., and Olivier Toubia (2026). "Frontiers: Discrimination Against Femininity in Headshots: A Field Experiment with AI-Enabled Controllable Stimuli Generation." Marketing Science, online ahead of print. <a href="https://doi.org/10.1287/mksc.2024.1176">doi</a></p></li>
+        <li><p class="cite">Sisodia, Ankit, Alex Burnap, and Vineet Kumar (2025). "Generative Interpretable Visual Design: Using Disentanglement for Visual Conjoint Analysis." Journal of Marketing Research 62(3): 405–428. <a href="https://doi.org/10.1177/00222437241276736">doi</a></p></li>
+        <li><p class="cite">Daviet, Remi, and Yohei Nishimura (2026). "Leveraging Generative Artificial Intelligence to Create Visual Content in Digital Advertising." Marketing Science 45(5): 893–912. <a href="https://doi.org/10.1287/mksc.2024.1130">doi</a></p></li>
       </ul>
     </div>
   </div>
@@ -1167,10 +1152,8 @@ print(reply.output_text)</code></pre></div>
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
-        <li><p class="cite">Cascio Rizzo, Giovanni Luca, Jonah Berger, and Mi Zhou (2026). "Talking with Your Hands: How Hand Gestures Influence Communication." Journal of Marketing Research 63(3): 518–537. <a href="https://doi.org/10.1177/00222437251385922">doi</a></p>
-          <p>Video processing measures hand movement in over 2,100 presentation videos, and a large multimodal model labels the type of gesture in almost 200,000 video segments.</p></li>
-        <li><p class="cite">Bharadwaj, Neeraj, Michel Ballings, Prasad A. Naik, Miller Moore, and Mustafa Murat Arat (2022). "A New Livestream Retail Analytics Framework to Assess the Sales Impact of Emotional Displays." Journal of Marketing 86(1): 27–47. <a href="https://doi.org/10.1177/00222429211013042">doi</a></p>
-          <p>Face detection and expression coding across 99,451 livestream sales pitches, linked to sales.</p></li>
+        <li><p class="cite">Cascio Rizzo, Giovanni Luca, Jonah Berger, and Mi Zhou (2026). "Talking with Your Hands: How Hand Gestures Influence Communication." Journal of Marketing Research 63(3): 518–537. <a href="https://doi.org/10.1177/00222437251385922">doi</a></p></li>
+        <li><p class="cite">Bharadwaj, Neeraj, Michel Ballings, Prasad A. Naik, Miller Moore, and Mustafa Murat Arat (2022). "A New Livestream Retail Analytics Framework to Assess the Sales Impact of Emotional Displays." Journal of Marketing 86(1): 27–47. <a href="https://doi.org/10.1177/00222429211013042">doi</a></p></li>
       </ul>
     </div>
   </div>
@@ -1232,8 +1215,7 @@ export_to_video(frames, "pour.mp4", fps=24)</code></pre></div>
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
-        <li><p class="cite">Kapoor, Anuj, and Madhav Kumar (2025). "Frontiers: Generative AI and Personalized Video Advertisements." Marketing Science 44(4): 733–747. <a href="https://doi.org/10.1287/mksc.2023.0494">doi</a></p>
-          <p>A field experiment with over 21,000 consumers compares personalized video ads featuring an AI avatar with personalized image ads and generic video ads.</p></li>
+        <li><p class="cite">Kapoor, Anuj, and Madhav Kumar (2025). "Frontiers: Generative AI and Personalized Video Advertisements." Marketing Science 44(4): 733–747. <a href="https://doi.org/10.1287/mksc.2023.0494">doi</a></p></li>
       </ul>
     </div>
   </div>
