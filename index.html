@@ -1336,7 +1336,7 @@ export_to_video(frames, "pour.mp4", fps=24)</code></pre></div>
 
   <div class="note">
     <h4>A VLM or a specialist?</h4>
-    <p>A VLM asked for JSON (<code>{"has_person": true, "n_people": 2, "price": "4.99"}</code>) does well on categorical codes, small counts, and text in ads. It still trails specialist tools on anything measured in pixels. On the ODinW-13 detection benchmark, Qwen3-VL scores 48.6 against 61.0 for SAM 3. Use a VLM for codes and a specialist for boxes, masks, and areas. Either way, validate on a hand-coded sample.</p>
+    <p>You can ask a VLM to answer several questions about an image at once and return the answers as named fields (JSON), for example whether a person appears, how many people there are, and the price shown: <code>{"has_person": true, "n_people": 2, "price": "4.99"}</code>. VLMs answer this kind of question well when the answer is a category, a small count, or text printed in the ad. They do worse than specialist tools when the answer is measured in pixels, such as where an object sits or how much of the image it covers. On the ODinW-13 detection benchmark, Qwen3-VL scores 48.6 and SAM 3 scores 61.0. Use a VLM for codes and a specialist tool for boxes, masks, and areas. Either way, check the output against a hand-coded sample.</p>
   </div>
 
   <h3>Detect and segment objects</h3>
