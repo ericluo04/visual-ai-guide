@@ -92,9 +92,9 @@ code { font-family: var(--font-mono); font-size: 0.86em; background: var(--surfa
 .brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 650; font-size: 1.02rem; color: var(--fg); text-decoration: none; white-space: nowrap; }
 .brand-mark { display: grid; grid-template-columns: repeat(4, 5px); gap: 2px; }
 .brand-mark i { width: 5px; height: 5px; border-radius: 1px; background: var(--accent); }
-.topnav { display: flex; gap: 4px; margin-left: auto; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+.topnav { display: flex; gap: 2px; margin-left: auto; overflow-x: auto; scrollbar-width: none; min-width: 0; }
 .topnav::-webkit-scrollbar { display: none; }
-.topnav a { font-size: 0.86rem; color: var(--muted); text-decoration: none; padding: 6px 10px; border-radius: 6px; white-space: nowrap; }
+.topnav a { font-size: 0.86rem; color: var(--muted); text-decoration: none; padding: 6px 8px; border-radius: 6px; white-space: nowrap; }
 .topnav a:hover { color: var(--fg); background: var(--surface-2); }
 .theme-btn {
   flex: none; display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px;
@@ -103,7 +103,7 @@ code { font-family: var(--font-mono); font-size: 0.86em; background: var(--surfa
 }
 .theme-btn:hover { border-color: var(--muted); }
 .theme-btn svg { width: 15px; height: 15px; }
-@media (max-width: 1020px) { .topnav { display: none; } .theme-btn { margin-left: auto; } }
+@media (max-width: 1100px) { .topnav { display: none; } .theme-btn { margin-left: auto; } }
 
 /* Page grid */
 .page { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); gap: 56px; padding-block: 40px 96px; }
@@ -294,8 +294,7 @@ footer .wrap { display: grid; gap: 6px; }
       <a href="#predict">Predict</a>
       <a href="#inference">Inference</a>
       <a href="#generate-images">Images</a>
-      <a href="#video-analyze">Embed/analyze video</a>
-      <a href="#video-generate">Generate video</a>
+      <a href="#video-analyze">Videos</a>
       <a href="#current">Stay current</a>
       <a href="#more-tools">More tools</a>
     </nav>
