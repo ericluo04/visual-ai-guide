@@ -331,52 +331,77 @@ footer .wrap { display: grid; gap: 6px; }
     </div>
   </div>
   <figure style="margin:0">
-    <svg class="adfig" viewBox="0 0 300 262" role="img" aria-label="A wine ad: a bottle of red wine and a filled glass on a wooden table in warm light. A scan line sweeps across the photo and reveals a heatmap of product presence over the bottle but not the glass, next to a card showing a predicted click-through rate of plus 18 percent">
+    <svg class="adfig" viewBox="0 0 300 262" role="img" aria-label="An ad for a sparkling wine: a green bottle with black neck foil and an orange label next to a tulip glass of pale bubbly wine and a cork, on a light tablecloth in window light. A scan line sweeps across the photo and reveals a heatmap of product presence over the bottle but not the glass, next to a card showing a predicted click-through rate of plus 18 percent">
       <defs>
-        <radialGradient id="wallG" cx="0.28" cy="0.22" r="0.95"><stop offset="0" stop-color="#9a7558"/><stop offset=".42" stop-color="#4c372a"/><stop offset="1" stop-color="#1a120e"/></radialGradient>
-        <linearGradient id="tableG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5634"/><stop offset="1" stop-color="#3e2313"/></linearGradient>
-        <linearGradient id="sheenG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffd9ad" stop-opacity=".28"/><stop offset=".55" stop-color="#ffd9ad" stop-opacity="0"/></linearGradient>
-        <linearGradient id="glassG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0c2118"/><stop offset=".16" stop-color="#2c5d43"/><stop offset=".3" stop-color="#143829"/><stop offset=".74" stop-color="#091a12"/><stop offset=".9" stop-color="#1f4332"/><stop offset="1" stop-color="#0a1a12"/></linearGradient>
-        <linearGradient id="capG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#36080f"/><stop offset=".35" stop-color="#9a2338"/><stop offset=".62" stop-color="#5c0f1f"/><stop offset="1" stop-color="#24060c"/></linearGradient>
-        <linearGradient id="labelG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#cdbfa5"/><stop offset=".3" stop-color="#f4ecdc"/><stop offset=".72" stop-color="#ece1cc"/><stop offset="1" stop-color="#bfb096"/></linearGradient>
-        <linearGradient id="wineG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8c1a2e"/><stop offset="1" stop-color="#3a0710"/></linearGradient>
-        <linearGradient id="specG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".25" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity=".08"/></linearGradient>
-        <radialGradient id="vigG" cx="0.5" cy="0.45" r="0.75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".45"/></radialGradient>
-        <filter id="softBlur" x="-50%" y="-200%" width="200%" height="500%"><feGaussianBlur stdDeviation="2.6"/></filter>
+        <linearGradient id="wallG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f6f1ea"/><stop offset=".45" stop-color="#ddd2c4"/><stop offset="1" stop-color="#b3a493"/></linearGradient>
+        <radialGradient id="windowG" cx="0.05" cy="0.15" r="0.7"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+        <linearGradient id="foldG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".5" stop-color="#3b2a1c" stop-opacity=".12"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>
+        <linearGradient id="clothG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c3cfd9"/><stop offset="1" stop-color="#9eacb9"/></linearGradient>
+        <linearGradient id="sheenG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        <linearGradient id="glassG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0d2a1b"/><stop offset=".14" stop-color="#3d7f57"/><stop offset=".28" stop-color="#174a30"/><stop offset=".72" stop-color="#08190f"/><stop offset=".9" stop-color="#245a3d"/><stop offset="1" stop-color="#0a1c12"/></linearGradient>
+        <linearGradient id="foilG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0b0b0b"/><stop offset=".3" stop-color="#3a3a3a"/><stop offset=".55" stop-color="#121212"/><stop offset="1" stop-color="#050505"/></linearGradient>
+        <pattern id="foilPat" width="1.6" height="1.6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><rect width="1.6" height=".5" fill="#fff" opacity=".09"/></pattern>
+        <linearGradient id="labelG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c85a22"/><stop offset=".3" stop-color="#f59a55"/><stop offset=".7" stop-color="#ef8a45"/><stop offset="1" stop-color="#b9501c"/></linearGradient>
+        <linearGradient id="caveG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbf2cf"/><stop offset="1" stop-color="#e3c46d"/></linearGradient>
+        <linearGradient id="specG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".2" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/></linearGradient>
+        <radialGradient id="vigG" cx="0.45" cy="0.45" r="0.8"><stop offset=".6" stop-color="#2a1d12" stop-opacity="0"/><stop offset="1" stop-color="#2a1d12" stop-opacity=".28"/></radialGradient>
+        <filter id="softBlur" x="-50%" y="-200%" width="200%" height="500%"><feGaussianBlur stdDeviation="2.8"/></filter>
         <filter id="tightBlur" x="-50%" y="-200%" width="200%" height="500%"><feGaussianBlur stdDeviation="0.9"/></filter>
-        <filter id="woodF" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.008 0.42" numOctaves="3" seed="7"/><feColorMatrix values="0 0 0 0 0.16  0 0 0 0 0.08  0 0 0 0 0.03  1.5 0 0 0 -0.55"/></filter>
+        <filter id="clothF" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9 0.35" numOctaves="2" seed="5"/><feColorMatrix values="0 0 0 0 0.35  0 0 0 0 0.4  0 0 0 0 0.46  0.9 0 0 0 -0.35"/></filter>
         <filter id="grainF" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"/><feColorMatrix type="saturate" values="0"/></filter>
         <clipPath id="adClip"><rect x="30" y="20" width="170" height="152" rx="10"/></clipPath>
-        <clipPath id="tableClip"><polygon points="30,127 205,117 205,175 30,175"/></clipPath>
+        <clipPath id="clothClip"><polygon points="30,131 205,124 205,175 30,175"/></clipPath>
+        <clipPath id="bottleClip"><path d="M107.5 24 h9 v32 c0 16 12 22 12 40 v46 q0 6 -16.5 6 q-16.5 0 -16.5 -6 v-46 c0 -18 12 -24 12 -40 z"/></clipPath>
+        <clipPath id="bowlClip"><path d="M52 70 C47 86 51 101 62 105 C73 101 77 86 72 70 Z"/></clipPath>
         <clipPath id="revealClip"><rect class="reveal" x="30" y="20" width="170" height="152"/></clipPath>
         <g id="adPhoto">
           <rect x="30" y="20" width="175" height="155" fill="url(#wallG)"/>
-          <polygon points="30,127 205,117 205,175 30,175" fill="url(#tableG)"/>
-          <rect x="30" y="112" width="175" height="63" filter="url(#woodF)" clip-path="url(#tableClip)"/>
-          <polygon points="30,127 205,117 205,175 30,175" fill="url(#sheenG)"/>
-          <polyline points="30,127 205,117" fill="none" stroke="#c48a5c" stroke-opacity=".45" stroke-width=".8"/>
-          <ellipse cx="137" cy="146" rx="30" ry="4.6" fill="#000" opacity=".55" filter="url(#softBlur)"/>
-          <ellipse cx="183" cy="139.5" rx="15" ry="2.8" fill="#000" opacity=".4" filter="url(#softBlur)"/>
-          <ellipse cx="112" cy="147.6" rx="15.5" ry="2.3" fill="#000" opacity=".65" filter="url(#tightBlur)"/>
-          <path d="M108 30 h8 v32 c0 10 11 12 11 22 v58 q0 6 -15 6 q-15 0 -15 -6 v-58 c0 -10 11 -12 11 -22 z" fill="url(#glassG)"/>
-          <rect x="107.4" y="27.5" width="9.2" height="21" rx="1.6" fill="url(#capG)"/>
-          <rect x="107.4" y="45.5" width="9.2" height="1.2" fill="#e2b56a" opacity=".55"/>
-          <rect x="100.6" y="88" width="2.6" height="50" rx="1.3" fill="url(#specG)"/>
-          <path d="M103 80 q3 -6 7 -9" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.1" stroke-linecap="round"/>
-          <rect x="125" y="88" width="1" height="50" fill="#f0c896" opacity=".28"/>
-          <rect x="99.5" y="100" width="25" height="30" rx="1" fill="url(#labelG)"/>
-          <text x="112" y="110.5" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="5.4" letter-spacing=".9" fill="#3a1a12">LUMEN</text>
-          <line x1="105" y1="113.4" x2="119" y2="113.4" stroke="#9a2338" stroke-width=".45"/>
-          <text x="112" y="119.5" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="3.6" letter-spacing=".5" fill="#5a3a2c">RESERVA</text>
-          <text x="112" y="125.5" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="3.6" fill="#5a3a2c">2021</text>
-          <path d="M171 92 C171 109 176 116 182 116 C188 116 193 109 193 92 Z" fill="#fff" fill-opacity=".07" stroke="#f3dcc0" stroke-opacity=".45" stroke-width=".7"/>
-          <path d="M171.5 101 C172 110 176.5 115.3 182 115.3 C187.5 115.3 192 110 192.5 101 Z" fill="url(#wineG)"/>
-          <ellipse cx="182" cy="101" rx="10.5" ry="1.4" fill="#a52a40"/>
-          <path d="M173.6 95 C173.8 105 176 111 179 113.5" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width=".8" stroke-linecap="round"/>
-          <line x1="182" y1="116" x2="182" y2="137.5" stroke="#f3dcc0" stroke-opacity=".5" stroke-width="1.1"/>
-          <ellipse cx="182" cy="138.3" rx="8" ry="1.7" fill="none" stroke="#f3dcc0" stroke-opacity=".5" stroke-width=".8"/>
+          <rect x="138" y="20" width="16" height="112" fill="url(#foldG)"/>
+          <rect x="160" y="20" width="14" height="110" fill="url(#foldG)"/>
+          <rect x="181" y="20" width="18" height="108" fill="url(#foldG)"/>
+          <rect x="30" y="20" width="175" height="155" fill="url(#windowG)"/>
+          <polygon points="30,131 205,124 205,175 30,175" fill="url(#clothG)"/>
+          <rect x="30" y="120" width="175" height="55" filter="url(#clothF)" clip-path="url(#clothClip)" opacity=".5"/>
+          <polygon points="30,131 205,124 205,175 30,175" fill="url(#sheenG)"/>
+          <polyline points="30,131 205,124" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width=".7"/>
+          <ellipse cx="141" cy="147" rx="32" ry="4.4" fill="#2b3640" opacity=".42" filter="url(#softBlur)"/>
+          <ellipse cx="80" cy="142.5" rx="18" ry="2.6" fill="#2b3640" opacity=".22" filter="url(#softBlur)"/>
+          <ellipse cx="112" cy="147.8" rx="17" ry="2.3" fill="#1d252c" opacity=".55" filter="url(#tightBlur)"/>
+          <path d="M107.5 24 h9 v32 c0 16 12 22 12 40 v46 q0 6 -16.5 6 q-16.5 0 -16.5 -6 v-46 c0 -18 12 -24 12 -40 z" fill="url(#glassG)"/>
+          <g clip-path="url(#bottleClip)">
+            <path d="M90 20 H134 V80 Q112 90 90 80 Z" fill="url(#foilG)"/>
+            <path d="M90 20 H134 V80 Q112 90 90 80 Z" fill="url(#foilPat)"/>
+            <rect x="99.5" y="88" width="2.8" height="52" rx="1.4" fill="url(#specG)"/>
+            <rect x="125.6" y="92" width="1.1" height="48" fill="#e9f3ec" opacity=".3"/>
+          </g>
+          <rect x="106" y="22" width="12" height="5.5" rx="2" fill="url(#foilG)"/>
+          <path d="M108.6 30 v22" stroke="#fff" stroke-opacity=".28" stroke-width=".9" stroke-linecap="round"/>
+          <polygon points="112,61.5 120,70 112,78.5 104,70" fill="#3f9db0"/>
+          <circle cx="112" cy="70" r="5.4" fill="#f2914c" stroke="#fbd7a8" stroke-width=".5"/>
+          <circle cx="112" cy="70" r="3.1" fill="#f6b265"/>
+          <rect x="97" y="104" width="30" height="36" rx=".8" fill="url(#labelG)"/>
+          <text x="112" y="110" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="3" letter-spacing=".6" fill="#3b1a0e">BRUT</text>
+          <text x="112" y="121" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="7" letter-spacing="1.1" fill="#3b1a0e">ALBA</text>
+          <text x="112" y="127" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="3.2" fill="#5c2a12">2019</text>
+          <text x="112" y="134" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="3.2" font-style="italic" fill="#5c2a12">Reserva</text>
+          <g clip-path="url(#bowlClip)">
+            <rect x="45" y="86" width="34" height="22" fill="url(#caveG)"/>
+            <ellipse cx="62" cy="86" rx="12.5" ry="1.3" fill="#fff7dc"/>
+            <circle cx="59" cy="96" r=".6" fill="#fff" opacity=".8"/><circle cx="63" cy="92" r=".5" fill="#fff" opacity=".8"/>
+            <circle cx="66" cy="99" r=".6" fill="#fff" opacity=".8"/><circle cx="61" cy="101" r=".45" fill="#fff" opacity=".8"/>
+            <circle cx="64.5" cy="89.5" r=".45" fill="#fff" opacity=".8"/><circle cx="57.5" cy="90" r=".4" fill="#fff" opacity=".7"/>
+          </g>
+          <path d="M52 70 C47 86 51 101 62 105 C73 101 77 86 72 70 Z" fill="#fff" fill-opacity=".1" stroke="#7d8a96" stroke-opacity=".55" stroke-width=".7"/>
+          <path d="M51.6 76 C50.5 88 52.5 97 56.5 101.5" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1" stroke-linecap="round"/>
+          <line x1="62" y1="105" x2="62" y2="140" stroke="#8c99a5" stroke-opacity=".7" stroke-width="1.1"/>
+          <line x1="61.6" y1="107" x2="61.6" y2="138" stroke="#fff" stroke-opacity=".6" stroke-width=".4"/>
+          <ellipse cx="62" cy="141" rx="11" ry="2.2" fill="#fff" fill-opacity=".18" stroke="#7d8a96" stroke-opacity=".55" stroke-width=".7"/>
+          <ellipse cx="162" cy="146.5" rx="10" ry="1.8" fill="#2b3640" opacity=".3" filter="url(#tightBlur)"/>
+          <rect x="151" y="138" width="15" height="8.4" rx="3.6" fill="#c69b6a"/>
+          <ellipse cx="165.4" cy="142.2" rx="2.4" ry="4.2" fill="#e0bf92"/>
+          <path d="M149 141 q4 -7 9 -3 q4 3 1 7 M152 139 q3 -5 7 -1" fill="none" stroke="#3b3b3b" stroke-width=".55"/>
           <rect x="30" y="20" width="175" height="155" fill="url(#vigG)"/>
-          <rect x="30" y="20" width="175" height="155" filter="url(#grainF)" opacity=".07"/>
+          <rect x="30" y="20" width="175" height="155" filter="url(#grainF)" opacity=".06"/>
         </g>
       </defs>
       <rect x="18" y="8" width="194" height="244" rx="16" style="fill:var(--surface);stroke:var(--line)"/>
@@ -391,8 +416,8 @@ footer .wrap { display: grid; gap: 6px; }
           <rect x="29" y="20" width="2" height="152" style="fill:var(--mk)"/>
         </g>
       </g>
-      <text x="30" y="195" style="font-family:var(--font-display);font-size:14px;font-weight:700;fill:var(--fg)">Lumen Reserva</text>
-      <text x="30" y="211" style="font-family:var(--font-body);font-size:9.5px;fill:var(--muted)">Aged in French oak.</text>
+      <text x="30" y="195" style="font-family:var(--font-display);font-size:14px;font-weight:700;fill:var(--fg)">Alba Brut Reserva</text>
+      <text x="30" y="211" style="font-family:var(--font-body);font-size:9.5px;fill:var(--muted)">Traditional method cava.</text>
       <rect x="30" y="222" width="64" height="20" rx="10" style="fill:var(--fg)"/>
       <text x="62" y="235.5" text-anchor="middle" style="font-family:var(--font-body);font-size:9px;font-weight:600;fill:var(--surface)">Shop now</text>
       <rect x="150" y="30" width="144" height="46" rx="12" style="fill:var(--surface);stroke:var(--line)"/>
@@ -1405,13 +1430,13 @@ for concept in ["logo", "person", "bottle"]:
 })();
 
 /* Bottle shape shared by the hero heatmap and the embedding diagrams (hero photo coordinates) */
-function inBottle(x, y) {   // the wine bottle: foil top, neck, sloped shoulders, body, curved base
+function inBottle(x, y) {   // the sparkling-wine bottle: lip, long neck, sloping shoulders, body, curved base
   var d = Math.abs(x - 112);
-  if (y >= 27.5 && y < 48) return d <= 4.6;
-  if (y >= 48 && y < 62) return d <= 4;
-  if (y >= 62 && y < 84) { var t = (y - 62) / 22; t = t * t * (3 - 2 * t); return d <= 4 + 11 * t; }
-  if (y >= 84 && y <= 142) return d <= 15;
-  if (y > 142 && y <= 148) { var q = (y - 142) / 6; return d <= 15 * Math.sqrt(Math.max(0, 1 - q * q)); }
+  if (y >= 22 && y < 28) return d <= 6;
+  if (y >= 28 && y < 56) return d <= 4.5;
+  if (y >= 56 && y < 96) { var t = (y - 56) / 40; t = t * t * (3 - 2 * t); return d <= 4.5 + 12 * t; }
+  if (y >= 96 && y <= 142) return d <= 16.5;
+  if (y > 142 && y <= 148) { var q = (y - 142) / 6; return d <= 16.5 * Math.sqrt(Math.max(0, 1 - q * q)); }
   return false;
 }
 /* Share of a cell covered by the bottle, from a 4 x 4 grid of sample points */
