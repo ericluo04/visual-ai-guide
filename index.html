@@ -603,6 +603,14 @@ footer .wrap { display: grid; gap: 6px; }
   <div class="stack">
     <p class="prose">No independent benchmark compares the three closed APIs, so their order here is a judgment call. OpenAI offers no image embedding model.</p>
 
+    <div class="mkt">
+      <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
+      <ul class="mkt-list">
+        <li><p class="cite">Cao, Jingcun, Xiaolin Li, and Lingling Zhang (2025). "Is Relevancy Everything? A Deep-Learning Approach to Understand the Effect of Image-Text Congruence." Management Science 71(12): 10579–10602. <a href="https://doi.org/10.1287/mnsc.2022.01896">doi</a></p>
+          <p>Embeds each image with a residual network and its text with BERT, scores how well the two match, and uses that score as a regressor. Reader preference turns out to be U-shaped in image-text congruence.</p></li>
+      </ul>
+    </div>
+
     <h3>Which output is the global embedding</h3>
     <p class="prose">Each model returns its global embedding under a different name. The code below already takes the right one. This table matters when you write your own.</p>
     <div class="tbl"><table>
@@ -700,10 +708,7 @@ print(est.effect(), est.effect_interval())   # price effect and its 95% interval
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
         <li><p class="cite">Compiani, Giovanni, Ilya Morozov, and Stephan Seiler (2026). "Demand Estimation with Text and Image Data." RAND Journal of Economics. <a href="https://doi.org/10.1111/1756-2171.70052">doi</a></p>
-          <p>Extracts embeddings of product photos with pretrained image networks and of product text with language models, then enters them as product attributes in a mixed logit demand model. The embeddings let the data reveal which products substitute for each other.</p></li>
-        <li><p class="cite">Cao, Jingcun, Xiaolin Li, and Lingling Zhang (2025). "Is Relevancy Everything? A Deep-Learning Approach to Understand the Effect of Image-Text Congruence." Management Science 71(12): 10579–10602. <a href="https://doi.org/10.1287/mnsc.2022.01896">doi</a></p>
-          <p>Embeds each image with a residual network and its text with BERT, scores how well the two match, and uses that score as a regressor. Reader preference turns out to be U-shaped in image-text congruence.</p></li>
-      </ul>
+          <p>Extracts embeddings of product photos with pretrained image networks and of product text with language models, then enters them as product attributes in a mixed logit demand model. The embeddings let the data reveal which products substitute for each other.</p></li>      </ul>
     </div>
 
     <h3>Heatmaps from patch embeddings</h3>
