@@ -203,7 +203,7 @@ td .links { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 0.82rem; }
 .track li span.nm { color: var(--fg); }
 @media (max-width: 560px) { .track li { grid-template-columns: minmax(0, 1fr); gap: 0; } }
 .paper { display: grid; gap: 6px; padding: 14px 16px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); font-size: 0.92rem; }
-.paper .tag { font: 600 0.7rem var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+.paper .tag { font: 500 0.84rem var(--font-body); color: var(--muted); }
 .paper .cite { font-weight: 500; }
 .paper .what { color: var(--muted); }
 .stack { display: grid; gap: 14px; margin-top: 18px; }
@@ -308,7 +308,7 @@ footer .wrap { display: grid; gap: 6px; }
 </section>
 <div class="note" style="margin-top:28px">
   <h4>Why the benchmarks matter more than the picks</h4>
-  <p>The best model in every category below changed at least once in 2026, and several closed models used in published studies have already been shut down. Treat each pick as a starting point dated November 2026. The "Track it" box in each section links the leaderboard that shows the current order, and the open or closed tag tells you whether you can rerun the model later.</p>
+  <p>Many of the picks below were released in 2026, and closed models are retired on short notice. In 2026 Google shut down Imagen 4 and the Veo 3.1 previews on the Gemini API, and OpenAI shut down the Sora 2 API. Treat each pick as a starting point dated November 2026. The "Track it" box in each section links the leaderboard that shows the current order, and the open or closed tag tells you whether you can rerun the model later.</p>
 </div>
 <section class="s" id="choose">
   <header>
@@ -660,7 +660,7 @@ def label_image(path):
   <div class="stack">
     <div class="note">
       <h4>Why the ladder starts with frozen embeddings</h4>
-      <p>No published study compares these approaches on image regression. The closest evidence is object classification on ImageNet with 1.28 million labels. There, a fine-tuned VLM beat a linear probe on its own vision encoder by only 0.5 to 1.5 points (<a href="https://arxiv.org/abs/2405.18415">Zhang et al. 2024</a>). Marketing datasets are far smaller and their outcomes are noisier. Training a VLM to write numbers as text also pulls predictions toward the middle of long-tailed outcomes such as likes and views (<a href="https://arxiv.org/abs/2605.01402">Du et al. 2026</a>). The label thresholds above are judgment calls. Run any richer model on the same cross-fitting folds as step 1 and report both.</p>
+      <p>We found no published study that compares these approaches on image regression. The closest evidence is object classification on ImageNet with 1.28 million labels. There, a fine-tuned VLM beat a linear probe on its own vision encoder by only 0.5 to 1.5 points (<a href="https://arxiv.org/abs/2405.18415">Zhang et al. 2024</a>). Marketing datasets are far smaller and their outcomes are noisier. Training a VLM to write numbers as text also pulls predictions toward the middle of long-tailed outcomes such as likes and views (<a href="https://arxiv.org/abs/2605.01402">Du et al. 2026</a>). The label thresholds above are judgment calls. Run any richer model on the same cross-fitting folds as step 1 and report both.</p>
     </div>
 
     <details class="code" open>
@@ -788,9 +788,9 @@ from ppi_py import ppi_ols_ci
 
 # Coded sample (n ads): X = covariates with a constant, Y = human label, Yhat = VLM label
 # Everything else (N ads): X_unlab = covariates, Yhat_unlab = VLM label
-ci_low, ci_high = ppi_ols_ci(X, Y, Yhat, X_unlab, Yhat_unlab, alpha=0.05)
-# Compare with OLS on the coded sample alone; PPI++ tuning keeps the
-# interval no wider than that baseline.</code></pre></div>
+ci_low, ci_high = ppi_ols_ci(X, Y, Yhat, X_unlab, Yhat_unlab, alpha=0.05)   # one entry per coefficient
+# X needs its own column of ones (no constant is added). PPI++ power tuning is on by
+# default, which keeps the interval asymptotically no wider than OLS on the coded sample.</code></pre></div>
     </details>
 
     <details class="code">
@@ -840,7 +840,7 @@ summary(fit)</code></pre></div>
   <div class="stack">
     <div class="note">
       <h4>Read the licence before you pick an open model</h4>
-      <p>Most top open image models are not free to use. Qwen-Image-2.1 allows research and evaluation only. FLUX.2 [dev], FLUX 3 Klein, and Ideogram 4.0 (open weights, gated) are non-commercial. MiniMax H3-Image ranks first among open models, but its licence excludes the United States, the EU, the UK, and South Korea. A LoRA trained on a model inherits that model's licence, so train on an Apache 2.0 base such as FLUX.2 [klein] 4B if a brand partner will use the outputs.</p>
+      <p>Most top open image models are not licensed for commercial use. Qwen-Image-2.1 allows research and evaluation only. FLUX.2 [dev], FLUX 3 Klein, and Ideogram 4.0 (open weights, gated) are non-commercial. MiniMax H3-Image ranks first among open models, but its licence excludes the United States, the EU, the UK, and South Korea. A LoRA trained on a model inherits that model's licence, so train on an Apache 2.0 base such as FLUX.2 [klein] 4B if a brand partner will use the outputs.</p>
     </div>
 
     <h3>Fine-tune a generator on your own products</h3>
@@ -1040,7 +1040,7 @@ print(reply.output_text)</code></pre></div>
 <section class="s" id="current">
   <header>
     <h2>Stay current</h2>
-    <p class="lede">The picks on this page will age. The leaderboards below will not. Check the one for your task before you start a project, and again before you submit.</p>
+    <p class="lede">The picks on this page will age faster than the leaderboards that rank them. Check the board for your task before you start a project and again before you submit. Boards also go stale: the original Video-MME leaderboard has had no new entry since September 2025, so check each board's last update.</p>
   </header>
 
   <div class="tbl"><table>
@@ -1154,7 +1154,7 @@ for concept in ["logo", "person", "bottle"]:
   <div class="stack">
     <div class="paper">
       <span class="tag">Worked pipelines</span>
-      <p class="cite"><a href="https://github.com/yale-som-hpc/ocr-examples">ocr-examples</a>, from Yale SOM's research computing group, public domain under the Unlicense.</p>
+      <p class="cite"><a href="https://github.com/yale-som-hpc/ocr-examples">ocr-examples</a>, from the yale-som-hpc GitHub organization, public domain under the Unlicense.</p>
       <p class="what">Runnable document-OCR pipelines for pypdf, Docling, olmOCR-2, DeepSeek-OCR-2, and GLM-OCR, plus examples for handwriting, historical print, and tables. Three habits carry over to any project: try the PDF's embedded text before running a model, write a provenance file (engine, model version, settings, input hash) next to each output, and check outputs against expected phrases.</p>
     </div>
     <div class="track">
@@ -1205,7 +1205,7 @@ for concept in ["logo", "person", "bottle"]:
 <footer>
   <div class="wrap">
     <p>Draft. Model rankings were checked in November 2026 and will change; follow the benchmark links in each section for the current order.</p>
-    <p>Code snippets are illustrative. Each follows the model card or official docs as of the check date; confirm against the linked page before running.</p>
+    <p>Code snippets are illustrative, and most were not run. They follow the model cards and official docs as of the check date. Confirm against the linked page before running.</p>
   </div>
 </footer>
 
