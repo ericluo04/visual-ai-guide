@@ -942,11 +942,9 @@ model.print_trainable_parameters()
 
     <h3>Explain the predictions</h3>
     <div class="prose">
-      <p>A heatmap shows which parts of an image pushed a prediction up or down. You can interpret your models with post-hoc methods from interpretable machine learning, and you should check that the explanations are not noise (<a href="https://arxiv.org/abs/1810.03292">Adebayo et al. 2018</a>).</p>
+      <p>A heatmap shows which parts of an image pushed a prediction up or down. You can interpret your models with post-hoc methods from interpretable machine learning.</p>
       <ul>
-        <li>For step 1, the <a href="#represent">outcome heatmap from patch embeddings</a> is exact: the square scores add up to the prediction.</li>
-        <li>For any model, occlusion covers one square at a time and records how much the prediction moves (<a href="https://captum.ai/docs/attribution_algorithms">Captum</a>, <code>Occlusion</code>).</li>
-        <li>For models you trained yourself, Grad-CAM and Integrated Gradients trace the prediction back through the network (<a href="https://github.com/jacobgil/pytorch-grad-cam">pytorch-grad-cam</a>, Captum).</li>
+        <li><a href="https://captum.ai/docs/attribution_algorithms">Captum</a> implements the widely accepted methods for PyTorch models, including Integrated Gradients, Grad-CAM, saliency maps, occlusion, and Shapley value sampling. Check that the maps are not noise with the sanity checks of <a href="https://arxiv.org/abs/1810.03292">Adebayo et al. (2018)</a>: a map that barely changes when the model's weights are randomized is not explaining the model.</li>
         <li>Do not read a VLM's attention maps or its written reasons as explanations; neither reliably reflects what drove the answer. Bright background squares in transformer maps can be artifacts (<a href="https://arxiv.org/abs/2309.16588">Darcet et al. 2024</a>).</li>
       </ul>
     </div>
