@@ -14,7 +14,8 @@ Each section lists the best open and closed options, gives a short illustrative 
 1. Open the "Track it" links in the section you want to update.
 2. Edit the picks table in that section of `index.html`.
 3. Edit the matching leaf in `window.GUIDE` if the name changed.
-4. Change the "Checked" date in the hero and the side rail.
+4. Change the "Released" month in the picks table if the model version changed.
+5. Change the "Checked" date in the side rail and in the "How to read this guide" Track it card.
 
 Model rankings were checked on 17 November 2026.
 
