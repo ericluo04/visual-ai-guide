@@ -1,6 +1,6 @@
 # Visual AI Field Guide
 
-A one-page practitioner guide to current visual AI tools for marketing research. It covers image embeddings (global and patch level), labeling images with vision-language models, predicting outcomes from images, inference with predicted variables, image generation, and video generation and analysis. A second tab covers specialized tools: detection and segmentation, OCR, faces, saliency, and aesthetics.
+A one-page practitioner guide to current visual AI tools for marketing research. It covers image embeddings (global and patch level), labeling images with vision-language models, predicting outcomes from images, inference with predicted variables, image generation, and video generation and analysis. A further section covers specialized tools: detection and segmentation, OCR, faces, saliency, and aesthetics.
 
 Each section lists the best open and closed options, gives a short illustrative Python snippet, links the leaderboard that tracks the field, and cites a marketing paper that uses the method.
 
