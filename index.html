@@ -193,7 +193,8 @@ p.prose { display: block; }
 .ex-card > svg { width: 22px; height: 22px; color: var(--accent); }
 .ex-lbl { margin-top: 4px; font: 600 0.78rem var(--font-body); color: var(--fg); }
 .ex-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-.ex-chips a { padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-2); font: 500 0.8rem var(--font-body); text-decoration: none; }
+.sub-h { margin: 24px 0 8px; }
+.ex-chips a { display: inline-block; flex: 0 0 auto; max-width: 100%; white-space: nowrap; padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-2); font: 500 0.8rem var(--font-body); text-decoration: none; }
 .ex-chips a:hover { border-color: var(--accent); background: var(--accent-soft); }
 
 /* Full map */
@@ -518,19 +519,28 @@ footer .wrap { display: grid; gap: 6px; }
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/></svg>
       <h4>What drives individual predictions?</h4>
       <p class="ex-lbl">Illustrative approach</p>
-      <p class="what">Make heatmaps with post-hoc interpretable machine learning methods, or with the embeddings regression.</p>
+      <p class="what">Make heatmaps for a random set of ads using local post-hoc interpretable machine learning methods, or the embeddings regression.</p>
       <p class="ex-lbl">Illustrative evaluation</p>
       <p class="what">Whether the maps pass sanity checks and point to elements you can name.</p>
+      <p class="ex-chips"><a href="#predict-explain-the-predictions">Explain the predictions</a></p>
+    </div>
+    <div class="paper ex-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>
+      <h4>What does the model rely on overall?</h4>
+      <p class="ex-lbl">Illustrative approach</p>
+      <p class="what">Test concepts you define (TCAV), or let a method find recurring concepts (CRAFT, SpRAy), across many ads.</p>
+      <p class="ex-lbl">Illustrative evaluation</p>
+      <p class="what">Whether the concepts hold up as hypotheses when you test them, for example in an experiment.</p>
       <p class="ex-chips"><a href="#predict-explain-the-predictions">Explain the predictions</a></p>
     </div>
     <div class="paper ex-card">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
       <h4>Do theory-guided concepts matter?</h4>
       <p class="ex-lbl">Illustrative approach</p>
-      <p class="what">Label each concept with a VLM, or with a classifier trained on your hand labels, for example perceptual fluency. Then regress retention on the labels with proper inference.</p>
+      <p class="what">Label each concept with a VLM, or with a classifier trained on your hand labels, for example perceptual fluency. Then regress retention on the labels with proper inference: a bias correction method, such as prediction-powered inference or DSL, uses a hand-coded sample so that labeling errors do not bias the coefficients.</p>
       <p class="ex-lbl">Illustrative evaluation</p>
-      <p class="what">Agreement with a hand-coded sample, and the coefficients from proper inference, with their intervals.</p>
-      <p class="ex-chips"><a href="#label">Label images with a VLM</a><a href="#predict">Predict outcomes</a><a href="#inference">Inference with predicted variables</a></p>
+      <p class="what">Agreement with a hand-coded sample, and the bias-corrected coefficients with their intervals.</p>
+      <p class="ex-chips"><a href="#label">Label images with a VLM</a><a href="#predict">Predict outcomes</a><a href="#inference" title="Inference with predicted variables">Inference</a></p>
     </div>
     <div class="paper ex-card">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15v5M16.5 17.5h5"/></svg>
@@ -539,7 +549,7 @@ footer .wrap { display: grid; gap: 6px; }
       <p class="what">Generate new ads, or edit one element of existing ads, guided by what you found.</p>
       <p class="ex-lbl">Illustrative evaluation</p>
       <p class="what">Retention in an A/B test against the original ads.</p>
-      <p class="ex-chips"><a href="#video-generate">Generate videos</a><a href="#generate-images">Generate and edit images</a></p>
+      <p class="ex-chips"><a href="#generate-images">Generate and edit images</a><a href="#video-generate">Generate videos</a></p>
     </div>
   </div>
 </section>
@@ -1025,7 +1035,12 @@ print(out.logits)   # shape (1, 1): one number for the image and prompt
 
     <h3 id="predict-explain-the-predictions">Explain the predictions</h3>
     <div class="prose">
-      <p>A heatmap shows which parts of an image pushed a prediction up or down. The methods below make such a map for any trained model, after training and without changing the model. For the embeddings regression, the <a href="#represent">outcome heatmap in Embed images</a> already splits each prediction across the image. <a href="https://captum.ai/docs/attribution_algorithms">Captum</a> implements the widely used methods for PyTorch models. The table lists the ones with the best evidence that their maps reflect what the model does.</p>
+      <p>A heatmap shows which parts of an image pushed a prediction up or down. The methods below make such a map for any trained model, after training and without changing the model. For the embeddings regression, the <a href="#represent">outcome heatmap in Embed images</a> already splits each prediction across the image.</p>
+      <p>A local method explains one prediction: it shows which pixels in this image moved this score. A global method explains the model as a whole, by naming the concepts it relies on across many images, such as faces or text overlays.</p>
+    </div>
+    <h4 class="sub-h">Local methods</h4>
+    <div class="prose">
+      <p><a href="https://captum.ai/docs/attribution_algorithms">Captum</a> implements the widely used local methods for PyTorch models. The table lists the ones with the best evidence that their maps reflect what the model does.</p>
     </div>
     <div class="tbl"><table>
       <thead><tr><th>Method</th><th>What it shows</th><th>Evidence that it is reliable</th><th>In Captum</th></tr></thead>
@@ -1041,7 +1056,7 @@ print(out.logits)   # shape (1, 1): one number for the image and prompt
       <ul>
         <li>Run the sanity check of <a href="https://arxiv.org/abs/1810.03292">Adebayo et al. (2018)</a> on your maps. Replace the model's learned numbers (its weights) with random ones and redraw the map. A map that barely changes is not explaining the model. Guided Backprop and Guided Grad-CAM fail this check.</li>
         <li>Treat a VLM's attention maps and its written reasons with caution. An attention map shows which parts of the image the model passed information from. Those parts can differ from the parts that changed its answer (<a href="https://doi.org/10.18653/v1/N19-1357">Jain and Wallace 2019</a>; <a href="https://arxiv.org/abs/2012.09838">Chefer et al. 2021</a>). Bright background patches in these maps can also be artifacts (<a href="https://arxiv.org/abs/2309.16588">Darcet et al. 2024</a>). A model's written reasons can leave out what swayed it, including cues in the image (<a href="https://arxiv.org/abs/2305.04388">Turpin et al. 2023</a>; <a href="https://doi.org/10.18653/v1/2025.findings-emnlp.723">Balasubramanian et al. 2025</a>).</li>
-        <li>All of these methods are local: each map explains one prediction for one image. Show maps for a random or pre-specified set of images, not only the ones that look convincing. Global methods explain what the model relies on across many images. <a href="https://arxiv.org/abs/1711.11279">TCAV</a> tests a concept that you define with example images. It measures how much the model's predictions move with that concept across many images. Captum implements it as <code>TCAV</code>. <a href="https://arxiv.org/abs/1902.03129">ACE</a> groups image segments into concepts, and <a href="https://arxiv.org/abs/2211.10154">CRAFT</a> splits the model's internal features into concepts. Both score how much each concept matters, but you still name each concept by looking at its examples. <a href="https://doi.org/10.1038/s41467-019-08987-4">SpRAy</a> clusters the maps of many images to find strategies that the model uses again and again.</li>
+        <li>All of these methods are local: each map explains one prediction for one image. Show maps for a random or pre-specified set of images, not only the ones that look convincing.</li>
       </ul>
     </div>
 
@@ -1078,6 +1093,19 @@ fig.savefig("ig_map.png")
 # Sanity check (Adebayo et al. 2018): give the model random weights, then rerun the lines from ig = on
 model = ViTForImageClassification(model.config).eval()</code></pre></div>
     </details>
+
+    <h4 class="sub-h">Global methods</h4>
+    <div class="prose">
+      <p>These methods look across many images and name the concepts that the model relies on. A 2026 benchmark found that no unsupervised concept method tracks the model faithfully (<a href="https://arxiv.org/abs/2504.10833">Kumar and Ahuja, CVPR 2026</a>), so treat the concepts as hypotheses to test.</p>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Method</th><th>What it shows</th><th>Evidence that it is reliable</th><th>Code</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://arxiv.org/abs/1711.11279">TCAV</a><br><small>Kim et al. 2018</small></td><td>How much a concept you define with example images raises or lowers the model's predictions across a dataset.</td><td>Widely used and well studied. Results depend on which example images you choose and on the layer you test (<a href="https://arxiv.org/abs/2404.03713">Nicolson et al. 2025</a>).</td><td><a href="https://captum.ai/api/concept.html">Captum</a>: <code>TCAV</code>. Test an internal layer, not only the final embedding.</td></tr>
+        <tr><td><a href="https://arxiv.org/abs/2211.10154">CRAFT</a><br><small>Fel et al. 2023</small></td><td>The recurring image parts the model uses for a prediction, found automatically and ranked by importance, with example patches for each.</td><td>In a study with about 1,150 people, its explanations helped more than heatmaps on 2 of 3 tasks. The 2026 benchmark finds its concepts only loosely track the model.</td><td><a href="https://deel-ai.github.io/xplique/latest/api/concepts/craft/">Xplique</a>: <code>CraftTorch</code>. It needs non-negative features, so vision transformers such as DINOv3 need a workaround (Semi-NMF in the <a href="https://github.com/KempnerInstitute/overcomplete">Overcomplete</a> library).</td></tr>
+        <tr><td><a href="https://doi.org/10.1038/s41467-019-08987-4">SpRAy</a><br><small>Lapuschkin et al. 2019</small></td><td>Groups the local heatmaps of many images to find strategies the model uses again and again, such as relying on a watermark or logo.</td><td>Shown in case studies, including a model that recognized horses by a copyright watermark. No benchmark yet.</td><td><a href="https://github.com/virelay/corelay">CoRelAy</a>. Works on maps from any model, including the Captum maps above.</td></tr>
+      </tbody>
+    </table></div>
 
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
@@ -1254,10 +1282,13 @@ pip install -r requirements_flux.txt
 pip install bitsandbytes torchao   # needed for --use_8bit_adam and --do_fp8_training
 accelerate config default
 
-# Put 20 to 30 photos of your product in one folder inside examples/dreambooth.
-# "sks" is a rare token that becomes the name of your product in prompts.
+# Put 20 to 30 of your images in one folder inside examples/dreambooth.
+# They can show a product, a brand style, or a setting.
+# "sks" is a rare token that becomes the name of that concept in prompts.
+# The README trains this distilled model. Black Forest Labs also publishes
+# black-forest-labs/FLUX.2-klein-base-4B and recommends it for LoRA training.
 export MODEL_NAME="black-forest-labs/FLUX.2-klein-4B"
-export INSTANCE_DIR="my_product"
+export INSTANCE_DIR="my_images"
 export OUTPUT_DIR="trained-flux2-klein-4b"
 
 # The README gives no memory figure for [klein]. It says FP8 training
@@ -1267,7 +1298,7 @@ accelerate launch train_dreambooth_lora_flux2_klein.py \
   --pretrained_model_name_or_path=$MODEL_NAME \
   --instance_data_dir=$INSTANCE_DIR \
   --output_dir=$OUTPUT_DIR \
-  --instance_prompt="a photo of sks bottle" \
+  --instance_prompt="a photo of sks" \
   --resolution=1024 \
   --train_batch_size=1 \
   --gradient_accumulation_steps=4 \
@@ -1297,11 +1328,11 @@ pipe.load_lora_weights("trained-flux2-klein-4b", adapter_name="brand")   # OUTPU
 pipe.set_adapters("brand", adapter_weights=0.8)   # 0 = base model, 1 = full LoRA
 
 image = pipe(
-    prompt="A green glass bottle of sparkling water on a marble counter, studio light",
+    prompt="a photo of sks on a marble counter, studio light",   # sks calls the trained concept
     height=1024, width=1024, guidance_scale=1.0, num_inference_steps=4,
-    generator=torch.Generator("cuda").manual_seed(0),   # same seed, so only the LoRA changes
+    generator=torch.Generator("cuda").manual_seed(0),   # fixed seed, so you can compare LoRA strengths
 ).images[0]
-image.save("bottle_lora.png")</code></pre></div>
+image.save("sks_lora.png")</code></pre></div>
     </details>
 
     <div class="mkt">
