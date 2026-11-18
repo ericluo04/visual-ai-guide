@@ -195,8 +195,8 @@ p.prose { display: block; }
 .ex-card { align-content: start; }
 .ex-card h4 { text-align: center; }
 .ex-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.ex-group { margin-top: 14px; padding: 12px 14px 14px; border-radius: var(--radius); background: var(--accent-soft); }
-.ex-group-title { margin: 0 0 10px; font: 600 0.85rem var(--font-body); color: var(--accent); }
+.ex-group { margin-top: 14px; padding: 12px 14px 14px; border-radius: var(--radius); border: 1px dashed var(--line); background: transparent; }
+.ex-group-title { margin: 0 0 10px; font: 400 0.85rem var(--font-body); color: var(--muted); }
 .ex-group-grid { display: grid; grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr); gap: 14px 6px; }
 .ex-pred { grid-area: 1 / 1 / 3 / 2; align-self: center; }
 .ex-loc { grid-area: 1 / 3; }
@@ -529,9 +529,9 @@ footer .wrap { display: grid; gap: 6px; }
     <div class="paper ex-card">
       <h4>Do theory-guided concepts matter?</h4>
       <p class="ex-lbl">Illustrative approach</p>
-      <p class="what">Label each concept with a VLM, or with a classifier trained on your hand labels, for example perceptual fluency. Then regress retention on the labels with proper inference: a bias correction method, such as prediction-powered inference or DSL, uses a hand-coded sample so that labeling errors do not bias the coefficients.</p>
+      <p class="what">Label each concept with a VLM, or with a classifier trained on your hand labels, for example perceptual fluency. Then regress retention on the labels with proper inference: a bias correction method that uses a human-labeled sample, so that labeling errors do not bias the coefficients.</p>
       <p class="ex-lbl">Illustrative evaluation</p>
-      <p class="what">Agreement with a hand-coded sample, and the bias-corrected coefficients with their intervals.</p>
+      <p class="what">Agreement with a human-labeled sample, and the bias-corrected coefficients with their intervals.</p>
       <p class="ex-chips"><a href="#label">Label images with a VLM</a><a href="#predict">Predict outcomes</a><a href="#inference">Inference with predicted variables</a></p>
     </div>
   </div>
