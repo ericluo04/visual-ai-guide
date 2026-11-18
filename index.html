@@ -1006,13 +1006,30 @@ print("out-of-fold R2:", 1 - ((y - yhat) ** 2).sum() / ((y - y.mean()) ** 2).sum
     <p class="prose">The easiest start on one GPU is a ready-made notebook from <a href="https://github.com/unslothai/unsloth">Unsloth</a> (<a href="https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_5_%284B%29_Vision.ipynb">Qwen3.5 4B</a>, <a href="https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Gemma4_%28E4B%29-Vision.ipynb">Gemma 4 E4B</a>): open it and swap in your own images and labels. <a href="https://huggingface.co/docs/trl/main/training_vlm_sft">TRL</a> is the standard Hugging Face library for the same job. <a href="https://github.com/hiyouga/LlamaFactory">LlamaFactory</a> runs from a config file or web UI. <a href="https://github.com/modelscope/ms-swift">ms-swift</a> has command-line options for models that output a class or a number. To fine-tune an image model such as DINOv3 or SigLIP 2 instead, wrap it with the same <code>LoraConfig</code> and add a small output layer for your outcome (<a href="https://huggingface.co/docs/peft/main/en/task_guides/image_classification_lora">PEFT guide for a ViT</a>).</p>
 
     <details class="code">
-      <summary><span class="ttl">Add a LoRA adapter to a VLM</span> <span class="lang">python · peft</span></summary>
+      <summary><span class="ttl">Train a LoRA on your labeled images (TRL)</span> <span class="lang">python · trl + peft</span></summary>
       <div class="codewrap"><pre><code class="language-python">import torch
-from transformers import AutoModelForMultimodalLM
-from peft import LoraConfig, get_peft_model
+from datasets import load_dataset
+from PIL import Image
+from peft import LoraConfig
+from transformers import AutoModelForMultimodalLM, AutoProcessor
+from trl import SFTConfig, SFTTrainer
 
+MODEL_ID = "google/gemma-4-E4B-it"   # tested on a Mac GPU with "google/gemma-4-E2B-it", the smallest size
+OUTPUT_DIR = "gemma4-lora-product-use"
+QUESTION = "Is a person using the product? Answer yes or no."
+
+# labels.csv: a header "path,label", then one row per image, such as ads/ad_0001.jpg,yes
+data = load_dataset("csv", data_files="labels.csv", split="train")
+
+def to_chat(row):   # TRL's format for images: a list of images, a prompt, and the answer
+    return {"images": [Image.open(row["path"]).convert("RGB")],
+            "prompt": [{"role": "user", "content": [{"type": "image"}, {"type": "text", "text": QUESTION}]}],
+            "completion": [{"role": "assistant", "content": [{"type": "text", "text": row["label"]}]}]}
+data = data.map(to_chat, remove_columns=data.column_names)   # training scores only the answer
+
+processor = AutoProcessor.from_pretrained(MODEL_ID)
 model = AutoModelForMultimodalLM.from_pretrained(
-    "google/gemma-4-E4B-it", dtype=torch.bfloat16, device_map="auto")
+    MODEL_ID, dtype=torch.bfloat16, device_map="auto")
 
 lora = LoraConfig(
     r=16, lora_alpha=16, lora_dropout=0.05,
@@ -1020,9 +1037,43 @@ lora = LoraConfig(
     use_rslora=True,               # or use_dora=True
     task_type="CAUSAL_LM",
 )
-model = get_peft_model(model, lora)
-model.print_trainable_parameters()
-# Train with trl.SFTTrainer(model=model, train_dataset=..., args=SFTConfig(...)).</code></pre></div>
+args = SFTConfig(output_dir=OUTPUT_DIR, num_train_epochs=3,
+                 learning_rate=1e-4,   # TRL's suggested rate when you train an adapter
+                 per_device_train_batch_size=4, gradient_accumulation_steps=4,
+                 max_length=None)      # never cut off the image tokens
+trainer = SFTTrainer(model=model, args=args, train_dataset=data,
+                     processing_class=processor, peft_config=lora)
+trainer.train()
+trainer.save_model(OUTPUT_DIR)     # saves only the adapter, not a copy of the model
+# The next snippet loads this adapter folder onto the original model.</code></pre></div>
+    </details>
+
+    <details class="code">
+      <summary><span class="ttl">Load your adapter and label new images</span> <span class="lang">python · peft</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import torch
+from peft import PeftModel
+from transformers import AutoModelForMultimodalLM, AutoProcessor
+
+MODEL_ID = "google/gemma-4-E4B-it"      # the model the adapter was trained on
+OUTPUT_DIR = "gemma4-lora-product-use"  # the adapter folder saved by the training snippet
+QUESTION = "Is a person using the product? Answer yes or no."
+
+processor = AutoProcessor.from_pretrained(MODEL_ID)
+base = AutoModelForMultimodalLM.from_pretrained(
+    MODEL_ID, dtype=torch.bfloat16, device_map="auto")
+model = PeftModel.from_pretrained(base, OUTPUT_DIR)   # adds your trained adapter
+
+def label_image(path):
+    messages = [{"role": "user", "content": [
+        {"type": "image", "path": path},
+        {"type": "text", "text": QUESTION}]}]
+    inputs = processor.apply_chat_template(
+        messages, add_generation_prompt=True, tokenize=True, return_dict=True,
+        return_tensors="pt").to(model.device)
+    out = model.generate(**inputs, max_new_tokens=5, do_sample=False)   # greedy: reproducible
+    return processor.decode(out[0][inputs["input_ids"].shape[-1]:], skip_special_tokens=True).strip()
+
+print(label_image("new_ad.jpg"))</code></pre></div>
     </details>
 
     <h3>Getting a number out of a VLM</h3>
