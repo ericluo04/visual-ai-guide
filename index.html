@@ -184,6 +184,14 @@ p.prose { display: block; }
 .btn:hover { filter: brightness(1.08); }
 .btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--line); }
 
+/* Worked example: a strip of linked steps above a table */
+.flow { list-style: none; margin: 16px 0 14px; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.flow li { display: flex; align-items: center; gap: 8px; }
+.flow a { padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font: 500 0.86rem var(--font-body); text-decoration: none; white-space: nowrap; }
+.flow a:hover { border-color: var(--accent); background: var(--accent-soft); }
+.flow .arr { color: var(--muted); }
+.tbl tr:target td { background: var(--accent-soft); }
+
 /* Full map */
 .map { display: grid; gap: 18px; }
 .map-branch { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 16px; padding-bottom: 18px; border-bottom: 1px dashed var(--line); }
@@ -479,6 +487,26 @@ footer .wrap { display: grid; gap: 6px; }
     </div>
     <div class="guide-body" id="guideBody" aria-live="polite"></div>
   </div>
+
+  <h3 id="choose-worked-example">Worked example: ad drop-off and retention</h3>
+  <p class="prose">Suppose viewers stop watching your video ads before the end. You want to know why, and you want ads that keep them watching. The five steps below chain the sections of this guide to do both.</p>
+  <ol class="flow" aria-label="Steps of the worked example">
+    <li><a href="#we-describe">Describe</a><span class="arr" aria-hidden="true">&rarr;</span></li>
+    <li><a href="#we-predict">Predict</a><span class="arr" aria-hidden="true">&rarr;</span></li>
+    <li><a href="#we-explain">Explain</a><span class="arr" aria-hidden="true">&rarr;</span></li>
+    <li><a href="#we-measure">Measure concepts</a><span class="arr" aria-hidden="true">&rarr;</span></li>
+    <li><a href="#we-create">Create variants</a></li>
+  </ol>
+  <div class="tbl"><table>
+    <thead><tr><th>Question</th><th>Approach</th><th>Section</th><th>What to evaluate</th></tr></thead>
+    <tbody>
+      <tr id="we-describe"><td>What kinds of ads do you run?</td><td>Embed each ad and cluster the embeddings. Score each ad's prototypicality (its similarity to the average ad in its category) or its uniqueness.</td><td><a href="#represent">Embed images</a><br><a href="#video-analyze">Embed and analyze videos</a></td><td>Whether the clusters look coherent when you inspect them, and whether uniqueness relates to retention.</td></tr>
+      <tr id="we-predict"><td>Can content predict drop-off?</td><td>Fit a high-dimensional regression of retention on the embeddings, with cross-fitting.</td><td><a href="#predict">Predict outcomes</a></td><td>Out-of-sample fit, compared with a baseline that has no content features.</td></tr>
+      <tr id="we-explain"><td>What drives the predictions?</td><td>Make heatmaps with Captum or with the embeddings regression.</td><td><a href="#predict-explain-the-predictions">Explain the predictions</a></td><td>Whether the maps pass the sanity check and point to elements you can name.</td></tr>
+      <tr id="we-measure"><td>Do theory-guided concepts matter?</td><td>Label each concept with a VLM, for example a face in the first three seconds. Then regress retention on the labels with proper inference.</td><td><a href="#label">Label images with a VLM</a><br><a href="#inference">Inference with predicted variables</a></td><td>Agreement with a hand-coded sample, and the coefficients from proper inference, with their intervals.</td></tr>
+      <tr id="we-create"><td>Can you improve retention?</td><td>Generate new ads, or edit one element of existing ads, guided by what the earlier steps found.</td><td><a href="#video-generate">Generate videos</a><br><a href="#generate-images">Generate and edit images</a></td><td>Retention in an A/B test against the original ads.</td></tr>
+    </tbody>
+  </table></div>
 </section>
 <script>
 (function () {
@@ -537,7 +565,7 @@ footer .wrap { display: grid; gap: 6px; }
             "Archive every file with its prompt, model ID, and date. Closed models get retired.") },
           { label: "Reproducible or controlled stimuli", hint: "Same seed, one attribute changed", next: leaf("#generate-images", [
             p("Qwen-Image-2.1", "open", "The best open model whose licence covers the US, EU, and UK. Research use only.")]) },
-          { label: "A model trained on your images", next: leaf("#generate-images", [
+          { label: "A model trained on your images", next: leaf("#generate-images-fine-tune-a-generator-with-lora", [
             p("LoRA on FLUX.2 [klein] 4B", "open", "Its licence allows any use, so a brand partner can use the outputs."),
             p("LoRA on Qwen-Image-2.1", "open", "Higher quality, research use only.")]) } ] } },
       { label: "Embed and analyze videos", hint: "Ads, short-form posts, livestreams", href: "#video-analyze", next: {
@@ -1141,7 +1169,7 @@ image.save("bottle.png")</code></pre></div>
       </ul>
     </div>
 
-    <h3>Fine-tune a generator with LoRA</h3>
+    <h3 id="generate-images-fine-tune-a-generator-with-lora">Fine-tune a generator with LoRA</h3>
     <div class="prose">
       <p>You can teach an open model a subject or a visual style from your own images. The standard method is LoRA, described in <a href="#predict">Predict outcomes</a>. The original model stays untouched, and training produces a small adapter file.</p>
       <ul>
