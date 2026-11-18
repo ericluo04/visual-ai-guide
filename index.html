@@ -440,7 +440,7 @@ footer .wrap { display: grid; gap: 6px; }
   <div class="legend">
     <div class="paper">
       <p class="cite"><span class="badge open">open</span> <span class="badge closed">closed</span></p>
-      <p class="what">Open models run on your own machine, so you can fine-tune them and rerun them exactly. Check the licence. Closed models run behind a company's paid API. They are often stronger, but the company can change or retire them.</p>
+      <p class="what">Open models run on your own machine or GPU cluster, so you can fine-tune them and rerun them exactly at no cost. Check the licence. Closed models run behind a company's paid API. They are often stronger (sometimes marginally), but the company can change or retire them.</p>
     </div>
     <div class="paper">
       <p class="cite track-sample"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</p>
@@ -532,7 +532,7 @@ footer .wrap { display: grid; gap: 6px; }
             "Archive every file with its prompt, model ID, and date. Closed models get retired.") },
           { label: "Reproducible or controlled stimuli", hint: "Same seed, one attribute changed", next: leaf("#generate-images", [
             p("Qwen-Image-2.1", "open", "Best open model a US researcher can use. Research licence.")]) },
-          { label: "A model trained on my products", next: leaf("#generate-images", [
+          { label: "A model trained on your products", next: leaf("#generate-images", [
             p("LoRA on FLUX.2 [klein] 4B", "open", "Apache 2.0, so a brand partner can use the outputs."),
             p("LoRA on Qwen-Image-2.1", "open", "Higher quality, research use only.")]) } ] } },
       { label: "Embed/analyze videos", hint: "Ads, short-form posts, livestreams", href: "#video-analyze", next: {
@@ -545,7 +545,7 @@ footer .wrap { display: grid; gap: 6px; }
         q: "API or open weights?", options: [
           { label: "Best quality through an API", next: leaf("#video-generate", [
             p("Gemini Omni 1.2 Flash", "closed"), p("Seedance 2.5", "closed"), p("Wan 3.0", "closed")]) },
-          { label: "Open weights I can fine-tune", next: leaf("#video-generate", [
+          { label: "Open weights you can fine-tune", next: leaf("#video-generate", [
             p("MiniMax H3", "open", "Best open model; licence excludes the US, EU, UK, and South Korea."),
             p("Wan 2.2", "open", "Apache 2.0."), p("HunyuanVideo 1.5", "open", "Licence excludes the EU, UK, and South Korea."), p("LTX-2.5", "open", "Free under $10M revenue.")]) } ] } },
       { label: "Measure objects, text, faces, or gaze", hint: "Specialized tools", href: "#more-tools", next: leaf("#more-tools", [
