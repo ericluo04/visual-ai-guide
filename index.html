@@ -202,6 +202,7 @@ tr:last-child td { border-bottom: 0; }
 th { font: 600 0.72rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); background: var(--surface-2); white-space: nowrap; }
 td .name { font-weight: 600; white-space: nowrap; }
 td.rel { font: 500 0.8rem var(--font-mono); color: var(--muted); white-space: nowrap; }
+#represent .tbl td:nth-child(4) { min-width: 150px; }
 td .links { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 0.82rem; }
 .badge { display: inline-block; font: 600 0.68rem var(--font-mono); padding: 2px 7px; border-radius: 999px; letter-spacing: 0.02em; white-space: nowrap; }
 .badge.open { color: var(--open); background: var(--open-soft); }
@@ -925,7 +926,7 @@ model.print_trainable_parameters()
     <div class="prose">
       <p>A VLM normally answers in words, so predicting a number such as a click-through rate takes extra setup. No library covers this from start to finish yet. There are four workable patterns.</p>
       <ul>
-        <li>Prompt the model to choose one answer from a fixed set of labels, which can be numbers such as 1 to 7. This gives a single classified label for each image, and the model's probability for each label is available too, with no training needed. <a href="https://arxiv.org/abs/2610.02076">Li and Wagle (2026)</a> show that general-purpose models already work well this way and when fine-tuning still helps.</li>
+        <li>Prompt the model to choose one answer from a fixed set of labels, which can be numbers such as 1 to 7. This gives a single classified label for each image, and the model's probability for each label is available too, with no training needed. <a href="https://arxiv.org/abs/2610.02076">Li and Wagle (2026)</a> show that general-purpose models already work well this way with careful prompting (performing as "Jev" style decision models).</li>
         <li>For a bounded rating, such as a 1 to 7 scale, teach the model to answer with level words ("bad" through "excellent") and average the levels by how confident the model is in each, as <a href="https://arxiv.org/abs/2312.17090">Q-Align</a> does for image quality.</li>
         <li>For a count or a log count, add a small output layer that returns a number instead of words (a regression head). In transformers, <code>Qwen3_5ForSequenceClassification</code> with <code>num_labels=1</code> does this and accepts images.</li>
         <li>As the cheapest check, take the VLM's internal representation of each image as an embedding and fit the embeddings regression.</li>
