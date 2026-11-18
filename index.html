@@ -184,13 +184,17 @@ p.prose { display: block; }
 .btn:hover { filter: brightness(1.08); }
 .btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--line); }
 
-/* Worked example: a strip of linked steps above a table */
-.flow { list-style: none; margin: 16px 0 14px; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.flow li { display: flex; align-items: center; gap: 8px; }
-.flow a { padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font: 500 0.86rem var(--font-body); text-decoration: none; white-space: nowrap; }
-.flow a:hover { border-color: var(--accent); background: var(--accent-soft); }
-.flow .arr { color: var(--muted); }
-.tbl tr:target td { background: var(--accent-soft); }
+/* Illustrative example: one problem, separate question cards (cards reuse .paper) */
+.ex-banner { margin: 14px 0 12px; padding: 10px 14px; border-left: 3px solid var(--accent); border-radius: 6px; background: var(--accent-soft); color: var(--fg); font: 600 0.95rem var(--font-display); }
+.ex-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
+@media (max-width: 1000px) { .ex-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .ex-cards { grid-template-columns: minmax(0, 1fr); } }
+.ex-card { align-content: start; }
+.ex-card > svg { width: 22px; height: 22px; color: var(--accent); }
+.ex-lbl { margin-top: 4px; font: 600 0.78rem var(--font-body); color: var(--fg); }
+.ex-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.ex-chips a { padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-2); font: 500 0.8rem var(--font-body); text-decoration: none; }
+.ex-chips a:hover { border-color: var(--accent); background: var(--accent-soft); }
 
 /* Full map */
 .map { display: grid; gap: 18px; }
@@ -488,25 +492,56 @@ footer .wrap { display: grid; gap: 6px; }
     <div class="guide-body" id="guideBody" aria-live="polite"></div>
   </div>
 
-  <h3 id="choose-worked-example">Worked example: ad drop-off and retention</h3>
-  <p class="prose">Suppose viewers stop watching your video ads before the end. You want to know why, and you want ads that keep them watching. The five steps below chain the sections of this guide to do both.</p>
-  <ol class="flow" aria-label="Steps of the worked example">
-    <li><a href="#we-describe">Describe</a><span class="arr" aria-hidden="true">&rarr;</span></li>
-    <li><a href="#we-predict">Predict</a><span class="arr" aria-hidden="true">&rarr;</span></li>
-    <li><a href="#we-explain">Explain</a><span class="arr" aria-hidden="true">&rarr;</span></li>
-    <li><a href="#we-measure">Measure concepts</a><span class="arr" aria-hidden="true">&rarr;</span></li>
-    <li><a href="#we-create">Create variants</a></li>
-  </ol>
-  <div class="tbl"><table>
-    <thead><tr><th>Question</th><th>Approach</th><th>Section</th><th>What to evaluate</th></tr></thead>
-    <tbody>
-      <tr id="we-describe"><td>What kinds of ads do you run?</td><td>Embed each ad and cluster the embeddings. Score each ad's prototypicality (its similarity to the average ad in its category) or its uniqueness.</td><td><a href="#represent">Embed images</a><br><a href="#video-analyze">Embed and analyze videos</a></td><td>Whether the clusters look coherent when you inspect them, and whether uniqueness relates to retention.</td></tr>
-      <tr id="we-predict"><td>Can content predict drop-off?</td><td>Fit a high-dimensional regression of retention on the embeddings, with cross-fitting.</td><td><a href="#predict">Predict outcomes</a></td><td>Out-of-sample fit, compared with a baseline that has no content features.</td></tr>
-      <tr id="we-explain"><td>What drives the predictions?</td><td>Make heatmaps with Captum or with the embeddings regression.</td><td><a href="#predict-explain-the-predictions">Explain the predictions</a></td><td>Whether the maps pass the sanity check and point to elements you can name.</td></tr>
-      <tr id="we-measure"><td>Do theory-guided concepts matter?</td><td>Label each concept with a VLM, or with a classifier trained on your hand labels, for example a face in the first three seconds. Then regress retention on the labels with proper inference.</td><td><a href="#label">Label images with a VLM</a><br><a href="#predict">Predict outcomes</a><br><a href="#inference">Inference with predicted variables</a></td><td>Agreement with a hand-coded sample, and the coefficients from proper inference, with their intervals.</td></tr>
-      <tr id="we-create"><td>Can you improve retention?</td><td>Generate new ads, or edit one element of existing ads, guided by what the earlier steps found.</td><td><a href="#video-generate">Generate videos</a><br><a href="#generate-images">Generate and edit images</a></td><td>Retention in an A/B test against the original ads.</td></tr>
-    </tbody>
-  </table></div>
+  <h3 id="choose-worked-example">Illustrative example: ad drop-off and retention</h3>
+  <p class="ex-banner">The problem: viewers stop watching your video ads before the end.</p>
+  <p class="prose">You want to know why, and you want ads that keep them watching. The sections of this guide answer separate questions about this one problem. Each card below takes one question and shows one way to approach it. You can take up any question on its own.</p>
+  <div class="ex-cards">
+    <div class="paper ex-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="7" cy="7" r="3"/><circle cx="17" cy="8" r="2"/><circle cx="16" cy="17" r="3"/><circle cx="6" cy="17" r="1.5"/></svg>
+      <h4>What kinds of ads do you run?</h4>
+      <p class="ex-lbl">Illustrative approach</p>
+      <p class="what">Embed each ad and cluster the embeddings. Score each ad's prototypicality (its similarity to the average ad in its category) or its uniqueness.</p>
+      <p class="ex-lbl">Illustrative evaluation</p>
+      <p class="what">Whether the clusters look coherent when you inspect them, and whether uniqueness relates to retention.</p>
+      <p class="ex-chips"><a href="#represent">Embed images</a><a href="#video-analyze">Embed and analyze videos</a></p>
+    </div>
+    <div class="paper ex-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-6"/></svg>
+      <h4>Can content predict drop-off?</h4>
+      <p class="ex-lbl">Illustrative approach</p>
+      <p class="what">Fit a high-dimensional regression of retention on the embeddings, with cross-fitting.</p>
+      <p class="ex-lbl">Illustrative evaluation</p>
+      <p class="what">Out-of-sample fit, compared with a baseline that has no content features.</p>
+      <p class="ex-chips"><a href="#predict">Predict outcomes</a></p>
+    </div>
+    <div class="paper ex-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/></svg>
+      <h4>What drives individual predictions?</h4>
+      <p class="ex-lbl">Illustrative approach</p>
+      <p class="what">Make heatmaps with post-hoc interpretable machine learning methods, or with the embeddings regression.</p>
+      <p class="ex-lbl">Illustrative evaluation</p>
+      <p class="what">Whether the maps pass sanity checks and point to elements you can name.</p>
+      <p class="ex-chips"><a href="#predict-explain-the-predictions">Explain the predictions</a></p>
+    </div>
+    <div class="paper ex-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+      <h4>Do theory-guided concepts matter?</h4>
+      <p class="ex-lbl">Illustrative approach</p>
+      <p class="what">Label each concept with a VLM, or with a classifier trained on your hand labels, for example perceptual fluency. Then regress retention on the labels with proper inference.</p>
+      <p class="ex-lbl">Illustrative evaluation</p>
+      <p class="what">Agreement with a hand-coded sample, and the coefficients from proper inference, with their intervals.</p>
+      <p class="ex-chips"><a href="#label">Label images with a VLM</a><a href="#predict">Predict outcomes</a><a href="#inference">Inference with predicted variables</a></p>
+    </div>
+    <div class="paper ex-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15v5M16.5 17.5h5"/></svg>
+      <h4>Can you improve retention?</h4>
+      <p class="ex-lbl">Illustrative approach</p>
+      <p class="what">Generate new ads, or edit one element of existing ads, guided by what you found.</p>
+      <p class="ex-lbl">Illustrative evaluation</p>
+      <p class="what">Retention in an A/B test against the original ads.</p>
+      <p class="ex-chips"><a href="#video-generate">Generate videos</a><a href="#generate-images">Generate and edit images</a></p>
+    </div>
+  </div>
 </section>
 <script>
 (function () {
@@ -1006,6 +1041,7 @@ print(out.logits)   # shape (1, 1): one number for the image and prompt
       <ul>
         <li>Run the sanity check of <a href="https://arxiv.org/abs/1810.03292">Adebayo et al. (2018)</a> on your maps. Replace the model's learned numbers (its weights) with random ones and redraw the map. A map that barely changes is not explaining the model. Guided Backprop and Guided Grad-CAM fail this check.</li>
         <li>Treat a VLM's attention maps and its written reasons with caution. An attention map shows which parts of the image the model passed information from. Those parts can differ from the parts that changed its answer (<a href="https://doi.org/10.18653/v1/N19-1357">Jain and Wallace 2019</a>; <a href="https://arxiv.org/abs/2012.09838">Chefer et al. 2021</a>). Bright background patches in these maps can also be artifacts (<a href="https://arxiv.org/abs/2309.16588">Darcet et al. 2024</a>). A model's written reasons can leave out what swayed it, including cues in the image (<a href="https://arxiv.org/abs/2305.04388">Turpin et al. 2023</a>; <a href="https://doi.org/10.18653/v1/2025.findings-emnlp.723">Balasubramanian et al. 2025</a>).</li>
+        <li>All of these methods are local: each map explains one prediction for one image. Show maps for a random or pre-specified set of images, not only the ones that look convincing. To say what drives predictions across all images (a global explanation), label the images with theory-guided or data-driven concepts. Then relate those concepts to the outcome, as in <a href="#label">Label images with a VLM</a> and <a href="#inference">Inference with predicted variables</a>.</li>
       </ul>
     </div>
 
@@ -1740,7 +1776,7 @@ print(df[["fileName", "brightnessMean", "colorfulness", "visualComplexity", "nim
 <footer>
   <div class="wrap">
     <p>Model rankings were checked on Nov 17, 2026 and will change. Follow the benchmark links in each section for the current order.</p>
-    <p>Code snippets are illustrative, and most were not run. They follow the model cards and official docs as of the check date. Confirm against the linked page before running.</p>
+    <p>Code snippets are illustrative. Some were run on a CPU in November 2026, and the rest follow the official docs. They follow the model cards and official docs as of the check date. Confirm against the linked page before running.</p>
   </div>
 </footer>
 
