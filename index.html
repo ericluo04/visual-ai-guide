@@ -326,7 +326,7 @@ footer .wrap { display: grid; gap: 6px; }
 <section class="hero">
   <div>
     <h1>Visual AI for Marketing Research</h1>
-    <p class="sub">A practitioner guide to the current tools for turning images and video into data, predicting outcomes from them, and generating new ones. Each section names the best open and closed options, gives a short Python example, points to the benchmark that tracks the field, and cites a marketing paper that uses the method.</p>
+    <p class="sub">A practitioner guide to the current tools for turning images and video into data, predicting outcomes from them, and generating new ones. Each section names the best open and closed model options, gives a short Python example, points to benchmarks that track progress in that area, and cites a relevant marketing paper.</p>
   </div>
   <figure style="margin:0">
     <svg class="adfig" viewBox="0 0 300 262" role="img" aria-label="An ad for a sparkling wine: a green bottle with black neck foil and an orange label next to a tulip glass of pale bubbly wine and a cork, on a light tablecloth in window light. A scan line sweeps across the photo and reveals a heatmap of product presence over the bottle but not the glass, next to a card showing a predicted click-through rate of plus 18 percent">
@@ -501,7 +501,7 @@ footer .wrap { display: grid; gap: 6px; }
               { label: "A concept I can name", next: leaf("#represent", [p("TIPSv2", "open", "Patch tokens aligned with text: one matrix product per concept.")]) },
               { label: "Similarity to a reference image", hint: "A logo, a product shot", next: leaf("#represent", [p("DINOv3 patch tokens", "open", "Cosine similarity of every patch to the reference.")]) },
               { label: "What drives my outcome", next: leaf("#represent", [p("DINOv3 patches + linear probe", "open", "Fit ridge on mean-pooled patches, then score each patch. The map adds up to the prediction.")]) } ] } } ] } },
-      { label: "Label images with categories I define", hint: "Is a person shown? Is it a lifestyle shot?", href: "#label", next: {
+      { label: "Label images with categories you define", hint: "Is a person shown? Is it a lifestyle shot?", href: "#label", next: {
         q: "How many images have you labeled by hand?", options: [
           { label: "None, or a handful", next: leaf("#label", [
             p("Qwen3.8 or Gemma 4", "open", "Zero-shot prompts with greedy decoding. Rerunnable later."),
