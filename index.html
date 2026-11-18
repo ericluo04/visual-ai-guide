@@ -163,9 +163,6 @@ section.s > header > h2::before { content: counter(sec, decimal-leading-zero); c
 p.prose { display: block; }
 .tbl table { min-width: 620px; }
 .prose ul, .prose ol { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
-.prose ol.ways { padding-left: 1.6em; }
-.prose ol.ways > li::marker { font: 700 1.15rem var(--font-display); color: var(--accent); }
-.ways-next { border-top: 1px solid var(--line); padding-top: 22px; margin-top: 14px; }
 
 /* Decision guide */
 .guide { margin-top: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
@@ -357,7 +354,7 @@ footer .wrap { display: grid; gap: 6px; }
       <li><a href="#predict">Predict outcomes</a></li>
       <li><a href="#inference">Inference with predicted variables</a></li>
       <li><a href="#generate-images">Generate and edit images</a></li>
-      <li><a href="#video-analyze">Embed and analyze videos</a></li>
+      <li><a href="#video-analyze">Video analysis</a></li>
       <li><a href="#video-generate">Generate videos</a></li>
       <li><a href="#more-tools">More tools</a></li>
       <li><a href="#current">Stay current</a></li>
@@ -530,7 +527,7 @@ footer .wrap { display: grid; gap: 6px; }
       <p class="what">Embed each ad and cluster the embeddings. Score each ad's prototypicality (its similarity to the average ad in its category) or its uniqueness.</p>
       <p class="ex-lbl">Illustrative evaluation</p>
       <p class="what">Whether the clusters look coherent when you inspect them, and whether uniqueness relates to retention.</p>
-      <p class="ex-chips"><a href="#represent">Embed images</a><a href="#video-analyze">Embed and analyze videos</a></p>
+      <p class="ex-chips"><a href="#represent">Embed images</a><a href="#video-analyze">Video analysis</a></p>
     </div>
     <div class="paper ex-card">
       <h4>Do theory-guided concepts matter?</h4>
@@ -642,10 +639,10 @@ footer .wrap { display: grid; gap: 6px; }
           { label: "A model trained on your images", next: leaf("#generate-images-fine-tune-a-generator-with-lora", [
             p("LoRA on FLUX.2 [klein] 4B", "open", "Its licence allows any use, so a brand partner can use the outputs."),
             p("LoRA on Qwen-Image-2.1", "open", "Higher quality, research use only.")]) } ] } },
-      { label: "Embed and analyze videos", hint: "Ads, short-form posts, livestreams", href: "#video-analyze", next: {
+      { label: "Video analysis", hint: "Ads, short-form posts, livestreams", href: "#video-analyze", next: {
         q: "What do you need from each video?", options: [
-          { label: "Answers to the questions in your codebook", next: leaf("#video-analyze", [p("Gemini 4", "closed", "Reads video with audio."), p("Qwen3.6-27B", "open", "One 80 GB GPU.")], REG) },
-          { label: "One vector per clip", next: leaf("#video-analyze", [
+          { label: "Answers to the questions in your codebook", next: leaf("#video-analyze-label-videos-with-a-vlm", [p("Gemini 4", "closed", "Reads video with audio."), p("Qwen3.6-27B", "open", "One 80 GB GPU.")], REG) },
+          { label: "One vector per clip", next: leaf("#video-analyze-embed-videos", [
             p("Gemini Embedding 2", "closed", "Clips up to 120 seconds."), p("Qwen3-VL-Embedding", "open", "Shared space with text."),
             p("V-JEPA 2.1", "open", "Best input for a regression on your own outcome.")], REG) } ] } },
       { label: "Generate videos", href: "#video-generate", next: {
@@ -1501,16 +1498,43 @@ image.save("sks_lora.png")</code></pre></div>
 
 <section class="s" id="video-analyze">
   <header>
-    <h2>Embed and analyze videos</h2>
-    <p class="lede">Turn videos you already have, such as ads, short-form posts, and livestreams, into data. As with images, you can ask a model questions about each video or turn each video into an embedding.</p>
+    <h2>Video analysis</h2>
+    <p class="lede">Turn videos you already have, such as ads, short-form posts, and livestreams, into data. The steps are the same as for images: embed each video or label it with a VLM, then use the result to predict outcomes.</p>
   </header>
   <div class="stack" style="margin-top:0">
-    <div class="prose">
-      <p>There are three ways to do this, from richest to cheapest. The first asks questions. The second and third make embeddings.</p>
-      <ol class="ways" start="1">
-        <li>Send the whole video to a VLM and ask the questions in your codebook: is the product shown, when does the brand first appear, what claims are spoken. Gemini watches the video and listens to its audio. It looks at 1 frame per second by default, so raise the rate for fast-cut ads.</li>
-      </ol>
-    </div>
+    <h3 id="video-analyze-embed-videos">Embed videos</h3>
+    <p class="prose">Turn each clip into one embedding with a video embedding model. It captures motion that a single frame misses. The vector then goes into a regression, clustering, or similarity search, as in <a href="#represent">Embed images</a>.</p>
+
+    <div class="tbl"><table>
+      <thead><tr><th>Model</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
+      <tbody>
+        <tr><td><span class="name">Gemini Embedding 2</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Mar 2026</td><td>One vector per clip, in the same space as text and images. Clips up to 120 seconds. It ignores the audio.</td><td><span class="links"><a href="https://aistudio.google.com/docs/embeddings">Docs</a></span></td></tr>
+        <tr><td><span class="name">Qwen3-VL-Embedding</span><br><small>Alibaba Qwen, 2B and 8B</small></td><td><span class="badge open">open</span></td><td class="rel">Jan 2026</td><td>Video embeddings in the same space as text, so you can search clips by description.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen3-VL-Embedding-8B">HF</a></span></td></tr>
+        <tr><td><span class="name">V-JEPA 2.1</span><br><small>Meta</small></td><td><span class="badge open">open</span></td><td class="rel">Mar 2026</td><td>Learns what videos look like from video alone, with no text. The best input when you will fit your own regression on an outcome.</td><td><span class="links"><a href="https://github.com/facebookresearch/vjepa2">GitHub</a></span></td></tr>
+      </tbody>
+    </table></div>
+
+    <details class="code">
+      <summary><span class="ttl">Embed video ads with Qwen3-VL-Embedding</span> <span class="lang">python · Qwen3-VL-Embedding</span></summary>
+      <div class="codewrap"><pre><code class="language-python"># Run from a clone of github.com/QwenLM/Qwen3-VL-Embedding
+from src.models.qwen3_vl_embedding import Qwen3VLEmbedder
+
+model = Qwen3VLEmbedder(model_name_or_path="Qwen/Qwen3-VL-Embedding-8B")
+
+videos = ["ad_0193.mp4", "ad_0194.mp4", "ad_0195.mp4"]
+# Sample 1 frame per second, at most 64 frames per video
+inputs = [{"video": v, "fps": 1.0, "max_frames": 64} for v in videos]
+emb = model.process(inputs)     # one normalized vector per video
+
+X = emb.float().cpu().numpy()   # one row per video, 4,096 columns
+# X goes into the same high-dimensional regression as image embeddings (see Predict outcomes)
+print(X.shape)</code></pre></div>
+    </details>
+
+    <p class="prose">For a cheaper baseline, take a frame every second or so, embed each frame with an <a href="#represent">image model</a>, and average the vectors. This is reproducible but ignores sound and motion. Keep the frame-level vectors if timing matters.</p>
+
+    <h3 id="video-analyze-label-videos-with-a-vlm">Label videos with a VLM</h3>
+    <p class="prose">Send the whole video to a VLM and ask the questions in your codebook: is the product shown, when does the brand first appear, what claims are spoken. Gemini watches the video and listens to its audio. It looks at 1 frame per second by default, so raise the rate for fast-cut ads.</p>
 
     <div class="tbl"><table>
       <thead><tr><th>Model</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
@@ -1544,45 +1568,10 @@ reply = client.interactions.create(
 print(reply.output_text)</code></pre></div>
     </details>
 
-    <p class="prose">Treat answers from the first approach as measurements with error. Follow the <a href="#label">labeling workflow</a> and the <a href="#inference">inference corrections</a>.</p>
+    <p class="prose">Treat these answers as measurements with error. Follow the <a href="#label">labeling workflow</a> and the <a href="#inference">inference corrections</a>.</p>
 
-    <div class="prose ways-next">
-      <ol class="ways" start="2">
-        <li>Turn each clip into one embedding with a video embedding model. It captures motion that a single frame misses. The vector then goes into a regression, clustering, or similarity search, as in <a href="#represent">Embed images</a>.</li>
-      </ol>
-    </div>
-
-    <div class="tbl"><table>
-      <thead><tr><th>Model</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
-      <tbody>
-        <tr><td><span class="name">Gemini Embedding 2</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Mar 2026</td><td>One vector per clip, in the same space as text and images. Clips up to 120 seconds. It ignores the audio.</td><td><span class="links"><a href="https://aistudio.google.com/docs/embeddings">Docs</a></span></td></tr>
-        <tr><td><span class="name">Qwen3-VL-Embedding</span><br><small>Alibaba Qwen, 2B and 8B</small></td><td><span class="badge open">open</span></td><td class="rel">Jan 2026</td><td>Video embeddings in the same space as text, so you can search clips by description.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen3-VL-Embedding-8B">HF</a></span></td></tr>
-        <tr><td><span class="name">V-JEPA 2.1</span><br><small>Meta</small></td><td><span class="badge open">open</span></td><td class="rel">Mar 2026</td><td>Learns what videos look like from video alone, with no text. The best input when you will fit your own regression on an outcome.</td><td><span class="links"><a href="https://github.com/facebookresearch/vjepa2">GitHub</a></span></td></tr>
-      </tbody>
-    </table></div>
-
-    <details class="code">
-      <summary><span class="ttl">Embed video ads with Qwen3-VL-Embedding</span> <span class="lang">python · Qwen3-VL-Embedding</span></summary>
-      <div class="codewrap"><pre><code class="language-python"># Run from a clone of github.com/QwenLM/Qwen3-VL-Embedding
-from src.models.qwen3_vl_embedding import Qwen3VLEmbedder
-
-model = Qwen3VLEmbedder(model_name_or_path="Qwen/Qwen3-VL-Embedding-8B")
-
-videos = ["ad_0193.mp4", "ad_0194.mp4", "ad_0195.mp4"]
-# Sample 1 frame per second, at most 64 frames per video
-inputs = [{"video": v, "fps": 1.0, "max_frames": 64} for v in videos]
-emb = model.process(inputs)     # one normalized vector per video
-
-X = emb.float().cpu().numpy()   # one row per video, 4,096 columns
-# X goes into the same high-dimensional regression as image embeddings (see Predict outcomes)
-print(X.shape)</code></pre></div>
-    </details>
-
-    <div class="prose ways-next">
-      <ol class="ways" start="3">
-        <li>Take a frame every second or so, embed each frame with an <a href="#represent">image model</a>, and average them. This is cheap and reproducible but ignores sound and motion. Keep the frame-level vectors if timing matters.</li>
-      </ol>
-    </div>
+    <h3 id="video-analyze-predict-outcomes-and-inference">Predict outcomes and inference</h3>
+    <p class="prose">Put the video embedding matrix from <a href="#video-analyze-embed-videos">Embed videos</a> into the same cross-fitted high-dimensional regression as in <a href="#predict">Predict outcomes</a>, and the code there runs unchanged. Fine-tuning works the same way. Keep all clips from one ad, or one account, in the same fold. Labels that a VLM coded from videos need the same bias correction as in <a href="#inference">Inference with predicted variables</a>.</p>
 
     <div class="track" style="margin-top:18px">
       <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
