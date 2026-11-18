@@ -533,7 +533,7 @@ footer .wrap { display: grid; gap: 6px; }
             "Archive every file with its prompt, model ID, and date. Closed models get retired.") },
           { label: "Reproducible or controlled stimuli", hint: "Same seed, one attribute changed", next: leaf("#generate-images", [
             p("Qwen-Image-2.1", "open", "Best open model a US researcher can use. Research licence.")]) },
-          { label: "A model trained on your products", next: leaf("#generate-images", [
+          { label: "A model trained on your images", next: leaf("#generate-images", [
             p("LoRA on FLUX.2 [klein] 4B", "open", "Apache 2.0, so a brand partner can use the outputs."),
             p("LoRA on Qwen-Image-2.1", "open", "Higher quality, research use only.")]) } ] } },
       { label: "Embed/analyze videos", hint: "Ads, short-form posts, livestreams", href: "#video-analyze", next: {
@@ -1030,7 +1030,7 @@ summary(fit)</code></pre></div>
 <section class="s" id="generate-images">
   <header>
     <h2>Generate and edit images</h2>
-    <p class="lede">Use an image generator to build experimental stimuli, to change one attribute of an ad while holding the rest fixed, or to adapt a model to your own products. Closed APIs lead on quality. Open models are the ones you can train on your own products and rerun exactly, years later.</p>
+    <p class="lede">Use an image generator to build experimental stimuli, to change one attribute of an ad while holding the rest fixed, or to adapt a model to your own images. Closed APIs lead on quality. Open models are the ones you can train on your own images and rerun exactly, years later.</p>
   </header>
 
   <div class="tbl"><table>
@@ -1062,9 +1062,9 @@ summary(fit)</code></pre></div>
       </ul>
     </div>
 
-    <h3>Fine-tune a generator on your own products</h3>
+    <h3>Fine-tune a generator on your own images</h3>
     <div class="prose">
-      <p>You can teach an open model what your product or brand style looks like. The standard tool is LoRA, the same small add-on described in <a href="#predict">Predict outcomes</a>: the original model stays untouched, and a small file learns your product from your own photos.</p>
+      <p>You can teach an open model a subject or a visual style from your own images. The standard tool is LoRA, the same small add-on described in <a href="#predict">Predict outcomes</a>: the original model stays untouched, and a small file learns from your images.</p>
       <ul>
         <li>To teach one product or mascot, use about 5 to 30 photos of it and a made-up name for it, such as "sks bottle". The model learns to draw the product whenever that name appears in a prompt. This recipe is called DreamBooth.</li>
         <li>To teach a visual style, use a few hundred images, each with a short caption.</li>
@@ -1089,7 +1089,7 @@ image = pipe(
 ).images[0]
 image.save("bottle.png")
 
-# After training a LoRA on your product photos:
+# After training a LoRA on your own images:
 pipe.load_lora_weights("path/to/your-lora", adapter_name="brand")
 pipe.set_adapters("brand", adapter_weights=0.8)   # 0 = base model, 1 = full LoRA</code></pre></div>
     </details>
@@ -1244,7 +1244,7 @@ print(reply.output_text)</code></pre></div>
       <h4>Check the licence</h4>
       <p>Every open video model here restricts use in some way: by country, by company revenue, or both. Only Wan 2.2 is fully permissive. Newer Wan versions (2.5 and later) are available only through Alibaba's API.</p>
     </div>
-    <p class="prose">You can also teach an open video model your product or style with a LoRA add-on, as for images. <a href="https://github.com/ostris/ai-toolkit">ai-toolkit</a>, <a href="https://github.com/modelscope/DiffSynth-Studio">DiffSynth-Studio</a>, <a href="https://github.com/kohya-ss/musubi-tuner">musubi-tuner</a>, and <a href="https://github.com/tdrussell/diffusion-pipe">diffusion-pipe</a> support MiniMax H3, Wan, and HunyuanVideo.</p>
+    <p class="prose">You can also teach an open video model a subject or style from your own videos with a LoRA add-on, as for images. <a href="https://github.com/ostris/ai-toolkit">ai-toolkit</a>, <a href="https://github.com/modelscope/DiffSynth-Studio">DiffSynth-Studio</a>, <a href="https://github.com/kohya-ss/musubi-tuner">musubi-tuner</a>, and <a href="https://github.com/tdrussell/diffusion-pipe">diffusion-pipe</a> support MiniMax H3, Wan, and HunyuanVideo.</p>
 
     <details class="code">
       <summary><span class="ttl">Generate a clip with Wan 2.2</span> <span class="lang">python · diffusers</span></summary>
