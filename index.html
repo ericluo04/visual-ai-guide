@@ -152,6 +152,10 @@ section.s > header { display: grid; gap: 12px; margin-bottom: 20px; }
 section.s ~ section.s { margin-top: 3.5rem; padding-top: 3.5rem; border-top: 1px solid var(--line); }
 @media (max-width: 600px) { section.s ~ section.s { margin-top: 2rem; padding-top: 2rem; } }
 section.s > header > h2 { margin-bottom: 0.5rem; }
+main { counter-reset: sec -1; }
+section.s { counter-increment: sec; }
+/* Same numbering as the rail. The "/ \"\"" alt text keeps screen readers from reading the number. */
+section.s > header > h2::before { content: counter(sec, decimal-leading-zero); content: counter(sec, decimal-leading-zero) / ""; margin-right: 0.45em; font: 500 0.6em var(--font-mono); color: var(--muted); letter-spacing: 0; vertical-align: 0.15em; }
 .lede { font-size: 1.06rem; color: var(--muted); }
 .prose { display: grid; gap: 14px; }
 p.prose { display: block; }
