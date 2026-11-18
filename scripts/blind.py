@@ -40,9 +40,14 @@ OWN_LINK = re.compile(
 OWN_URL = re.compile(r'https?://(?:www\.)?(?:laneluo\.com|github\.com/ericluo04)\S*', re.IGNORECASE)
 
 
+NOINDEX = '<meta name="robots" content="noindex, nofollow">'
+
+
 def scrub(html: str) -> str:
     html = OWN_LINK.sub(r"\1", html)
     html = OWN_URL.sub("", html)
+    if NOINDEX not in html:
+        html = html.replace("</head>", NOINDEX + "\n</head>", 1)
     return html
 
 
