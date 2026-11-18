@@ -498,9 +498,9 @@ footer .wrap { display: grid; gap: 6px; }
                 p("Cohere Embed v5 or voyage-multimodal-3.5", "closed", "Mixed text-plus-image inputs.")], REG) } ] } },
           { label: "Where in the image something is", hint: "Heatmaps", next: {
             q: "A map of what?", options: [
-              { label: "A concept I can name", next: leaf("#represent", [p("TIPSv2", "open", "Patch tokens aligned with text: one matrix product per concept.")]) },
+              { label: "A concept you can name", next: leaf("#represent", [p("TIPSv2", "open", "Patch tokens aligned with text: one matrix product per concept.")]) },
               { label: "Similarity to a reference image", hint: "A logo, a product shot", next: leaf("#represent", [p("DINOv3 patch tokens", "open", "Cosine similarity of every patch to the reference.")]) },
-              { label: "What drives my outcome", next: leaf("#represent", [p("DINOv3 patches + linear probe", "open", "Fit ridge on mean-pooled patches, then score each patch. The map adds up to the prediction.")]) } ] } } ] } },
+              { label: "What drives your outcome", next: leaf("#represent", [p("DINOv3 patches + linear probe", "open", "Fit ridge on mean-pooled patches, then score each patch. The map adds up to the prediction.")]) } ] } } ] } },
       { label: "Label images with categories you define", hint: "Is a person shown? Is it a lifestyle shot?", href: "#label", next: {
         q: "How many images have you labeled by hand?", options: [
           { label: "None, or a handful", next: leaf("#label", [
