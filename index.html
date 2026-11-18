@@ -149,6 +149,9 @@ main { min-width: 0; max-width: var(--col); }
 /* Sections */
 section.s { padding-top: 56px; }
 section.s > header { display: grid; gap: 12px; margin-bottom: 20px; }
+section.s ~ section.s { margin-top: 3.5rem; padding-top: 3.5rem; border-top: 1px solid var(--line); }
+@media (max-width: 600px) { section.s ~ section.s { margin-top: 2rem; padding-top: 2rem; } }
+section.s > header > h2 { margin-bottom: 0.5rem; }
 .lede { font-size: 1.06rem; color: var(--muted); }
 .prose { display: grid; gap: 14px; }
 p.prose { display: block; }
@@ -190,25 +193,25 @@ p.prose { display: block; }
 @media (max-width: 1000px) { .ex-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 600px) { .ex-cards { grid-template-columns: minmax(0, 1fr); } }
 .ex-card { align-content: start; }
+.ex-card h4 { text-align: center; }
 .ex-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .ex-group { margin-top: 14px; padding: 12px 14px 14px; border-radius: var(--radius); background: var(--accent-soft); }
 .ex-group-title { margin: 0 0 10px; font: 600 0.85rem var(--font-body); color: var(--accent); }
-.ex-group-grid { display: grid; grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr); gap: 14px 6px; }
-.ex-pred { grid-area: 1 / 1 / 3 / 2; }
+.ex-group-grid { display: grid; grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr); gap: 14px 6px; }
+.ex-pred { grid-area: 1 / 1 / 3 / 2; align-self: center; }
 .ex-loc { grid-area: 1 / 3; }
 .ex-glob { grid-area: 2 / 3; }
-.ex-arrow { width: 24px; height: 24px; align-self: center; justify-self: center; color: var(--accent); }
-.ex-arrow.a1 { grid-area: 1 / 2; }
-.ex-arrow.a2 { grid-area: 2 / 2; }
+.ex-arrow { display: none; width: 24px; height: 24px; justify-self: center; color: var(--accent); }
+.ex-fork { grid-area: 1 / 2 / 3 / 3; align-self: center; width: 36px; height: 120px; color: var(--accent); }
 .ex-join { display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 10px 0; color: var(--muted); font: 500 0.8rem var(--font-body); }
 .ex-join svg { width: 16px; height: 28px; }
 @media (max-width: 600px) {
   .ex-group-grid { grid-template-columns: minmax(0, 1fr); }
   .ex-two { grid-template-columns: minmax(0, 1fr); }
   .ex-group-grid > *, .ex-group-grid > .ex-arrow { grid-area: auto; }
-  .ex-arrow { transform: rotate(90deg); }
+  .ex-arrow { display: block; transform: rotate(90deg); }
+  .ex-fork { display: none; }
 }
-.ex-card > svg { width: 22px; height: 22px; color: var(--accent); }
 .ex-lbl { margin-top: 4px; font: 600 0.78rem var(--font-body); color: var(--fg); }
 .ex-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 .sub-h { margin: 24px 0 8px; }
@@ -516,7 +519,6 @@ footer .wrap { display: grid; gap: 6px; }
   <p class="prose">You want to know why, and you want ads that keep them watching. The sections of this guide answer separate questions about this one problem. Each card below takes one question and shows one way to approach it. You can take up any question on its own.</p>
   <div class="ex-cards ex-two">
     <div class="paper ex-card">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="7" cy="7" r="3"/><circle cx="17" cy="8" r="2"/><circle cx="16" cy="17" r="3"/><circle cx="6" cy="17" r="1.5"/></svg>
       <h4>What kinds of ads do you run?</h4>
       <p class="ex-lbl">Illustrative approach</p>
       <p class="what">Embed each ad and cluster the embeddings. Score each ad's prototypicality (its similarity to the average ad in its category) or its uniqueness.</p>
@@ -525,20 +527,18 @@ footer .wrap { display: grid; gap: 6px; }
       <p class="ex-chips"><a href="#represent">Embed images</a><a href="#video-analyze">Embed and analyze videos</a></p>
     </div>
     <div class="paper ex-card">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
       <h4>Do theory-guided concepts matter?</h4>
       <p class="ex-lbl">Illustrative approach</p>
       <p class="what">Label each concept with a VLM, or with a classifier trained on your hand labels, for example perceptual fluency. Then regress retention on the labels with proper inference: a bias correction method, such as prediction-powered inference or DSL, uses a hand-coded sample so that labeling errors do not bias the coefficients.</p>
       <p class="ex-lbl">Illustrative evaluation</p>
       <p class="what">Agreement with a hand-coded sample, and the bias-corrected coefficients with their intervals.</p>
-      <p class="ex-chips"><a href="#label">Label images with a VLM</a><a href="#predict">Predict outcomes</a><a href="#inference" title="Inference with predicted variables">Inference</a></p>
+      <p class="ex-chips"><a href="#label">Label images with a VLM</a><a href="#predict">Predict outcomes</a><a href="#inference">Inference with predicted variables</a></p>
     </div>
   </div>
   <div class="ex-group">
     <p class="ex-group-title">Predict, then explain</p>
     <div class="ex-group-grid">
       <div class="paper ex-card ex-pred">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-6"/></svg>
         <h4>Can content predict drop-off?</h4>
         <p class="ex-lbl">Illustrative approach</p>
         <p class="what">Fit a high-dimensional regression of retention on the embeddings, with cross-fitting. With many ads, you can fine-tune the image model instead.</p>
@@ -547,8 +547,8 @@ footer .wrap { display: grid; gap: 6px; }
         <p class="ex-chips"><a href="#predict">Predict outcomes</a></p>
       </div>
       <svg class="ex-arrow a1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15"/><path d="M14 7l5 5-5 5"/></svg>
+      <svg class="ex-fork" viewBox="0 0 36 120" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 60h12M14 12v96M14 12h18M14 108h18"/><path d="M27 7l5 5-5 5M27 103l5 5-5 5"/></svg>
       <div class="paper ex-card ex-loc">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/></svg>
         <h4>What drives individual predictions?</h4>
         <p class="ex-lbl">Illustrative approach</p>
         <p class="what">Make heatmaps for that predictor on a random set of ads: the patch-level outcome map from Embed images, or Integrated Gradients run through the image model and the regression together.</p>
@@ -556,9 +556,7 @@ footer .wrap { display: grid; gap: 6px; }
         <p class="what">Whether the maps pass sanity checks and point to elements you can name.</p>
         <p class="ex-chips"><a href="#predict-explain-the-predictions">Explain the predictions</a></p>
       </div>
-      <svg class="ex-arrow a2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15"/><path d="M14 7l5 5-5 5"/></svg>
       <div class="paper ex-card ex-glob">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>
         <h4>What does the model rely on overall?</h4>
         <p class="ex-lbl">Illustrative approach</p>
         <p class="what">Run TCAV or CRAFT on the same predictor, or group many of its heatmaps with SpRAy, to find what it relies on across ads.</p>
@@ -570,10 +568,9 @@ footer .wrap { display: grid; gap: 6px; }
   </div>
   <div class="ex-join"><svg viewBox="0 0 16 28" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 2v22"/><path d="M3 19l5 5 5-5"/></svg>Builds on the cards above</div>
     <div class="paper ex-card ex-final">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15v5M16.5 17.5h5"/></svg>
       <h4>Can you improve retention?</h4>
       <p class="ex-lbl">Illustrative approach</p>
-      <p class="what">Generate new ads, or edit one element of existing ads, guided by the concepts, clusters, and heatmaps you found above.</p>
+      <p class="what">Generate new ads, or edit one element of existing ads, guided by the insights you found above.</p>
       <p class="ex-lbl">Illustrative evaluation</p>
       <p class="what">Retention in an A/B test against the original ads.</p>
       <p class="ex-chips"><a href="#generate-images">Generate and edit images</a><a href="#video-generate">Generate videos</a></p>
@@ -1313,9 +1310,8 @@ accelerate config default
 # Put 20 to 30 of your images in one folder inside examples/dreambooth.
 # They can show a product, a brand style, or a setting.
 # "sks" is a rare token that becomes the name of that concept in prompts.
-# The README trains this distilled model. Black Forest Labs also publishes
-# black-forest-labs/FLUX.2-klein-base-4B and recommends it for LoRA training.
-export MODEL_NAME="black-forest-labs/FLUX.2-klein-4B"
+# Black Forest Labs recommends the base model for LoRA training.
+export MODEL_NAME="black-forest-labs/FLUX.2-klein-base-4B"
 export INSTANCE_DIR="my_images"
 export OUTPUT_DIR="trained-flux2-klein-4b"
 
@@ -1352,8 +1348,9 @@ accelerate launch train_dreambooth_lora_flux2_klein.py \
     <details class="code">
       <summary><span class="ttl">Add your LoRA to the open model</span> <span class="lang">python · diffusers</span></summary>
       <div class="codewrap"><pre><code class="language-python"># pipe is the FLUX.2 [klein] pipeline from "Generate with an open model" above
+# The LoRA was trained on the base model. This loads it into the distilled model.
 pipe.load_lora_weights("trained-flux2-klein-4b", adapter_name="brand")   # OUTPUT_DIR from training
-pipe.set_adapters("brand", adapter_weights=0.8)   # 0 = base model, 1 = full LoRA
+pipe.set_adapters("brand", adapter_weights=0.8)   # 0 = no LoRA, 1 = full LoRA
 
 image = pipe(
     prompt="a photo of sks on a marble counter, studio light",   # sks calls the trained concept
