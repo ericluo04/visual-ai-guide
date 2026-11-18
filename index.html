@@ -493,7 +493,7 @@ footer .wrap { display: grid; gap: 6px; }
   </div>
 
   <h3 id="choose-worked-example">Illustrative example: ad drop-off and retention</h3>
-  <p class="ex-banner">The problem: viewers stop watching your video ads before the end.</p>
+  <p class="ex-banner">The problem: viewers stop watching your image/video ads before the end.</p>
   <p class="prose">You want to know why, and you want ads that keep them watching. The sections of this guide answer separate questions about this one problem. Each card below takes one question and shows one way to approach it. You can take up any question on its own.</p>
   <div class="ex-cards">
     <div class="paper ex-card">
@@ -1243,9 +1243,57 @@ image.save("bottle.png")</code></pre></div>
     </div>
 
     <details class="code">
+      <summary><span class="ttl">Train a LoRA on your images (FLUX.2 [klein])</span> <span class="lang">bash · diffusers</span></summary>
+      <div class="codewrap"><pre><code class="language-bash"># Official diffusers example: examples/dreambooth/README_flux2.md
+# Install diffusers from source, then the example's requirements
+git clone https://github.com/huggingface/diffusers
+cd diffusers
+pip install -e .
+cd examples/dreambooth
+pip install -r requirements_flux.txt
+pip install bitsandbytes torchao   # needed for --use_8bit_adam and --do_fp8_training
+accelerate config default
+
+# Put 20 to 30 photos of your product in one folder inside examples/dreambooth.
+# "sks" is a rare token that becomes the name of your product in prompts.
+export MODEL_NAME="black-forest-labs/FLUX.2-klein-4B"
+export INSTANCE_DIR="my_product"
+export OUTPUT_DIR="trained-flux2-klein-4b"
+
+# The README gives no memory figure for [klein]. It says FP8 training
+# (--do_fp8_training) needs a CUDA GPU with compute capability 8.9 or higher.
+# Rank 16 with alpha 16 follows the README's "LoRA Rank and Alpha" tip.
+accelerate launch train_dreambooth_lora_flux2_klein.py \
+  --pretrained_model_name_or_path=$MODEL_NAME \
+  --instance_data_dir=$INSTANCE_DIR \
+  --output_dir=$OUTPUT_DIR \
+  --instance_prompt="a photo of sks bottle" \
+  --resolution=1024 \
+  --train_batch_size=1 \
+  --gradient_accumulation_steps=4 \
+  --optimizer="adamW" \
+  --use_8bit_adam \
+  --learning_rate=1e-4 \
+  --lr_scheduler="constant" \
+  --lr_warmup_steps=100 \
+  --max_train_steps=500 \
+  --rank=16 \
+  --lora_alpha=16 \
+  --mixed_precision="bf16" \
+  --guidance_scale=1 \
+  --do_fp8_training \
+  --gradient_checkpointing \
+  --cache_latents \
+  --seed="0"
+
+# The LoRA is saved in examples/dreambooth/trained-flux2-klein-4b/.
+# The next snippet loads that folder with load_lora_weights.</code></pre></div>
+    </details>
+
+    <details class="code">
       <summary><span class="ttl">Add your LoRA to the open model</span> <span class="lang">python · diffusers</span></summary>
       <div class="codewrap"><pre><code class="language-python"># pipe is the FLUX.2 [klein] pipeline from "Generate with an open model" above
-pipe.load_lora_weights("path/to/your-lora", adapter_name="brand")
+pipe.load_lora_weights("trained-flux2-klein-4b", adapter_name="brand")   # OUTPUT_DIR from training
 pipe.set_adapters("brand", adapter_weights=0.8)   # 0 = base model, 1 = full LoRA
 
 image = pipe(
