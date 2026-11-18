@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Visual AI Field Guide</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="A practitioner guide to current visual AI tools for marketing research: embeddings, extraction, labeling, prediction, inference with predicted variables, and image and video generation.">
+<meta name="description" content="A practitioner guide to current visual AI tools for marketing research: image embeddings, labeling, prediction, inference with predicted variables, video analysis, image and video generation, and specialized measurement tools.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,650;12..96,750&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -292,10 +292,10 @@ footer .wrap { display: grid; gap: 6px; }
       <a href="#label">Label</a>
       <a href="#predict">Predict</a>
       <a href="#inference">Inference</a>
-      <a href="#generate-images">Images</a>
-      <a href="#video-analyze">Videos</a>
-      <a href="#current">Stay current</a>
+      <a href="#generate-images">Generate</a>
+      <a href="#video-analyze">Video</a>
       <a href="#more-tools">More tools</a>
+      <a href="#current">Stay current</a>
     </nav>
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch color theme">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg>
@@ -310,27 +310,27 @@ footer .wrap { display: grid; gap: 6px; }
       <li><a href="#how-to-read">How to read this guide</a></li>
       <li><a href="#choose">Choose a method</a></li>
       <li><a href="#represent">Embed images</a></li>
-      <li><a href="#label">Label with a VLM</a></li>
+      <li><a href="#label">Label images with a VLM</a></li>
       <li><a href="#predict">Predict outcomes</a></li>
       <li><a href="#inference">Inference with predicted variables</a></li>
-      <li><a href="#generate-images">Generate images</a></li>
-      <li><a href="#video-analyze">Embed/analyze videos</a></li>
+      <li><a href="#generate-images">Generate and edit images</a></li>
+      <li><a href="#video-analyze">Embed and analyze videos</a></li>
       <li><a href="#video-generate">Generate videos</a></li>
-      <li><a href="#current">Stay current</a></li>
       <li><a href="#more-tools">More tools</a></li>
+      <li><a href="#current">Stay current</a></li>
       <li><a href="#companion">Companion resources</a></li>
     </ol>
-    <p class="rail-note">Checked 17 November 2026.</p>
+    <p class="rail-note">Checked Nov 17, 2026.</p>
   </aside>
 
   <main>
 <section class="hero">
   <div>
     <h1>Visual AI for Marketing Research</h1>
-    <p class="sub">A practitioner guide to the current tools for turning images and video into data, predicting outcomes from them, and generating new ones. Each section names the best open and closed model options, gives a short Python example, points to benchmarks that track progress in that area, and cites a relevant marketing paper.</p>
+    <p class="sub">A practitioner guide to the current tools for turning images and video into data, predicting outcomes from images and video, and generating new images and video. Each section names the best open and closed model options, gives a short code example, points to benchmarks that track progress in that area, and cites a relevant marketing paper.</p>
   </div>
   <figure style="margin:0">
-    <svg class="adfig" viewBox="0 0 300 262" role="img" aria-label="An ad for a sparkling wine: a green bottle with black neck foil and an orange label next to a tulip glass of pale bubbly wine and a cork, on a light tablecloth in window light. A scan line sweeps across the photo and reveals a heatmap of product presence over the bottle but not the glass, next to a card showing a predicted click-through rate of plus 18 percent">
+    <svg class="adfig" viewBox="0 0 300 262" role="img" aria-label="An ad for a sparkling wine: a green bottle with black neck foil and an orange label next to a tulip glass of pale bubbly wine and a cork, on a light tablecloth in window light. A scan line sweeps across the photo and reveals a heatmap of product presence over the bottle but not the glass, next to a card showing a predicted click rate of plus 18 percent">
       <defs>
         <linearGradient id="wallG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f6f1ea"/><stop offset=".45" stop-color="#ddd2c4"/><stop offset="1" stop-color="#b3a493"/></linearGradient>
         <radialGradient id="windowG" cx="0.05" cy="0.15" r="0.7"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
@@ -426,7 +426,7 @@ footer .wrap { display: grid; gap: 6px; }
       <rect x="180" y="56" width="8" height="8" rx="1.5" style="fill:var(--mk);opacity:.95"/>
       <text x="194" y="64" style="font-size:10px;fill:var(--mk)">product presence</text>
       <rect x="168" y="178" width="124" height="70" rx="12" style="fill:var(--surface);stroke:var(--line)"/>
-      <text x="180" y="197" style="font-size:9px;fill:var(--muted)">predicted CTR</text>
+      <text x="180" y="197" style="font-size:9px;fill:var(--muted)">predicted click rate</text>
       <text x="180" y="223" style="font-family:var(--font-display);font-size:21px;font-weight:700;fill:var(--fg)">+18%</text>
       <polyline points="236,233 246,227 254,230 263,217 271,220 280,205" style="fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round"/>
       <circle cx="280" cy="205" r="3" style="fill:var(--accent)"/>
@@ -445,7 +445,7 @@ footer .wrap { display: grid; gap: 6px; }
     </div>
     <div class="paper">
       <p class="cite track-sample"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</p>
-      <p class="what">The best tool for each task changes every few months, so every pick here reflects state-of-the-art methods as of Nov 17, 2026. The Track it box at the end of each section links the leaderboards that rank current models. Check them before you start a project.</p>
+      <p class="what">The best tool for each task changes every few months, so every pick here reflects state-of-the-art methods as of Nov 17, 2026. The Track it box in most sections links the leaderboards that rank current models. Check them before you start a project.</p>
     </div>
     <div class="paper">
       <p class="cite mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</p>
@@ -453,7 +453,7 @@ footer .wrap { display: grid; gap: 6px; }
     </div>
     <div class="paper">
       <p class="cite"><span class="ctag">&lt;/&gt;</span> Show code</p>
-      <p class="what">Short Python examples, folded away until you open them. They follow the model cards and official docs, but please check linked pages to ensure that implementations are up to date.</p>
+      <p class="what">Short Python and R examples, folded away until you open them. They follow the model cards and official docs, but please check linked pages to ensure that implementations are up to date.</p>
     </div>
     <div class="paper">
       <p class="cite">Where to start</p>
@@ -464,7 +464,7 @@ footer .wrap { display: grid; gap: 6px; }
 <section class="s" id="choose">
   <header>
     <h2>Choose a method</h2>
-    <p class="lede">Start from the task. Answer two or three questions and the guide names the tool, tells you whether it is open or closed, and links the section with code.</p>
+    <p class="lede">Start from the task. Answer two or three questions. The decision guide then names the tool, says whether it is open or closed, and links to the section that has the code.</p>
   </header>
   <div class="guide">
     <div class="guide-head">
@@ -480,6 +480,7 @@ footer .wrap { display: grid; gap: 6px; }
 <script>
 (function () {
   var REG = 'If the output enters a regression, correct for its errors: see <a href="#inference">Inference</a>.';
+  var HAND = 'All of these need a random hand-coded sample of a few hundred images.';
   function leaf(href, picks, then) { return { href: href, picks: picks, then: then }; }
   function p(name, access, why) { return { name: name, access: access, why: why }; }
   window.GUIDE = {
@@ -488,71 +489,71 @@ footer .wrap { display: grid; gap: 6px; }
       { label: "Turn images into numbers", hint: "Features for regression, clustering, or search", href: "#represent", next: {
         q: "What should the numbers capture?", options: [
           { label: "How the images look", hint: "Style, composition, product appearance", next: leaf("#represent",
-            [p("DINOv3", "open", "Image-only features. Take <code>pooler_output</code> (the CLS token) for one vector per image.")], REG) },
+            [p("DINOv3", "open", "Trained on images alone, with no text. Gives one vector per image.")], REG) },
           { label: "Images and text in one space", hint: "Search by text, zero-shot scores", next: {
-            q: "Open weights or an API?", options: [
-              { label: "Open weights", next: leaf("#represent", [
-                p("SigLIP 2", "open", "Short labels and captions; fast; Apache 2.0."),
+            q: "An open model or an API?", options: [
+              { label: "An open model", next: leaf("#represent", [
+                p("SigLIP 2", "open", "Short labels and captions. Fast. Apache 2.0."),
                 p("Qwen3-VL-Embedding or WeMM-Embedding", "open", "Long or compositional queries, documents, video. Needs a GPU.")], REG) },
               { label: "An API", next: leaf("#represent", [
                 p("Gemini Embedding 2", "closed", "Text, images, video, audio, and PDFs in one space."),
                 p("voyage-multimodal-3.5", "closed", "Mixed text, image, and video inputs.")], REG) } ] } },
           { label: "Where in the image something is", hint: "Heatmaps", next: {
             q: "A map of what?", options: [
-              { label: "A concept you can name", next: leaf("#represent", [p("TIPSv2", "open", "Patch tokens aligned with text: one matrix product per concept.")]) },
-              { label: "Similarity to a reference image", hint: "A logo, a product shot", next: leaf("#represent", [p("DINOv3 patch tokens", "open", "Cosine similarity of every patch to the reference.")]) },
-              { label: "What drives your outcome", next: leaf("#represent", [p("DINOv3 patches + linear probe", "open", "Fit ridge on mean-pooled patches, then score each patch. The map adds up to the prediction.")]) } ] } } ] } },
+              { label: "A concept you can name", next: leaf("#represent", [p("TIPSv2", "open", "Compares each patch of the image with a phrase you type, and maps where the phrase matches.")]) },
+              { label: "Similarity to a reference image", hint: "A logo, a product shot", next: leaf("#represent", [p("DINOv3 patch embeddings", "open", "Scores how closely each patch of the image resembles the reference.")]) },
+              { label: "What drives your outcome", next: leaf("#represent", [p("DINOv3 patch embeddings + regression", "open", "Fit a regression of the outcome on the image's patch embeddings, then score each patch. The map averages to the prediction, up to the regression's constant.")]) } ] } } ] } },
       { label: "Label images with categories you define", hint: "Is a person shown? Is it a lifestyle shot?", href: "#label", next: {
         q: "How many images have you labeled by hand?", options: [
           { label: "None, or a handful", next: leaf("#label", [
-            p("Qwen3.8 or Gemma 4", "open", "Zero-shot prompts with greedy decoding. Rerunnable later."),
+            p("Qwen3.8 or Gemma 4", "open", "Ask the question with no training examples. Set the model to always give its most likely answer, so a rerun gives the same labels."),
             p("Claude, Gemini, or GPT-6", "closed", "Use the low-cost tiers and batch APIs for scale.")],
             "Hand-code about 400 random images and report agreement. " + REG) },
           { label: "Hundreds or more", next: leaf("#predict", [
-            p("DINOv3 or SigLIP 2 embeddings + penalized logistic regression", "open", "Cross-fit, and compare with a zero-shot VLM on the same images.")], REG) } ] } },
+            p("DINOv3 or SigLIP 2 embeddings + high-dimensional logistic regression", "", "Train on your hand labels and test on images the regression never saw. Compare with a VLM given no examples.")], REG) } ] } },
       { label: "Predict an outcome", hint: "Clicks, likes, sales, ratings", href: "#predict", next: {
         q: "What does the outcome depend on?", options: [
           { label: "What the image shows", next: {
-            q: "How many labeled images do you have?", options: [
-              { label: "Fewer than about 10,000", next: leaf("#predict", [p("DINOv3 or SigLIP 2 embeddings + high-dimensional regression", "open", "Ridge, lasso, elastic net, or Bayesian shrinkage, cross-fitted.")], REG) },
+            q: "For how many images do you observe the outcome?", options: [
+              { label: "Fewer than about 10,000", next: leaf("#predict", [p("DINOv3 or SigLIP 2 embeddings (one list of numbers per image) + high-dimensional regression", "", "A regression built for many columns (ridge, lasso, elastic net). Predict each image from a fit that never saw it.")], REG) },
               { label: "About 10,000 or more", next: leaf("#predict", [
-                p("Embeddings + high-dimensional regression", "open", "This is the baseline to beat."),
-                p("LoRA on the vision backbone", "open", "Only if the images are unlike web photos and the embeddings regression leaves a gap.")], REG) } ] } },
+                p("Embeddings + high-dimensional regression", "", "Fit this first and compare every other approach with it."),
+                p("Fine-tune the image model (LoRA)", "open", "Only if your images look unlike everyday web photos and fine-tuning predicts held-out images measurably better than the embeddings regression.")], REG) } ] } },
           { label: "Text in or beside the image", hint: "Packaging copy, headline, caption", next: leaf("#predict", [
-            p("LoRA on Qwen3.8 or Gemma 4", "open", "Compare against embeddings + high-dimensional regression on the same folds.")], REG) } ] } },
+            p("LoRA on Qwen3.8 or Gemma 4", "open", "Needs thousands of images with an observed outcome. Compare with the embeddings regression on the same held-out images.")], "With fewer images, take the VLM's internal representation of each image as an embedding and fit the embeddings regression. " + REG) } ] } },
       { label: "Use model outputs in a regression", hint: "Any predicted label, score, or index", href: "#inference", next: {
         q: "Where does the predicted variable enter?", options: [
-          { label: "As the outcome", next: leaf("#inference", [p("Prediction-powered inference (PPI++)", "open", "ppi_py in Python, ipd in R.")]) },
+          { label: "As the outcome", next: leaf("#inference", [p("Prediction-powered inference (PPI++)", "", "ppi_py in Python, ipd in R.")], HAND) },
           { label: "As a regressor or treatment", next: leaf("#inference", [
-            p("Design-based supervised learning (DSL)", "open", "dsl in R; needs a coded sample drawn at known probabilities."),
-            p("Battaglia et al. correction", "open", "ValidMLInference in Python, MLBC in R.")]) } ] } },
-      { label: "Create or edit images", hint: "Stimuli, ad variants, brand imagery", href: "#generate-images", next: {
+            p("Design-based supervised learning (DSL)", "", "dsl in R. Egami, Hinck, Stewart, and Wei (2024) extend it to predicted regressors."),
+            p("Battaglia et al. correction", "", "ValidMLInference in Python, MLBC in R.")], HAND) } ] } },
+      { label: "Generate or edit images", hint: "Stimuli, ad variants, brand imagery", href: "#generate-images", next: {
         q: "What matters most?", options: [
           { label: "Best quality for a fixed stimulus set", next: leaf("#generate-images", [
-            p("GPT Image 2.6", "closed", "First on both arenas."), p("Nano Banana 2.1", "closed", "Gemini API, SynthID watermark.")],
+            p("GPT Image 2.6", "closed", "First on Artificial Analysis for generation."), p("Nano Banana 2.1", "closed", "Gemini API, SynthID watermark.")],
             "Archive every file with its prompt, model ID, and date. Closed models get retired.") },
           { label: "Reproducible or controlled stimuli", hint: "Same seed, one attribute changed", next: leaf("#generate-images", [
-            p("Qwen-Image-2.1", "open", "Best open model a US researcher can use. Research licence.")]) },
+            p("Qwen-Image-2.1", "open", "The best open model whose licence covers the US, EU, and UK. Research use only.")]) },
           { label: "A model trained on your images", next: leaf("#generate-images", [
             p("LoRA on FLUX.2 [klein] 4B", "open", "Apache 2.0, so a brand partner can use the outputs."),
             p("LoRA on Qwen-Image-2.1", "open", "Higher quality, research use only.")]) } ] } },
-      { label: "Embed/analyze videos", hint: "Ads, short-form posts, livestreams", href: "#video-analyze", next: {
+      { label: "Embed and analyze videos", hint: "Ads, short-form posts, livestreams", href: "#video-analyze", next: {
         q: "What do you need from each video?", options: [
-          { label: "Answers to coded questions", next: leaf("#video-analyze", [p("Gemini 4", "closed", "Reads video with audio."), p("Qwen3.6-27B", "open", "One 80 GB GPU.")], REG) },
+          { label: "Answers to the questions in your codebook", next: leaf("#video-analyze", [p("Gemini 4", "closed", "Reads video with audio."), p("Qwen3.6-27B", "open", "One 80 GB GPU.")], REG) },
           { label: "One vector per clip", next: leaf("#video-analyze", [
             p("Gemini Embedding 2", "closed", "Clips up to 120 seconds."), p("Qwen3-VL-Embedding", "open", "Shared space with text."),
             p("V-JEPA 2.1", "open", "Best input for a regression on your own outcome.")], REG) } ] } },
-      { label: "Create videos", href: "#video-generate", next: {
-        q: "API or open weights?", options: [
+      { label: "Generate videos", href: "#video-generate", next: {
+        q: "An API or an open model?", options: [
           { label: "Best quality through an API", next: leaf("#video-generate", [
             p("Gemini Omni 1.2 Flash", "closed"), p("Seedance 2.5", "closed"), p("Wan 3.0", "closed")]) },
-          { label: "Open weights you can fine-tune", next: leaf("#video-generate", [
-            p("MiniMax H3", "open", "Best open model; licence excludes the US, EU, UK, and South Korea."),
+          { label: "An open model you can fine-tune", next: leaf("#video-generate", [
+            p("MiniMax H3", "open", "The best open model. Its licence excludes the US, EU, UK, and South Korea."),
             p("Wan 2.2", "open", "Apache 2.0.")]) } ] } },
-      { label: "Measure objects, text, faces, or gaze", hint: "Specialized tools", href: "#more-tools", next: leaf("#more-tools", [
-        p("SAM 3", "open", "Text-prompted masks: the share of the ad a logo covers."),
+      { label: "Measure objects, text, or where viewers look", hint: "Specialized tools, including faces", href: "#more-tools", next: leaf("#more-tools", [
+        p("SAM 3", "open", "Outlines any object you name. Use it to measure the share of the image that a logo covers."),
         p("PaddleOCR", "open", "Words and their boxes in ads and packaging."),
-        p("DeepGaze", "open", "Predicted eye fixations.")], REG) }
+        p("DeepGaze", "open", "Predicts where viewers will look.")], REG) }
     ]
   };
 })();
@@ -560,57 +561,57 @@ footer .wrap { display: grid; gap: 6px; }
 <section class="s" id="represent">
   <header>
     <h2>Embed images</h2>
-    <p class="lede">An embedding turns each image into a vector of a few hundred to a few thousand numbers. Images that look alike or mean alike sit close together. Embeddings feed regressions, clustering, similarity search, and most of the methods further down this page.</p>
+    <p class="lede">An embedding turns each image into a vector of a few hundred to a few thousand numbers. Images that look alike, or that show similar content, get similar vectors. Embeddings feed regressions, clustering, similarity search, and most of the methods further down this page.</p>
   </header>
 
   <div class="two">
     <div class="paper">
       <svg class="viz" id="vizGlobal" viewBox="0 0 300 96" role="img" aria-label="An ad image becomes one row of numbers"></svg>
       <p class="cite">Global embedding: one vector per image</p>
-      <p class="what">The whole ad becomes one list of numbers. Use it as regressors, to cluster ads, or to find the most similar images.</p>
+      <p class="what">The whole image becomes one list of numbers. Use the numbers as regressors, to cluster images, or to find the most similar images.</p>
     </div>
     <div class="paper">
       <svg class="viz" id="vizPatch" viewBox="0 0 300 96" role="img" aria-label="An ad image cut into a grid of squares, each square scored to form a heatmap"></svg>
-      <p class="cite">Patch embeddings: one vector per square</p>
-      <p class="what">The ad is cut into small squares, and each square gets its own vector. Score the squares and you get a map of where something is in the ad.</p>
+      <p class="cite">Patch embeddings: one vector per patch</p>
+      <p class="what">The image is cut into small squares, called patches, and each patch gets its own vector. Score the patches and you get a map of where something is in the image.</p>
     </div>
   </div>
-  <p class="prose" style="margin-top:14px">How the two connect: most image models today are vision transformers. A vision transformer cuts the image into squares of 14 or 16 pixels, called patches, and adds one extra summary token, often called the CLS token. After the model has read the image, the summary token (or the average of all the patches) is the global embedding, and the patches are the patch embeddings.</p>
+  <p class="prose" style="margin-top:14px">How the two connect: most image models today are vision transformers. A vision transformer cuts the image into squares 14 or 16 pixels wide, called patches. It turns each patch into a vector, and it adds one extra vector that summarizes the whole image, often called the CLS token. After the model has processed the image, the summary vector (or the average of the patch vectors) is the global embedding. The vector for each patch is that patch's embedding.</p>
+  <p class="prose">Model sizes in the tables are counts of parameters, the numbers inside the model (M for million, B for billion). Larger models need a GPU with more memory. Most open models are hosted on Hugging Face (HF), and each model's page there is called its model card.</p>
 
-  <h3>Current picks</h3>
   <div class="tbl"><table>
     <thead><tr><th>Model</th><th>Access</th><th>Released</th><th>Embeds</th><th>Notes</th><th>Links</th></tr></thead>
     <tbody>
-      <tr><td><span class="name">DINOv3</span><br><small>Meta, 21M to 6.7B</small></td><td><span class="badge open">open</span></td><td class="rel">Aug 2025</td><td>Images</td><td>Learns what images look like from images alone. It has the strongest patch embeddings, so it is the default for heatmaps and for features you feed into your own regression. You accept Meta's licence on Hugging Face before downloading. It allows commercial use.</td><td><span class="links"><a href="https://huggingface.co/facebook/dinov3-vitb16-pretrain-lvd1689m">HF</a><a href="https://arxiv.org/abs/2508.10104">Paper</a></span></td></tr>
-      <tr><td><span class="name">SigLIP 2</span><br><small>Google, 86M to 1B</small></td><td><span class="badge open">open</span></td><td class="rel">Feb 2025</td><td>Images, text</td><td>Images and texts share one space, for zero-shot labels and text-to-image search. Text is capped at 64 tokens. Apache 2.0, fast, multilingual.</td><td><span class="links"><a href="https://huggingface.co/collections/google/siglip2-67b5dcef38c175486e240107">HF</a><a href="https://arxiv.org/abs/2502.14786">Paper</a></span></td></tr>
-      <tr><td><span class="name">Gemini Embedding 2</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Mar 2026</td><td>Text, images, video, audio, PDFs<br><small>mixed in one input</small></td><td>One API call with no GPU. Each request takes up to 6 images, a 6-page PDF, 3 minutes of audio, or 2 minutes of video. 128 to 3,072 dimensions.</td><td><span class="links"><a href="https://ai.google.dev/gemini-api/docs/embeddings">Docs</a><a href="https://deepmind.google/models/gemini/embedding/">Model</a></span></td></tr>
-      <tr><td><span class="name">Qwen3-VL-Embedding</span> / <span class="name">WeMM-Embedding</span><br><small>Alibaba, Tencent; 2B to 9B</small></td><td><span class="badge open">open</span></td><td class="rel">Aug 2026</td><td>Text, images, video, document pages<br><small>mixed in one input</small></td><td>Built on the same models that chat about images, so they understand long, detailed text queries. They lead the MMEB-V2 leaderboard, need a GPU, and give no patch embeddings.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen3-VL-Embedding-8B">Qwen</a><a href="https://huggingface.co/tencent/WeMM-Embedding-9B">WeMM</a></span></td></tr>
+      <tr><td><span class="name">DINOv3</span><br><small>Meta, 21M to 6.7B parameters</small></td><td><span class="badge open">open</span></td><td class="rel">Aug 2025</td><td>Images</td><td>Learns what images look like from images alone. It has the strongest patch embeddings, so it is the default for heatmaps and for features you feed into your own regression. You accept Meta's licence on Hugging Face before downloading. It allows commercial use.</td><td><span class="links"><a href="https://huggingface.co/facebook/dinov3-vitb16-pretrain-lvd1689m">HF</a><a href="https://arxiv.org/abs/2508.10104">Paper</a></span></td></tr>
+      <tr><td><span class="name">SigLIP 2</span><br><small>Google, 86M to 1B</small></td><td><span class="badge open">open</span></td><td class="rel">Feb 2025</td><td>Images, text</td><td>Images and text share one vector space, so an image and a phrase that describes it get similar vectors. You can use this to label images with no training examples (zero-shot) and to search images by text. Text is capped at 64 tokens (word pieces). Fast and multilingual. Its licence, Apache 2.0, allows any use, including commercial use.</td><td><span class="links"><a href="https://huggingface.co/collections/google/siglip2-67b5dcef38c175486e240107">HF</a><a href="https://arxiv.org/abs/2502.14786">Paper</a></span></td></tr>
+      <tr><td><span class="name">Gemini Embedding 2</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Mar 2026</td><td>Text, images, video, audio, PDFs<br><small>mixed in one input</small></td><td>One API call with no GPU. Each request takes up to 6 images, a 6-page PDF, 3 minutes of audio, or 2 minutes of video. You choose the vector length, from 128 to 3,072 numbers.</td><td><span class="links"><a href="https://aistudio.google.com/docs/embeddings">Docs</a><a href="https://deepmind.google/models/gemini/embedding/">Model</a></span></td></tr>
+      <tr><td><span class="name">Qwen3-VL-Embedding</span> / <span class="name">WeMM-Embedding</span><br><small>Alibaba, Tencent; 2B to 9B</small></td><td><span class="badge open">open</span></td><td class="rel">Aug 2026</td><td>Text, images, video, document pages<br><small>mixed in one input</small></td><td>Built on the same models that chat about images, so they understand long, detailed text queries. On the MMEB-V2 leaderboard, WeMM-Embedding-9B ranks third and Qwen3-VL-Embedding-8B ranks lower (Ovis-VL-Embedding-9B is first). Both of these models need a GPU and give no patch embeddings.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen3-VL-Embedding-8B">Qwen</a><a href="https://huggingface.co/tencent/WeMM-Embedding-9B">WeMM</a></span></td></tr>
       <tr><td><span class="name">TIPSv2</span><br><small>Google DeepMind, 86M to 1.1B</small></td><td><span class="badge open">open</span></td><td class="rel">Apr 2026</td><td>Images, text</td><td>Like SigLIP 2, but each patch also lines up with text, so you can ask "where is the product in this ad" and get a map. Apache 2.0.</td><td><span class="links"><a href="https://huggingface.co/google/tipsv2-b14">HF</a><a href="https://arxiv.org/abs/2604.12012">Paper</a></span></td></tr>
       <tr><td><span class="name">voyage-multimodal-3.5</span><br><small>Voyage AI</small></td><td><span class="badge closed">closed</span></td><td class="rel">Jan 2026</td><td>Text, images, video<br><small>mixed in one input</small></td><td>A good fit for document-like images such as catalog pages. Up to 32,000 tokens per input.</td><td><span class="links"><a href="https://docs.voyageai.com/docs/multimodal-embeddings">Docs</a></span></td></tr>
     </tbody>
   </table></div>
 
   <div class="stack">
-    <p class="prose">No independent benchmark compares the two closed APIs, so their order here is a judgment call. OpenAI offers no image embedding model.</p>
+    <p class="prose">No independent benchmark compares the two closed APIs, Gemini Embedding 2 and voyage-multimodal-3.5. Listing Gemini first is a judgment call. OpenAI offers no image embedding model.</p>
 
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
         <li><p class="cite">Cao, Jingcun, Xiaolin Li, and Lingling Zhang (2025). "Is Relevancy Everything? A Deep-Learning Approach to Understand the Effect of Image-Text Congruence." Management Science 71(12): 10579–10602. <a href="https://doi.org/10.1287/mnsc.2022.01896">doi</a></p>
-          <p>Embeds each image with a residual network and its text with BERT, scores how well the two match, and uses that score as a regressor. Reader preference turns out to be U-shaped in image-text congruence.</p></li>
+          <p>Embeds each image with a pretrained image network (ResNet) and its text with a language model (BERT), scores how well the two match, and uses that score as a regressor. Reader preference is U-shaped in image-text congruence.</p></li>
       </ul>
     </div>
 
     <h3>Which output is the global embedding</h3>
-    <p class="prose">Each model returns its global embedding under a different name. The code below already takes the right one. This table matters when you write your own.</p>
+    <p class="prose">Each model returns its global embedding under a different name. The code below already takes the right one. Skip this table unless you write your own code. It uses the output names of the Hugging Face transformers classes.</p>
     <div class="tbl"><table>
-      <thead><tr><th>Model</th><th>Global embedding</th><th>Patch tokens</th></tr></thead>
+      <thead><tr><th>Model</th><th>Global embedding</th><th>Patch embeddings</th></tr></thead>
       <tbody>
         <tr><td><span class="name">DINOv3</span></td><td><code>pooler_output</code>: the CLS token after the final layer norm. The CLS token concatenated with the mean patch is a common alternative.</td><td><code>last_hidden_state[:, 5:]</code>. Skip 1 CLS and 4 register tokens. Patch size 16, so 224 px gives a 14 × 14 grid.</td></tr>
         <tr><td><span class="name">SigLIP 2</span></td><td><code>image_embeds</code> or <code>pooler_output</code> from an attention-pooling head. There is no CLS token.</td><td>Available, but poorly aligned with text. Use TIPSv2 or DINOv3 for maps.</td></tr>
         <tr><td><span class="name">TIPSv2</span></td><td><code>pooler_output</code>, which is token 0.</td><td>Skip 2 tokens. Patch size 14, and the default 448 px gives 32 × 32.</td></tr>
-        <tr><td><span class="name">VLM embedders</span></td><td>The last token of the language model, returned directly.</td><td>None.</td></tr>
-        <tr><td><span class="name">Closed APIs</span></td><td>One vector per input item, with undocumented pooling.</td><td>None.</td></tr>
+        <tr><td><span class="name">Qwen3-VL-Embedding, WeMM-Embedding</span></td><td>The last token of the language model, returned directly.</td><td>None.</td></tr>
+        <tr><td><span class="name">Closed APIs</span></td><td>One vector per input item. The company does not document how it is computed.</td><td>None.</td></tr>
       </tbody>
     </table></div>
 
@@ -677,9 +678,9 @@ vectors = [e.values for e in result.embeddings]   # 3 lists of 768 floats</code>
 
     <h3>Use embeddings in a regression</h3>
     <div class="prose">
-      <p>An embedding has hundreds or thousands of columns, often more than you have images, so ordinary least squares breaks down. Use a high-dimensional regression that shrinks or selects coefficients. Common choices are ridge, lasso, and elastic net, with the amount of shrinkage chosen by cross-validation. Bayesian versions such as spike-and-slab or horseshoe priors do the same job and give full uncertainty. Use the logistic versions for a yes or no outcome.</p>
-      <p>Be careful with squeezing the embedding into a handful of principal components (PCA). PCA keeps the directions where images vary most, and those need not be the ones that matter for your outcome. A few linear directions can also lose much of what a nonlinear model encoded.</p>
-      <p>Often the image is a control and the question is about something else: the effect of price, a promotion, or a model's face in the ad. A growing literature treats images as confounders directly. <a href="https://doi.org/10.1073/pnas.2530532123">Imai and Nakamura (2026, PNAS)</a> read a compact summary of each image from inside the generative model that made it, then adjust for that summary with machine learning, so the effect of one image feature is not credited to features that tend to appear with it. Their paper points to further work, such as <a href="https://arxiv.org/abs/2402.01785">DoubleMLDeep (Klaassen et al. 2024)</a>, which runs double machine learning with image and text controls.</p>
+      <p>An embedding has hundreds or thousands of columns, often more than you have images, so ordinary least squares breaks down. Use a high-dimensional regression that shrinks or selects coefficients. Common choices are ridge, lasso, and elastic net, with the amount of shrinkage chosen by cross-validation (try each amount on held-out images and keep the best). Bayesian versions such as spike-and-slab or horseshoe priors do the same job and give a posterior distribution for every coefficient. Use the logistic versions for a yes or no outcome.</p>
+      <p>Avoid reducing the embedding to a handful of principal components (PCA) by default. PCA keeps the directions where images vary most, and those need not be the directions that matter for your outcome. A handful of components can also drop information that the model stored in the other directions.</p>
+      <p>Often the image is a control and the question is about something else: the effect of price, a promotion, or a person's face in the ad. The image is then a confounder: it is related to both the cause you study and the outcome. <a href="https://doi.org/10.1073/pnas.2530532123">Imai and Nakamura (2026, PNAS)</a> read a compact summary of each image from inside a generative model that is made to reproduce it. They adjust for that summary with machine learning. The effect of one image feature is then not credited to features that tend to appear with it. Their paper points to further work, such as <a href="https://arxiv.org/abs/2402.01785">DoubleMLDeep (Klaassen et al. 2024)</a>, which applies double machine learning, the method in the code below, with image and text controls.</p>
     </div>
     <details class="code">
       <summary><span class="ttl">Effect of price, with the image embedding as a control</span> <span class="lang">python · econml</span></summary>
@@ -698,7 +699,7 @@ print(est.effect(), est.effect_interval())   # price effect and its 95% interval
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
         <li><p class="cite">Dew, Ryan (2025). "Adaptive Preference Measurement with Unstructured Data." Management Science 71(5): 3996–4012. <a href="https://doi.org/10.1287/mnsc.2023.03775">doi</a></p>
-          <p>Embeds product photos and text, reduces the embeddings with PCA, and uses them as inputs to a nonparametric utility model, so products need no hand-coded attributes. An adaptive survey picks which products to show next by Bayesian optimization, and the fitted utility can be read to recover how consumers value specific attributes.</p></li>
+          <p>Embeds product photos, reduces the embeddings with PCA, and uses them as inputs to a nonparametric utility model, so products need no hand-coded attributes. An adaptive survey uses Bayesian optimization to pick which products to show next. The fitted utility model then shows how consumers value specific attributes.</p></li>
         <li><p class="cite">Compiani, Giovanni, Ilya Morozov, and Stephan Seiler (2026). "Demand Estimation with Text and Image Data." RAND Journal of Economics. <a href="https://doi.org/10.1111/1756-2171.70052">doi</a></p>
           <p>Extracts embeddings of product photos with pretrained image networks and of product text with language models, then enters them as product attributes in a mixed logit demand model. The embeddings let the data reveal which products substitute for each other.</p></li>
       </ul>
@@ -706,19 +707,19 @@ print(est.effect(), est.effect_interval())   # price effect and its 95% interval
 
     <h3>Heatmaps from patch embeddings</h3>
     <div class="prose">
-      <p>A heatmap gives each square of the image a score and colors it. What the score means depends on what you compare each square with. There are three common choices.</p>
+      <p>A heatmap gives each patch of the image a score and colors it. What the score means depends on what you compare each patch with. There are three common choices.</p>
       <ol>
-        <li>Compare each square with a reference image, such as your logo (DINOv3). Squares that look like the logo light up.</li>
-        <li>Compare each square with a phrase, such as "a bottle" (TIPSv2, or <a href="https://github.com/facebookresearch/dinov3/blob/main/notebooks/dinotxt_segmentation_inference.ipynb">dino.txt</a> for DINOv3). Squares that match the phrase light up. Compare maps across phrases; the raw level means little.</li>
-        <li>Score each square by its contribution to an outcome (DINOv3). Fit a regression of the outcome on the average of each image's patch embeddings, then apply the fitted coefficients to each square. The square scores average exactly to the image's prediction, so the map splits the prediction across the ad.</li>
+        <li>Compare each patch with a reference image, such as your logo (DINOv3). Patches that look like the logo light up.</li>
+        <li>Compare each patch with a phrase, such as "a bottle" (TIPSv2, or <a href="https://github.com/facebookresearch/dinov3/blob/main/notebooks/dinotxt_segmentation_inference.ipynb">dino.txt</a> for DINOv3). Patches that match the phrase light up. A single map's numbers have no fixed scale. Read a map by comparing it with the maps for other phrases.</li>
+        <li>Score each patch by its contribution to an outcome (DINOv3). Fit a regression of the outcome on the average of each image's patch embeddings, then apply the fitted coefficients to each patch. The patch scores average to the image's prediction minus the regression's constant (intercept). The map therefore shows how much each patch contributes. For maps of other models, see <a href="#predict-explain-the-predictions">Explain the predictions</a>.</li>
       </ol>
     </div>
     <details class="code">
-      <summary>Outcome heatmap from a linear probe <span class="lang">python · scikit-learn</span></summary>
+      <summary>Outcome heatmap from an embeddings regression <span class="lang">python · scikit-learn</span></summary>
       <div class="codewrap"><pre><code class="language-python">import numpy as np
 from sklearn.linear_model import RidgeCV
 
-# P: one (H*W, d) array of DINOv3 patch tokens per image, from the snippet above
+# P: a list with one (H*W, d) NumPy array per image: patches[0].numpy() from the snippet above
 # y: the outcome for each image, such as log click-through rate
 X = np.stack([p.mean(axis=0) for p in P])                  # mean-pooled patches, (n, d)
 probe = RidgeCV(alphas=np.logspace(-2, 4, 25)).fit(X, y)
@@ -727,13 +728,13 @@ heat = (P[0] @ probe.coef_).reshape(H, W)   # per-patch contribution for image 0
 # heat.mean() + probe.intercept_ equals the prediction for image 0.
 # Upsample heat to the image size (bilinear) and overlay it on the ad.</code></pre></div>
     </details>
-    <p class="prose">Meta's <a href="https://github.com/facebookresearch/dinov3/blob/main/notebooks/foreground_segmentation.ipynb">foreground segmentation notebook</a> trains a linear probe on patch tokens, and its <a href="https://github.com/facebookresearch/dinov3/blob/main/notebooks/pca.ipynb">PCA notebook</a> shows the patch features directly.</p>
+    <p class="prose">Meta's <a href="https://github.com/facebookresearch/dinov3/blob/main/notebooks/foreground_segmentation.ipynb">foreground segmentation notebook</a> trains a simple regression on patch embeddings, and its <a href="https://github.com/facebookresearch/dinov3/blob/main/notebooks/pca.ipynb">PCA notebook</a> plots the patch embeddings directly.</p>
 
     <div class="track">
       <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
       <ul>
-        <li><a href="https://huggingface.co/spaces/TIGER-Lab/MMEB-Leaderboard">MMEB leaderboard</a><span>Universal multimodal embeddings. For image work, read the MMEB-V2 and Image columns; the default V3 tab scores zero for modalities a model lacks.</span></li>
-        <li><a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB, image tabs (MIEB)</a><span>130 image tasks including linear probes and clustering, the closest board to "features for my own model".</span></li>
+        <li><a href="https://huggingface.co/spaces/TIGER-Lab/MMEB-Leaderboard">MMEB leaderboard</a><span>Universal multimodal embeddings. For image work, read the MMEB-V2 and Image columns. The default V3 tab gives a model zero for every input type it cannot read, such as video or audio.</span></li>
+        <li><a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB, image tabs (MIEB)</a><span>130 image tasks, including regressions on embeddings (linear probes) and clustering, the closest board to "features for my own model".</span></li>
         <li><a href="https://huggingface.co/spaces/vidore/vidore-leaderboard">ViDoRe</a><span>Retrieval of document pages such as catalogs and slides.</span></li>
         <li>Patch quality<span>No standing leaderboard. Read the ADE20k linear-probe and zero-shot segmentation tables in each new model's paper.</span></li>
       </ul>
@@ -742,7 +743,7 @@ heat = (P[0] @ probe.coef_).reshape(H, W)   # per-patch contribution for image 0
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
         <li><p class="cite">Feng, Xiaohang (Flora), Charis X. Li, and Shunyuan Zhang (2025). "Visual Uniqueness in Peer-to-Peer Marketplaces: Machine Learning Model Development, Validation, and Application." Journal of Consumer Research 52(4): 800–825. <a href="https://doi.org/10.1093/jcr/ucaf021">doi</a></p>
-          <p>Trains a contrastive model without any labels on 481,747 Airbnb photos to score how visually unique each one is. Heatmaps from RELAX, a method that masks random parts of an image and records how the model's representation changes, show which regions make a photo unique.</p></li>
+          <p>Trains a model with no labels on 481,747 Airbnb photos, by teaching it to tell each photo apart from the others (contrastive learning), to score how visually unique each one is. Heatmaps from RELAX, a method that masks random parts of an image and records how the model's representation changes, show which regions make a photo unique.</p></li>
       </ul>
     </div>
   </div>
@@ -756,26 +757,26 @@ heat = (P[0] @ probe.coef_).reshape(H, W)   # per-patch contribution for image 0
   <div class="tbl"><table>
     <thead><tr><th>Model</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
     <tbody>
-      <tr><td><span class="name">Claude</span><br><small>Anthropic</small></td><td><span class="badge closed">closed</span></td><td class="rel">Jun 2026</td><td>Claude Fable 5 ranks first on Vision Arena. Haiku 5.5 is the low-cost tier for labeling at scale.</td><td><span class="links"><a href="https://platform.claude.com/docs/en/about-claude/models/overview">Docs</a></span></td></tr>
-      <tr><td><span class="name">Qwen3.8-27B</span><br><small>Alibaba Qwen</small></td><td><span class="badge open">open</span></td><td class="rel">Aug 2026</td><td>The current Qwen release, natively multimodal, Apache 2.0. Thinking mode is on by default, so turn it off for labeling. Qwen3.5-4B and 9B are the small versions.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen3.8-27B">HF</a><a href="https://huggingface.co/Qwen/Qwen3.5-9B">9B</a></span></td></tr>
+      <tr><td><span class="name">Claude</span><br><small>Anthropic</small></td><td><span class="badge closed">closed</span></td><td class="rel">Nov 2026</td><td>Claude Fable 5 ranks first on the Arena vision leaderboard. The current release is Fable 5.2. Haiku 5.5 is the low-cost tier for labeling at scale.</td><td><span class="links"><a href="https://platform.claude.com/docs/en/about-claude/models/overview">Docs</a></span></td></tr>
+      <tr><td><span class="name">Qwen3.8-27B</span><br><small>Alibaba Qwen</small></td><td><span class="badge open">open</span></td><td class="rel">Aug 2026</td><td>The current Qwen release. It reads images and text in one model. Apache 2.0. By default it writes out its reasoning before it answers (thinking mode). Turn that off for labeling. The small versions, 4B and 9B, are from the earlier Qwen3.5 release.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen3.8-27B">HF</a><a href="https://huggingface.co/Qwen/Qwen3.5-9B">9B</a></span></td></tr>
       <tr><td><span class="name">Gemini</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Oct 2026</td><td>Gemini 4 and the 3.x Flash models. Flash is the low-cost tier, and the same API also reads video.</td><td><span class="links"><a href="https://aistudio.google.com/docs/models">Docs</a></span></td></tr>
-      <tr><td><span class="name">Gemma 4</span><br><small>Google, E4B to 31B</small></td><td><span class="badge open">open</span></td><td class="rel">Apr 2026</td><td>Apache 2.0. The 31B ranks above Qwen3.8 on Vision Arena, and the E4B runs on a laptop-class GPU.</td><td><span class="links"><a href="https://huggingface.co/google/gemma-4-31B-it">31B</a><a href="https://huggingface.co/google/gemma-4-E4B-it">E4B</a></span></td></tr>
+      <tr><td><span class="name">Gemma 4</span><br><small>Google, E2B to 31B</small></td><td><span class="badge open">open</span></td><td class="rel">Mar 2026</td><td>Apache 2.0. The 31B ranks above Qwen3.8-27B on the Arena vision leaderboard, and the E4B runs on a laptop-class GPU.</td><td><span class="links"><a href="https://huggingface.co/google/gemma-4-31B-it">31B</a><a href="https://huggingface.co/google/gemma-4-E4B-it">E4B</a></span></td></tr>
       <tr><td><span class="name">GPT-6</span><br><small>OpenAI</small></td><td><span class="badge closed">closed</span></td><td class="rel">Sep 2026</td><td>Every GPT-6 model accepts images. GPT-6 Luna is the low-cost tier.</td><td><span class="links"><a href="https://developers.openai.com/api/docs/models">Docs</a></span></td></tr>
-      <tr><td><span class="name">Molmo 2 8B</span><br><small>Ai2</small></td><td><span class="badge open">open</span></td><td class="rel">Dec 2025</td><td>Open weights, and Ai2 releases its multimodal training data, so you can report what it learned from and check whether your test images were in it (training-data leakage). The Qwen3 and SigLIP 2 parts it builds on use undisclosed data. Weaker overall.</td><td><span class="links"><a href="https://huggingface.co/allenai/Molmo2-8B">HF</a></span></td></tr>
+      <tr><td><span class="name">Molmo 2 8B</span><br><small>Ai2</small></td><td><span class="badge open">open</span></td><td class="rel">Dec 2025</td><td>Ai2 releases the multimodal data it trained Molmo 2 on. You can report what the model learned from and check whether your test images were in it (training-data leakage). The check is partial, because the Qwen3 language model and the SigLIP vision encoder inside Molmo 2 were trained on undisclosed data. It is weaker overall.</td><td><span class="links"><a href="https://huggingface.co/allenai/Molmo2-8B">HF</a></span></td></tr>
     </tbody>
   </table></div>
 
   <div class="stack">
-    <p class="prose">The top 15 models on Vision Arena are separated by less than their confidence intervals, so treat the frontier as one tier and choose on price, data policy, and whether you need to rerun the model later. For labeling thousands of images, the low-cost tiers and batch APIs matter more than the top rank. For a fast first pass on simple categories, <a href="#represent">SigLIP 2 zero-shot scores</a> are cheaper still.</p>
+    <p class="prose">The top 15 models on the Arena vision leaderboard have overlapping rank ranges, so treat them as tied. Choose on price, data policy, and whether you need to rerun the model later. Sending consumer photos to a closed API shares them with that company, so check your ethics approval and the platform's terms. For labeling thousands of images, the low-cost tiers and batch APIs (you submit all images at once and get the answers later at a lower price) matter more than the top rank. For a fast first pass on simple categories, <a href="#represent">SigLIP 2 zero-shot scores</a> are cheaper still. Once you have a few hundred hand labels, also fit a high-dimensional logistic regression on embeddings (see <a href="#predict">Predict outcomes</a>) and compare it with the VLM on the same held-out images.</p>
 
     <h3>A labeling workflow</h3>
     <div class="prose">
       <p>The workflow below follows the split-sample framework of <a href="https://doi.org/10.1126/sciadv.abg2652">Egami, Fong, Grimmer, Roberts, and Stewart (2022, Science Advances)</a>. Their paper is about text, and the same logic carries over to images: develop the measure on one part of the data and use it, unchanged, on another.</p>
       <ol>
         <li>Split your images at random into a development set and a held-out set. Set the held-out set aside.</li>
-        <li>On the development set, write a codebook: the question, the allowed answers, and two or three edge cases. Revise the prompt as often as you like here.</li>
-        <li>Freeze the prompt and the model version. Run the model on the held-out images and set it to always give its single most likely answer (greedy decoding), so a rerun gives the same labels. Log the model ID and date.</li>
-        <li>Hand-code a random sample of about 400 held-out images and report how often people and the model agree. With a yes or no label split evenly and 85% agreement, 400 images give a kappa near 0.70, give or take 0.07.</li>
+        <li>On the development set, write a codebook: the question, the allowed answers, and two or three edge cases. The codebook is the prompt you give the model. Revise it as often as you like at this stage.</li>
+        <li>Freeze the prompt and the model version. Run the model on the held-out images and set it to always give its single most likely answer (greedy decoding), so a rerun gives the same labels. Log the model ID and date. For a closed API, call the dated model ID and store every raw response, because a rerun can still differ.</li>
+        <li>Hand-code a random sample of about 400 held-out images and report how often people and the model agree. Also report Cohen's kappa, which is agreement corrected for the agreement you would get by chance (0 is chance, 1 is perfect). Example: for a yes or no label that splits evenly, 85% agreement on 400 images gives a kappa of 0.70, with a 95% interval of about 0.63 to 0.77. For a rare label, add extra images that the model marks positive and record each image's chance of being drawn. Have two people code the sample and report their agreement as the ceiling.</li>
         <li>If the labels enter a regression, correct for their errors with the <a href="#inference">methods below</a>.</li>
       </ol>
     </div>
@@ -811,7 +812,7 @@ def label_image(path):
         <li><a href="https://arena.ai/leaderboard/vision">Arena, vision</a><span>Human preference votes on image prompts, open and closed, with OCR and diagram tabs.</span></li>
         <li><a href="https://huggingface.co/spaces/opencompass/open_vlm_leaderboard">OpenVLM Leaderboard</a><span>Average over a fixed set of benchmarks, run with <a href="https://github.com/open-compass/VLMEvalKit">VLMEvalKit</a>.</span></li>
         <li><a href="https://mmmu-benchmark.github.io/">MMMU and MMMU-Pro</a><span>College-level questions with images, including business and design subjects.</span></li>
-        <li>Your own data<span>None of these measures how well a model labels your images. The hand-coded sample is the benchmark that counts.</span></li>
+        <li>Your own data<span>None of these measures how well a model labels your images. Your hand-coded sample is the only test of that.</span></li>
       </ul>
     </div>
 
@@ -819,7 +820,7 @@ def label_image(path):
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
         <li><p class="cite">Ye, Jianping, Michel Wedel, and Rik Pieters (2026). "AdGazer: Improving Contextual Advertising with Theory-Informed Machine Learning." Journal of Marketing 90(4): 122–144. <a href="https://doi.org/10.1177/00222429251396114">doi</a></p>
-          <p>Uses a multimodal LLM to label the topics of 3,531 display ads and the pages they appear on. Those labels become features in a model that predicts eye-tracked gaze on the ad and the brand.</p></li>
+          <p>Uses a VLM to label the topics of 3,531 display ads and the pages they appear on. Those labels become features in a model that predicts eye-tracked gaze on the ad and the brand.</p></li>
       </ul>
     </div>
   </div>
@@ -827,21 +828,21 @@ def label_image(path):
 <section class="s" id="predict">
   <header>
     <h2>Predict outcomes</h2>
-    <p class="lede">To predict clicks, likes, or sales from images, transfer what a pretrained model already knows. Start with the cheapest version and move up only when it leaves a measurable gap on held-out data.</p>
+    <p class="lede">To predict clicks, likes, or sales from images, transfer what a pretrained model already knows. Start with the cheapest version. Move up only when the next version predicts held-out data measurably better.</p>
   </header>
 
   <div class="tbl"><table>
-    <thead><tr><th>Approach</th><th>When</th><th>Labels</th><th>Cost</th></tr></thead>
+    <thead><tr><th>Approach</th><th>When</th><th>Images needed</th><th>Cost</th></tr></thead>
     <tbody>
-      <tr><td><span class="name">Embeddings + high-dimensional regression</span><br><small>DINOv3 or SigLIP 2; ridge, lasso, elastic net, or Bayesian shrinkage</small></td><td>The default for every market outcome. The image model stays as it is; only the regression is fit. Report it even when you use something else.</td><td>Hundreds and up</td><td>One pass per image, then a CPU regression</td></tr>
-      <tr><td><span class="name">Fine-tune the image model</span><br><small>LoRA on DINOv3 or SigLIP 2</small></td><td>The image model itself is adjusted to your outcome. Worth it with about 10,000 or more labeled images that look unlike everyday web photos (packaging close-ups, text-heavy thumbnails), and only if the embeddings regression leaves a clear gap.</td><td>About 10,000 and up</td><td>One GPU, hours, repeated for each fold</td></tr>
-      <tr><td><span class="name">Fine-tune a VLM</span><br><small>LoRA on Qwen3.8 or Gemma 4</small></td><td>The outcome depends on text in or beside the image (packaging copy, the ad headline, the post caption) or on relations in the scene.</td><td>Thousands and up</td><td>One large GPU, hours to days</td></tr>
-      <tr><td><span class="name">Zero-shot VLM</span></td><td>Only for concepts a person can define. See <a href="#label">Label</a>.</td><td>None, plus a coded sample</td><td>Inference or API calls</td></tr>
+      <tr><td><span class="name">Embeddings + high-dimensional regression</span><br><small>DINOv3 or SigLIP 2, with ridge, lasso, elastic net, or Bayesian shrinkage</small></td><td>The default for every market outcome. The image model stays as it is. Only the regression is fit. Report it even when you use something else.</td><td>Hundreds and up</td><td>One pass per image, then a CPU regression</td></tr>
+      <tr><td><span class="name">Fine-tune the image model</span><br><small>LoRA on DINOv3 or SigLIP 2</small></td><td>The image model itself is adjusted to your outcome. Use it when you have about 10,000 or more images with an observed outcome, the images look unlike everyday web photos (packaging close-ups, text-heavy thumbnails), and fine-tuning predicts held-out data measurably better than the embeddings regression.</td><td>About 10,000 and up</td><td>One GPU, hours, repeated for each of the five folds (see below)</td></tr>
+      <tr><td><span class="name">Fine-tune a VLM</span><br><small>LoRA on Qwen3.8 or Gemma 4</small></td><td>The outcome depends on text in or beside the image (packaging copy, the ad headline, the post caption) or on how things in the scene relate, such as who is holding the product.</td><td>Thousands and up</td><td>One large GPU, hours to days</td></tr>
+      <tr><td><span class="name">Zero-shot VLM</span></td><td>Only for concepts a person can define. See <a href="#label">Label</a>.</td><td>None, plus a hand-coded sample</td><td>Running the model, or API fees</td></tr>
     </tbody>
   </table></div>
 
   <div class="stack">
-    <p class="prose">The embeddings regression is the recipe from <a href="#represent">Embed images</a>, scored out of sample. Fit the regression on part of the data, predict the rest, and rotate (cross-fitting), so every image gets a prediction from a model that never saw it.</p>
+    <p class="prose">The embeddings regression is the recipe from <a href="#represent">Embed images</a>, with one addition called cross-fitting. Split the images into five parts (folds). Fit the regression on four parts and predict the fifth. Repeat until every part has been predicted. Every image then has a prediction from a regression that never saw it. If images share an account, brand, or campaign, keep each group within one fold and remove near-duplicate images first, or the out-of-fold fit will look better than it is.</p>
 
     <details class="code">
       <summary><span class="ttl">Embeddings and a cross-fitted regression</span> <span class="lang">python · transformers + scikit-learn</span></summary>
@@ -866,7 +867,7 @@ def embed(paths, bs=32):
 
 X = embed(image_paths)                       # n x 1024
 y = np.log1p(likes)                          # long-tailed outcome on the log scale
-folds = KFold(5, shuffle=True, random_state=0)
+folds = KFold(5, shuffle=True, random_state=0)   # if images share accounts: GroupKFold(5), and pass groups= below
 yhat = cross_val_predict(RidgeCV(alphas=np.logspace(-2, 4, 25)), X, y, cv=folds)
 # Swap RidgeCV for LassoCV or ElasticNetCV; for horseshoe or spike-and-slab priors use PyMC or R's brms.
 print("out-of-fold R2:", 1 - ((y - yhat) ** 2).sum() / ((y - y.mean()) ** 2).sum())
@@ -885,19 +886,19 @@ print("out-of-fold R2:", 1 - ((y - yhat) ** 2).sum() / ((y - y.mean()) ** 2).sum
 
     <h3>Fine-tune a model on your own data</h3>
     <div class="prose">
-      <p>Retraining a whole model means updating billions of numbers inside it, which takes more computing power and data than most research projects have. Parameter-efficient fine-tuning (PEFT) leaves the original model as it is and learns a small set of extra adjustments on top. The update fits on one GPU and is saved as a small file next to the model.</p>
-      <p>The most common PEFT method is LoRA (low-rank adaptation), and plain LoRA applied to every layer is a good default. It matches full retraining on small and medium datasets when it uses a learning rate about 10 times higher (<a href="https://thinkingmachines.ai/blog/lora/">LoRA Without Regret</a>). The variants in the table change how the adjustments are set up or stored, and you can try them with one setting each.</p>
+      <p>Fine-tuning means training an existing model further on your own data. Full fine-tuning updates billions of numbers inside the model, which takes more computing power and data than most research projects have. Parameter-efficient fine-tuning (PEFT) leaves the original model as it is and learns a small set of extra adjustments on top, called an adapter. The adapter fits on one GPU and is saved as a small file next to the model.</p>
+      <p>The most common PEFT method is LoRA (low-rank adaptation), and plain LoRA applied to every layer is a good default. On small and medium datasets it matches full fine-tuning, provided the learning rate (the step size of each training update) is about 10 times the rate used for full fine-tuning (<a href="https://thinkingmachines.ai/blog/lora/">LoRA Without Regret</a>). The variants in the table change how the adapter is set up or stored, and you can try them with one setting each.</p>
     </div>
     <div class="tbl"><table>
-      <thead><tr><th>Method</th><th>What it does</th><th>Setting in Hugging Face PEFT</th></tr></thead>
+      <thead><tr><th>Method</th><th>What it does</th><th>Setting in the Hugging Face peft library</th></tr></thead>
       <tbody>
-        <tr><td><a href="https://arxiv.org/abs/2106.09685">LoRA</a></td><td>Adds a small, compact adjustment to each layer of the model.</td><td><code>LoraConfig</code></td></tr>
+        <tr><td><a href="https://arxiv.org/abs/2106.09685">LoRA</a></td><td>Adds a small adapter to each layer of the model.</td><td><code>LoraConfig</code></td></tr>
         <tr><td><a href="https://arxiv.org/abs/2305.14314">QLoRA</a></td><td>LoRA on a compressed copy of the model, so a larger model fits on one GPU, at a small cost in accuracy. Unsloth advises against it for Qwen3.5.</td><td>bitsandbytes 4-bit + <code>LoraConfig</code></td></tr>
-        <tr><td><a href="https://arxiv.org/abs/2402.09353">DoRA</a></td><td>Splits each adjustment into a size and a direction, which sometimes trains closer to full retraining but runs slower.</td><td><code>use_dora=True</code></td></tr>
-        <tr><td><a href="https://arxiv.org/abs/2312.03732">rsLoRA</a></td><td>Rescales the adjustment so that larger adapters still train smoothly.</td><td><code>use_rslora=True</code></td></tr>
+        <tr><td><a href="https://arxiv.org/abs/2402.09353">DoRA</a></td><td>Splits each adapter's update into a size and a direction, which sometimes trains closer to full fine-tuning but runs slower.</td><td><code>use_dora=True</code></td></tr>
+        <tr><td><a href="https://arxiv.org/abs/2312.03732">rsLoRA</a></td><td>Rescales each adapter's update so that larger adapters still train smoothly.</td><td><code>use_rslora=True</code></td></tr>
       </tbody>
     </table></div>
-    <p class="prose">The easiest start on one GPU is a ready-made notebook from <a href="https://github.com/unslothai/unsloth">Unsloth</a> (<a href="https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_5_%284B%29_Vision.ipynb">Qwen3.5 4B</a>, <a href="https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Gemma4_%28E4B%29-Vision.ipynb">Gemma 4 E4B</a>): open it and swap in your own images and labels. <a href="https://huggingface.co/docs/trl/main/training_vlm_sft">TRL</a> is the standard Hugging Face library for the same job, <a href="https://github.com/hiyouga/LLaMA-Factory">LLaMA-Factory</a> runs from a config file or web UI, and <a href="https://github.com/modelscope/ms-swift">ms-swift</a> has command-line flags for classification and regression heads.</p>
+    <p class="prose">The easiest start on one GPU is a ready-made notebook from <a href="https://github.com/unslothai/unsloth">Unsloth</a> (<a href="https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_5_%284B%29_Vision.ipynb">Qwen3.5 4B</a>, <a href="https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Gemma4_%28E4B%29-Vision.ipynb">Gemma 4 E4B</a>): open it and swap in your own images and labels. <a href="https://huggingface.co/docs/trl/main/training_vlm_sft">TRL</a> is the standard Hugging Face library for the same job. <a href="https://github.com/hiyouga/LlamaFactory">LlamaFactory</a> runs from a config file or web UI. <a href="https://github.com/modelscope/ms-swift">ms-swift</a> has command-line options for models that output a class or a number. To fine-tune an image model such as DINOv3 or SigLIP 2 instead, wrap it with the same <code>LoraConfig</code> and add a small output layer for your outcome (<a href="https://huggingface.co/docs/peft/main/en/task_guides/image_classification_lora">PEFT guide for a ViT</a>).</p>
 
     <details class="code">
       <summary><span class="ttl">Add a LoRA adapter to a VLM</span> <span class="lang">python · peft</span></summary>
@@ -910,7 +911,7 @@ model = AutoModelForMultimodalLM.from_pretrained(
 
 lora = LoraConfig(
     r=16, lora_alpha=16, lora_dropout=0.05,
-    target_modules="all-linear",   # attention and MLP layers
+    target_modules="all-linear",   # every linear layer: language model, vision encoder, audio encoder
     use_rslora=True,               # or use_dora=True
     task_type="CAUSAL_LM",
 )
@@ -923,31 +924,31 @@ model.print_trainable_parameters()
     <div class="prose">
       <p>A VLM normally answers in words, so predicting a number such as a click-through rate takes extra setup. No library covers this from start to finish yet. There are four workable patterns.</p>
       <ul>
-        <li>Prompt the model to choose one answer from a fixed set of labels, which can be numbers such as 1 to 7. This gives a single classified label for each image, and the model's probability for each label is available too, with no training needed. <a href="https://arxiv.org/abs/2610.02076">Li and Wagle (2026)</a> show that general-purpose models already work well this way with careful prompting (performing as "Jev" style decision models).</li>
-        <li>For a bounded rating, such as a 1 to 7 scale, teach the model to answer with level words ("bad" through "excellent") and average the levels by how confident the model is in each, as <a href="https://arxiv.org/abs/2312.17090">Q-Align</a> does for image quality.</li>
-        <li>For a count or a log count, add a small output layer that returns a number instead of words (a regression head). In transformers, <code>Qwen3_5ForSequenceClassification</code> with <code>num_labels=1</code> does this and accepts images.</li>
+        <li>Prompt the model to choose one answer from a fixed set of labels, which can be numbers such as 1 to 7. This needs no training. You get one label for each image, and you can also read the model's probability for each label. It is the labeling approach of <a href="#label">Label images with a VLM</a>. <a href="https://arxiv.org/abs/2610.02076">Li and Wagle (2026)</a> show that general-purpose models already work well this way with careful prompting (performing as "Jev" style decision models).</li>
+        <li>For a bounded rating, such as a 1 to 7 scale, fine-tune the model to answer with one word for each level ("bad" through "excellent"). The rating is the average of the levels, weighted by the probability the model gives each word, as <a href="https://arxiv.org/abs/2312.17090">Q-Align</a> does for image quality.</li>
+        <li>For a count or a log count, add a small output layer that returns a number instead of words (a regression head). In the Hugging Face transformers library, <code>Qwen3_5ForSequenceClassification</code> with <code>num_labels=1</code> does this and accepts images.</li>
         <li>As the cheapest check, take the VLM's internal representation of each image as an embedding and fit the embeddings regression.</li>
       </ul>
     </div>
 
-    <h3>Explain the predictions</h3>
+    <h3 id="predict-explain-the-predictions">Explain the predictions</h3>
     <div class="prose">
-      <p>A heatmap shows which parts of an image pushed a prediction up or down. You can interpret your models with post-hoc methods from interpretable machine learning. <a href="https://captum.ai/docs/attribution_algorithms">Captum</a> implements the widely used methods for PyTorch models. The table lists the ones with the best evidence that their maps reflect what the model actually does.</p>
+      <p>A heatmap shows which parts of an image pushed a prediction up or down. The methods below make such a map for any trained model, after training and without changing the model. For the embeddings regression, the <a href="#represent">outcome heatmap in Embed images</a> already splits each prediction across the image. <a href="https://captum.ai/docs/attribution_algorithms">Captum</a> implements the widely used methods for PyTorch models. The table lists the ones with the best evidence that their maps reflect what the model does.</p>
     </div>
     <div class="tbl"><table>
       <thead><tr><th>Method</th><th>What it shows</th><th>Evidence that it is reliable</th><th>In Captum</th></tr></thead>
       <tbody>
-        <tr><td><a href="https://proceedings.mlr.press/v70/sundararajan17a.html">Integrated Gradients</a></td><td>How much each pixel moves the score, along a path from a blank image to yours.</td><td>The best general-purpose method on both convolutional networks and vision transformers in <a href="https://arxiv.org/abs/2407.11910">Hesse et al. (2024)</a>, when the path starts from random noise.</td><td><code>IntegratedGradients</code></td></tr>
-        <tr><td><a href="https://doi.org/10.1109/ICCV.2017.74">Grad-CAM</a></td><td>A coarse map of the regions the network's last feature layer used.</td><td>Passes the sanity checks below and does well on convolutional networks. A vision transformer needs its patches reshaped into a grid first.</td><td><code>LayerGradCam</code></td></tr>
-        <tr><td><a href="https://arxiv.org/abs/1706.03825">SmoothGrad-Squared</a></td><td>A gradient map averaged over many noisy copies of the image.</td><td>With VarGrad, the only methods that beat a random map when <a href="https://arxiv.org/abs/1806.10758">Hooker et al. (2019)</a> removed the top-ranked pixels and retrained. Plain SmoothGrad does not help. Tested on convolutional networks.</td><td><code>NoiseTunnel</code>, <code>nt_type="smoothgrad_sq"</code></td></tr>
+        <tr><td><a href="https://proceedings.mlr.press/v70/sundararajan17a.html">Integrated Gradients</a></td><td>How much each pixel moves the score. The method fades a starting image into yours in small steps and adds up each pixel's effect.</td><td>The best general-purpose method on convolutional networks (an older family of image models) and vision transformers in <a href="https://arxiv.org/abs/2407.11910">Hesse et al. (2024)</a>, when the starting image is random noise.</td><td><code>IntegratedGradients</code></td></tr>
+        <tr><td><a href="https://doi.org/10.1109/ICCV.2017.74">Grad-CAM</a></td><td>A coarse map of the regions that the model's last layer of image features relied on.</td><td>Passes the sanity checks below and does well on convolutional networks. A vision transformer needs its patches reshaped into a grid first.</td><td><code>LayerGradCam</code></td></tr>
+        <tr><td><a href="https://arxiv.org/abs/1806.10758">SmoothGrad-Squared</a></td><td>A gradient map averaged over many noisy copies of the image.</td><td><a href="https://arxiv.org/abs/1806.10758">Hooker et al. (2019)</a> removed the pixels that each method ranked highest, retrained the model, and measured how far accuracy fell. Only SmoothGrad-Squared and a related method, VarGrad, did better than a random map. Plain <a href="https://arxiv.org/abs/1706.03825">SmoothGrad</a> did not. The test used convolutional networks.</td><td><code>NoiseTunnel</code>, <code>nt_type="smoothgrad_sq"</code></td></tr>
         <tr><td><a href="https://doi.org/10.1007/978-3-319-10590-1_53">Occlusion</a></td><td>How much the score drops when a gray patch covers each region.</td><td>A direct test that needs no gradients and works on any model. The gray patches look unlike real images, which can distort the map (<a href="https://proceedings.mlr.press/v162/rong22a.html">Rong et al. 2022</a>).</td><td><code>Occlusion</code></td></tr>
-        <tr><td>Shapley value sampling</td><td>Each region's fair share of the score, across many combinations of hidden regions.</td><td>Rests on clear axioms and works on any model, but needs many passes. A model built to deceive can fool it (<a href="https://doi.org/10.1145/3375627.3375830">Slack et al. 2020</a>).</td><td><code>ShapleyValueSampling</code></td></tr>
+        <tr><td>Shapley value sampling</td><td>Each region's fair share of the score, across many combinations of hidden regions.</td><td>Has a clear mathematical basis and works on any model, but needs many runs of the model. A model built to deceive can fool it (<a href="https://doi.org/10.1145/3375627.3375830">Slack et al. 2020</a>).</td><td><code>ShapleyValueSampling</code></td></tr>
       </tbody>
     </table></div>
     <div class="prose">
       <ul>
-        <li>Check that the maps are not noise with the sanity checks of <a href="https://arxiv.org/abs/1810.03292">Adebayo et al. (2018)</a>: a map that barely changes when the model's weights are randomized is not explaining the model. Guided Backprop and Guided Grad-CAM fail this check.</li>
-        <li>Treat a VLM's attention maps and its written reasons with caution. Attention weights show where the model routes information, which can differ from what changed its answer (<a href="https://doi.org/10.18653/v1/N19-1357">Jain and Wallace 2019</a>; <a href="https://arxiv.org/abs/2012.09838">Chefer et al. 2021</a>), and bright background squares in transformer maps can be artifacts (<a href="https://arxiv.org/abs/2309.16588">Darcet et al. 2024</a>). A model's written reasons can leave out what actually swayed it, including cues in the image (<a href="https://arxiv.org/abs/2305.04388">Turpin et al. 2023</a>; <a href="https://doi.org/10.18653/v1/2025.findings-emnlp.723">Balasubramanian et al. 2025</a>).</li>
+        <li>Run the sanity check of <a href="https://arxiv.org/abs/1810.03292">Adebayo et al. (2018)</a> on your maps. Replace the model's learned numbers (its weights) with random ones and redraw the map. A map that barely changes is not explaining the model. Guided Backprop and Guided Grad-CAM fail this check.</li>
+        <li>Treat a VLM's attention maps and its written reasons with caution. An attention map shows which parts of the image the model passed information from. Those parts can differ from the parts that changed its answer (<a href="https://doi.org/10.18653/v1/N19-1357">Jain and Wallace 2019</a>; <a href="https://arxiv.org/abs/2012.09838">Chefer et al. 2021</a>). Bright background patches in these maps can also be artifacts (<a href="https://arxiv.org/abs/2309.16588">Darcet et al. 2024</a>). A model's written reasons can leave out what swayed it, including cues in the image (<a href="https://arxiv.org/abs/2305.04388">Turpin et al. 2023</a>; <a href="https://doi.org/10.18653/v1/2025.findings-emnlp.723">Balasubramanian et al. 2025</a>).</li>
       </ul>
     </div>
 
@@ -959,7 +960,7 @@ model.print_trainable_parameters()
         <li><p class="cite">Yang, Jeremy, Juanjuan Zhang, and Yuhan Zhang (2025). "Engagement That Sells: Influencer Video Advertising on TikTok." Marketing Science 44(2): 247–267. <a href="https://doi.org/10.1287/mksc.2021.0107">doi</a></p>
           <p>Trains a 3D convolutional network to predict engagement with TikTok influencer videos and explains it with gradient-based saliency maps that show which pixels, second by second, drive the prediction. Overlapping that map with where the product appears gives a score that predicts sales.</p></li>
         <li><p class="cite">Fong, Hortense, Vineet Kumar, and K. Sudhir (2025). "A Theory-Based Explainable Deep Learning Architecture for Music Emotion." Marketing Science 44(1): 196–219. <a href="https://doi.org/10.1287/mksc.2022.0323">doi</a></p>
-          <p>Explains a convolutional classifier of music emotion with Grad-CAM, which highlights the parts of a song's mel spectrogram that drive each prediction. Filters built around the harmonic frequencies of Western music make those heatmaps readable as consonance and match a standard network's accuracy with far fewer parameters.</p></li>
+          <p>Explains a convolutional classifier of music emotion with Grad-CAM, which highlights the parts of a song's mel spectrogram (a picture of its frequencies over time) that drive each prediction. The paper's network uses filters shaped to the harmonic frequencies of Western music. Its heatmaps can be read in terms of consonance, and it matches a standard network's accuracy with far fewer parameters.</p></li>
       </ul>
     </div>
   </div>
@@ -967,18 +968,18 @@ model.print_trainable_parameters()
 <section class="s" id="inference">
   <header>
     <h2>Inference with predicted variables</h2>
-    <p class="lede">Every tool above produces predictions, and predictions have errors. When a predicted label, score, or index enters a regression, those errors bias the coefficient and make its standard error too small. The classifier's accuracy does not tell you by how much. The fix is a small random sample coded by people and an estimator that uses it.</p>
+    <p class="lede">Every measurement tool on this page produces predictions, and predictions have errors. When a predicted label, score, or index enters a regression, those errors bias the coefficient and make its standard error too small. The model's accuracy does not tell you how large the bias is. The fix is a small random sample coded by people (a hand-coded sample), and a regression method that uses that sample to correct the estimate.</p>
   </header>
 
   <div class="prose">
     <p>The workflow is the same whichever tool made the prediction.</p>
     <ol>
-      <li>Draw a random sample of images, typically a few hundred, with known sampling probabilities.</li>
+      <li>Draw a random sample of images, typically a few hundred. Record each image's chance of being drawn. In a simple random sample every image has the same chance. The hand-coded sample from step 4 of the <a href="#label">labeling workflow</a> can serve, if it was drawn this way.</li>
       <li>Have people code the variable on that sample, using the same definition the model was given.</li>
       <li>Run the model on every image, including the coded sample.</li>
       <li>Estimate your regression with one of the corrections below. It uses the coded sample to measure and remove the prediction error.</li>
     </ol>
-    <p>If you trained the predictor yourself, keep the images that trained it out of the regression sample, or cross-fit.</p>
+    <p>If you trained the model yourself, leave its training images out of the regression, or use cross-fitted predictions.</p>
   </div>
 
   <h3>Pick the correction by where the prediction sits</h3>
@@ -986,8 +987,8 @@ model.print_trainable_parameters()
     <thead><tr><th>The predicted variable is</th><th>Method</th><th>Package</th></tr></thead>
     <tbody>
       <tr><td>The outcome. Example: a VLM codes whether each ad shows a person, and you compare that share across campaigns.</td><td>Prediction-powered inference, PPI and PPI++ (<a href="https://doi.org/10.1126/science.adi6000">Angelopoulos et al. 2023</a>; <a href="https://doi.org/10.1214/26-aoas2215">Angelopoulos, Duchi, and Zrnic 2026</a>)</td><td><a href="https://github.com/aangelopoulos/ppi_py">ppi_py</a> (Python), <a href="https://github.com/ipd-tools/ipd">ipd</a> (R)</td></tr>
-      <tr><td>A regressor or treatment, with a coded sample drawn at known probabilities.</td><td>Design-based supervised learning, DSL (<a href="https://arxiv.org/abs/2306.04746">Egami et al. 2023</a>). <a href="https://doi.org/10.1177/00491241251333372">Rister Portinari Maranca et al. (2025)</a> apply it to three image corpora.</td><td><a href="http://naokiegami.com/dsl/">dsl</a> (R)</td></tr>
-      <tr><td>A regressor generated by a classifier, where you know its error rate from an outside sample.</td><td>Bias-corrected regression (<a href="https://arxiv.org/abs/2402.15585">Battaglia, Christensen, Hansen, and Sacher 2025</a>)</td><td><a href="https://github.com/KonradKurczynski/ValidMLInference">ValidMLInference</a> (Python), MLBC (R)</td></tr>
+      <tr><td>A regressor or treatment, with a hand-coded sample drawn as in step 1.</td><td>Design-based supervised learning, DSL (<a href="https://naokiegami.com/paper/dsl_ss.pdf">Egami, Hinck, Stewart, and Wei 2024</a>). <a href="https://doi.org/10.1177/00491241251333372">Rister Portinari Maranca et al. (2025)</a> apply it to three image corpora.</td><td><a href="https://naokiegami.com/dsl/">dsl</a> (R)</td></tr>
+      <tr><td>A regressor generated by a classifier, where a separate hand-coded sample tells you the classifier's error rate.</td><td>Bias-corrected regression (<a href="https://arxiv.org/abs/2402.15585">Battaglia, Christensen, Hansen, and Sacher 2025</a>)</td><td><a href="https://github.com/timothymchristensen/ValidMLInference">ValidMLInference</a> (Python), MLBC (R)</td></tr>
       <tr><td>An image feature whose extraction error may carry other content of the same image that also moves the outcome.</td><td><a href="https://doi.org/10.2139/ssrn.4113608">Wei and Malik (2026)</a>, accepted at Management Science</td><td>None released</td></tr>
       <tr><td>A regressor, when an instrumental-variables correction is acceptable.</td><td>EnsembleIV (<a href="https://doi.org/10.1287/mnsc.2024.08999">Burtch, McFowland, Yang, and Adomavicius 2026</a>)</td><td>See the paper</td></tr>
     </tbody>
@@ -1022,7 +1023,7 @@ summary(fit)</code></pre></div>
 
     <div class="note">
       <h4>Read first</h4>
-      <p><a href="https://doi.org/10.3386/w35744">Dell and Rambachan (2026)</a>, the review that accompanies the 2026 NBER Methods Lecture, covers how to define and validate a measure built with AI, and how to draw valid conclusions with and without a random validation sample. <a href="https://doi.org/10.1146/annurev-economics-120925-105620">Ludwig, Mullainathan, and Rambachan (2026, Annual Review of Economics)</a> explain why a hand-coded sample is required whenever model outputs are used as data.</p>
+      <p><a href="https://doi.org/10.3386/w35744">Dell and Rambachan (2026)</a>, the review that accompanies the 2026 NBER Methods Lecture, covers how to define and validate a measure built with AI, and how to draw valid conclusions with and without a random validation sample (a hand-coded sample). <a href="https://doi.org/10.1146/annurev-economics-120925-105620">Ludwig, Mullainathan, and Rambachan (2026, Annual Review of Economics)</a> explain why a hand-coded validation sample is required whenever model outputs measure a variable that enters an estimate.</p>
     </div>
 
     <div class="mkt">
@@ -1031,7 +1032,7 @@ summary(fit)</code></pre></div>
         <li><p class="cite">Allon, Gad, Daniel Chen, Zhenling Jiang, and Dennis Zhang (2023). "Machine Learning and Prediction Errors in Causal Inference." Working paper. <a href="https://doi.org/10.2139/ssrn.4480696">SSRN 4480696</a></p>
           <p>Shows that errors in a machine-learned variable can push second-stage estimates far off even when the first-stage model looks accurate, and gives corrections that use unbiased training data.</p></li>
         <li><p class="cite">Wei, Yanhao, and Nikhil Malik (2026). "Estimation Bias from Machine-Learned Features in Econometric Models." Accepted at Management Science. <a href="https://doi.org/10.2139/ssrn.4113608">SSRN 4113608</a></p>
-          <p>Shows that an image feature detected by a model (a pet in rental listing photos) can pick up other content of the same photo that also moves demand. The paper corrects the resulting bias in the demand estimates.</p></li>
+          <p>Shows that a feature a model extracts from unstructured data can pick up other content of the same input that also moves the outcome, which biases the regression estimate, and corrects that bias. The application regresses the helpfulness of Amazon reviews on machine-extracted sentiment.</p></li>
       </ul>
     </div>
   </div>
@@ -1039,26 +1040,26 @@ summary(fit)</code></pre></div>
 <section class="s" id="generate-images">
   <header>
     <h2>Generate and edit images</h2>
-    <p class="lede">Use an image generator to build experimental stimuli, to change one attribute of an ad while holding the rest fixed, or to adapt a model to your own images. Closed APIs lead on quality. Open models are the ones you can train on your own images and rerun exactly, years later.</p>
+    <p class="lede">Use an image generator to build experimental stimuli, or to change one attribute of an image while holding the rest fixed. You can also train an open generator on your own images. Closed APIs lead on quality. Open models are the ones you can train on your own images and rerun exactly, years later.</p>
   </header>
 
   <div class="tbl"><table>
     <thead><tr><th>Model</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
     <tbody>
-      <tr><td><span class="name">GPT Image 2.6 / 2.5</span><br><small>OpenAI</small></td><td><span class="badge closed">closed</span></td><td class="rel">Nov 2026</td><td>First on Artificial Analysis for generation and in the top three on the other leaderboards, where GPT Image 2.5 still ranks first on Arena. Several reference images per edit.</td><td><span class="links"><a href="https://developers.openai.com/api/docs/guides/image-generation">Docs</a></span></td></tr>
-      <tr><td><span class="name">MAI-Image-2.7</span><br><small>Microsoft AI</small></td><td><span class="badge closed">closed</span></td><td class="rel">Oct 2026</td><td>First on Artificial Analysis for editing, by a narrow margin, and fourth on the other three leaderboards. Up to five reference images per edit. Public preview in Microsoft Foundry, about $35 per 1,000 images.</td><td><span class="links"><a href="https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai">Docs</a><a href="https://microsoft.ai/models/mai-image-2-7/">Model</a></span></td></tr>
+      <tr><td><span class="name">GPT Image 2.6 / 2.5</span><br><small>OpenAI</small></td><td><span class="badge closed">closed</span></td><td class="rel">Nov 2026</td><td>GPT Image 2.6 ranks first on Artificial Analysis for generation and in the top three on the other three leaderboards. GPT Image 2.5 still ranks first on both Arena leaderboards. Both accept several reference images per edit.</td><td><span class="links"><a href="https://developers.openai.com/api/docs/guides/image-generation">Docs</a></span></td></tr>
+      <tr><td><span class="name">MAI-Image-2.7</span><br><small>Microsoft AI</small></td><td><span class="badge closed">closed</span></td><td class="rel">Nov 2026</td><td>First on Artificial Analysis for editing, by a narrow margin, and fourth on the other three leaderboards. Up to five reference images per edit. Public preview in Microsoft Foundry, about $35 per 1,000 images.</td><td><span class="links"><a href="https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai">Docs</a><a href="https://microsoft.ai/models/mai-image-2-7/">Model</a></span></td></tr>
       <tr><td><span class="name">Nano Banana 2.1</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Oct 2026</td><td>Generation and conversational editing through the Gemini API. Outputs carry a SynthID watermark.</td><td><span class="links"><a href="https://aistudio.google.com/docs/image-generation">Docs</a></span></td></tr>
-      <tr><td><span class="name">MiniMax H3-Image</span><br><small>MiniMax, 33B</small></td><td><span class="badge open">open</span></td><td class="rel">Nov 2026</td><td>First among open models on Artificial Analysis for generation and editing. Its licence excludes the United States, the EU, the UK, and South Korea, and it needs several GPUs.</td><td><span class="links"><a href="https://huggingface.co/MiniMaxAI/MiniMax-H3-Image">HF</a></span></td></tr>
+      <tr><td><span class="name">MiniMax H3-Image</span><br><small>MiniMax, 33B</small></td><td><span class="badge open">open</span></td><td class="rel">Nov 2026</td><td>First among open models on Artificial Analysis for generation and editing. Its licence excludes the United States, the EU, the UK, and South Korea. It needs one very large GPU (the transformer alone is 69 GB) or several.</td><td><span class="links"><a href="https://huggingface.co/MiniMaxAI/MiniMax-H3-Image">HF</a></span></td></tr>
       <tr><td><span class="name">Qwen-Image-2.1</span><br><small>Alibaba Qwen, 7B</small></td><td><span class="badge open">open</span></td><td class="rel">Sep 2026</td><td>First among open models on Arena, for generation and editing with up to 10 reference images. Research licence only.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen-Image-2.1">HF</a></span></td></tr>
-      <tr><td><span class="name">FLUX 3 Image Klein</span><br><small>Black Forest Labs, 5.6B</small></td><td><span class="badge open">open</span></td><td class="rel">Oct 2026</td><td>Third among open models on Artificial Analysis. Ships a separate base checkpoint for LoRA training. Non-commercial licence.</td><td><span class="links"><a href="https://huggingface.co/black-forest-labs/flux-3-image-klein">HF</a><a href="https://huggingface.co/black-forest-labs/flux-3-image-klein-base">Base</a></span></td></tr>
-      <tr><td><span class="name">FLUX.2 [klein] 4B</span><br><small>Black Forest Labs</small></td><td><span class="badge open">open</span></td><td class="rel">Jan 2026</td><td>The permissive choice: Apache 2.0, about 13 GB of VRAM, and fine for teaching and brand LoRAs. Ranks far below the leaders.</td><td><span class="links"><a href="https://huggingface.co/black-forest-labs/FLUX.2-klein-4B">HF</a></span></td></tr>
+      <tr><td><span class="name">FLUX 3 Image Klein</span><br><small>Black Forest Labs, 5.6B</small></td><td><span class="badge open">open</span></td><td class="rel">Oct 2026</td><td>Third among open models on Artificial Analysis for generation, fourth for editing. Also comes in a separate base version for LoRA training (see below). Non-commercial licence, with an exception for outputs made by small firms.</td><td><span class="links"><a href="https://huggingface.co/black-forest-labs/flux-3-image-klein">HF</a><a href="https://huggingface.co/black-forest-labs/flux-3-image-klein-base">Base</a></span></td></tr>
+      <tr><td><span class="name">FLUX.2 [klein] 4B</span><br><small>Black Forest Labs</small></td><td><span class="badge open">open</span></td><td class="rel">Jan 2026</td><td>The choice when you need commercial rights: Apache 2.0, and it runs on a GPU with about 13 GB of memory. Fine for teaching and brand LoRAs. Ranks far below the leaders.</td><td><span class="links"><a href="https://huggingface.co/black-forest-labs/FLUX.2-klein-4B">HF</a></span></td></tr>
     </tbody>
   </table></div>
 
   <div class="stack">
     <div class="note">
       <h4>Read the licence before you pick an open model</h4>
-      <p>Most top open image models allow research use but not commercial use, and MiniMax H3-Image excludes several countries entirely. Anything you train on top of a model carries the same licence, so start from an Apache 2.0 model such as FLUX.2 [klein] 4B if a brand partner will use the images.</p>
+      <p>Most top open image models allow research use but not commercial use. Anything you train on top of a model carries the same licence, so start from an Apache 2.0 model such as FLUX.2 [klein] 4B if a brand partner will use the images.</p>
     </div>
 
     <div class="mkt">
@@ -1073,7 +1074,7 @@ summary(fit)</code></pre></div>
 
     <h3>Fine-tune a generator on your own images</h3>
     <div class="prose">
-      <p>You can teach an open model a subject or a visual style from your own images. The standard tool is LoRA, the same small add-on described in <a href="#predict">Predict outcomes</a>: the original model stays untouched, and a small file learns from your images.</p>
+      <p>You can teach an open model a subject or a visual style from your own images. The standard method is LoRA, described in <a href="#predict">Predict outcomes</a>. The original model stays untouched, and training produces a small adapter file.</p>
       <ul>
         <li>To teach one product or mascot, use about 5 to 30 photos of it and a made-up name for it, such as "sks bottle". The model learns to draw the product whenever that name appears in a prompt. This recipe is called DreamBooth.</li>
         <li>To teach a visual style, use a few hundred images, each with a short caption.</li>
@@ -1085,7 +1086,7 @@ summary(fit)</code></pre></div>
     <details class="code">
       <summary><span class="ttl">Generate with an open model, then add your LoRA</span> <span class="lang">python · diffusers</span></summary>
       <div class="codewrap"><pre><code class="language-python">import torch
-from diffusers import Flux2KleinPipeline  # pip install git+https://github.com/huggingface/diffusers
+from diffusers import Flux2KleinPipeline  # pip install -U diffusers
 
 pipe = Flux2KleinPipeline.from_pretrained(
     "black-forest-labs/FLUX.2-klein-4B", torch_dtype=torch.bfloat16)
@@ -1110,7 +1111,7 @@ from openai import OpenAI
 
 client = OpenAI()   # reads OPENAI_API_KEY
 result = client.images.generate(
-    model="gpt-image-2.5-sunburst",
+    model="gpt-image-2.5-sunburst",   # first on Arena. "gpt-image-2.6-sunburst" leads Artificial Analysis.
     prompt="A green glass bottle of sparkling water on a marble counter, studio light",
 )
 with open("bottle.png", "wb") as f:
@@ -1122,17 +1123,28 @@ with open("bottle.png", "wb") as f:
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
         <li><p class="cite">Heitmann, Mark, Tijmen P. J. Jansen, Martin Reisenbichler, and David A. Schweidel (2026). "Picture Perfect: Engaging Customers with Visual Generative AI." Journal of Marketing 90(4): 74–96. <a href="https://doi.org/10.1177/00222429251356993">doi</a></p>
-          <p>Fine-tunes Stable Diffusion on marketing metrics such as attention and interest, and on brand personality traits such as ruggedness and luxury, each learned from a few example images and added to the prompt. The generated ads match or beat conventionally produced ads on those metrics, and raters see the trait-tuned ads as more rugged or luxurious than the brand's real ads.</p></li>
+          <p>Fine-tunes Stable Diffusion on marketing metrics such as attention and interest, and on brand personality traits such as ruggedness and luxury. The model learns each one from about two dozen example images, and a word for it is added to the prompt. The generated ads match or beat conventionally produced ads on those metrics, and raters see the trait-tuned ads as more rugged or luxurious than the brand's real ads.</p></li>
       </ul>
     </div>
 
-    <h3>Design notes for stimuli</h3>
+    <h3 id="generate-images-design-notes-for-stimuli">Design notes for stimuli</h3>
     <div class="prose">
       <ul>
-        <li>An image generator starts every picture from random noise, and a number called the seed fixes that noise. To change one attribute and hold everything else fixed, keep the seed the same and change only the prompt or the strength of your LoRA. Closed APIs do not let you fix the seed.</li>
-        <li>Asking a model to edit an image ("make the bottle green") can also change things you did not ask for. Measure how much the rest of the image changed and report it as a manipulation check.</li>
-        <li>Closed models are retired without much notice. Generate the full stimulus set once and archive the files with their prompts, the model name, and the date. If you may need new stimuli later, use an open model and keep a copy of it.</li>
-        <li>Gemini images carry a hidden SynthID watermark, and OpenAI states that its images carry C2PA content credentials. Open models add no marking. For field studies shown to EU consumers, Article 50 of the EU AI Act requires that generated images be marked in a machine-readable way.</li>
+        <li>An image generator starts every picture from random noise, and a number called the seed fixes that noise. To change one attribute and hold everything else fixed, keep the seed the same and change only the prompt or the strength of your LoRA. OpenAI's and Microsoft's image APIs do not let you fix the seed. Some closed APIs do, such as Imagen on Vertex AI (with the watermark turned off) and FLUX.2 [pro].</li>
+        <li>Asking a model to edit an image ("make the bottle green") can also change things you did not ask for. Measure how much the rest of the image changed and report it as a manipulation check. ImgEdit-Bench's detail-preservation score, in Track it below, is one such measure.</li>
+        <li>Generate the full stimulus set once and archive the files with their prompts, the model name, and the date (see <a href="#current">Stay current</a>). If you may need new stimuli later, use an open model and keep a copy of it.</li>
+        <li>Gemini images carry a hidden SynthID watermark. OpenAI images can carry the same watermark and content credentials (C2PA), a record inside the file that says how the image was made. Open models add no marking. Since 2 August 2026, Article 50(2) of the EU AI Act requires providers of image generators to mark outputs in a machine-readable way. Generators already on the market before that date have until 2 December 2026. Article 50(4) requires whoever shows a deepfake (a realistic AI-made image of a real person, object, or place) to EU audiences to disclose that it is AI-generated.</li>
+      </ul>
+    </div>
+
+    <div class="track">
+      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
+      <ul>
+        <li><a href="https://artificialanalysis.ai/image/leaderboard/text-to-image">Artificial Analysis, text to image</a><span>Blind pairwise votes. Has an open-weights filter (open models only) and price per image.</span></li>
+        <li><a href="https://artificialanalysis.ai/image/leaderboard/editing">Artificial Analysis, editing</a><span>The same method for instruction edits. Editing ranks differ from generation ranks.</span></li>
+        <li><a href="https://arena.ai/leaderboard/text-to-image">Arena, text to image</a><span>Crowd votes with a licence column (formerly LMArena). Entries with few votes are marked preliminary.</span></li>
+        <li><a href="https://arena.ai/leaderboard/image-edit">Arena, image edit</a><span>Crowd votes on single-image edits.</span></li>
+        <li><a href="https://github.com/PKU-YuanGroup/ImgEdit">ImgEdit-Bench</a><span>Fixed prompts. Its detail-preservation score measures whether an edit leaves the rest of the image alone.</span></li>
       </ul>
     </div>
 
@@ -1146,29 +1158,19 @@ with open("bottle.png", "wb") as f:
       </ul>
     </div>
 
-    <div class="track">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
-      <ul>
-        <li><a href="https://artificialanalysis.ai/image/leaderboard/text-to-image">Artificial Analysis, text to image</a><span>Blind pairwise votes. Has an open-weights filter and price per image.</span></li>
-        <li><a href="https://artificialanalysis.ai/image/leaderboard/editing">Artificial Analysis, editing</a><span>The same method for instruction edits. Editing ranks differ from generation ranks.</span></li>
-        <li><a href="https://arena.ai/leaderboard/text-to-image">Arena, text to image</a><span>Crowd votes with a licence column (formerly LMArena). Thin-data entries are marked preliminary.</span></li>
-        <li><a href="https://arena.ai/leaderboard/image-edit">Arena, image edit</a><span>Crowd votes on single-image edits.</span></li>
-        <li><a href="https://github.com/PKU-YuanGroup/ImgEdit">ImgEdit-Bench</a><span>Fixed prompts; its detail-preservation score measures whether an edit leaves the rest of the image alone.</span></li>
-      </ul>
-    </div>
   </div>
 </section>
 
 <section class="s" id="video-analyze">
   <header>
-    <h2>Embed/analyze videos</h2>
-    <p class="lede">Turn videos you already have, such as ads, short-form posts, and livestreams, into data. The same two moves as for images apply: ask a model coded questions, or turn each video into an embedding.</p>
+    <h2>Embed and analyze videos</h2>
+    <p class="lede">Turn videos you already have, such as ads, short-form posts, and livestreams, into data. As with images, you can ask a model questions about each video or turn each video into an embedding.</p>
   </header>
   <div class="stack" style="margin-top:0">
     <div class="prose">
-      <p>There are three ways to turn a video into data, from richest to cheapest.</p>
+      <p>There are three ways to do this, from richest to cheapest. The first asks questions. The second and third make embeddings.</p>
       <ol>
-        <li>Send the whole video to a multimodal model and ask coded questions: is the product shown, when does the brand first appear, what claims are spoken. Gemini watches the video and listens to its audio. It looks at 1 frame per second by default, so raise the rate for fast-cut ads.</li>
+        <li>Send the whole video to a VLM and ask the questions in your codebook: is the product shown, when does the brand first appear, what claims are spoken. Gemini watches the video and listens to its audio. It looks at 1 frame per second by default, so raise the rate for fast-cut ads.</li>
         <li>Turn each clip into one embedding with a video embedding model. It captures motion that a single frame misses. The vector then goes into a regression, clustering, or similarity search, as in <a href="#represent">Embed images</a>.</li>
         <li>Take a frame every second or so, embed each frame with an <a href="#represent">image model</a>, and average them. This is cheap and reproducible but ignores sound and motion. Keep the frame-level vectors if timing matters.</li>
       </ol>
@@ -1180,8 +1182,8 @@ with open("bottle.png", "wb") as f:
       <thead><tr><th>Model</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
       <tbody>
         <tr><td><span class="name">Gemini 4</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Oct 2026</td><td>Answers questions about a video and its audio, up to 3 hours long. Takes uploaded files and public YouTube links. The Gemini 3.x Flash models are the low-cost tier with the same video input.</td><td><span class="links"><a href="https://aistudio.google.com/docs/video-understanding">Docs</a></span></td></tr>
-        <tr><td><span class="name">Qwen3.6-27B</span><br><small>Alibaba Qwen</small></td><td><span class="badge open">open</span></td><td class="rel">Apr 2026</td><td>Answers questions about videos from frames, without audio, with self-reported scores close to Gemini 3 Pro. Fits on one 80 GB GPU. Apache 2.0. Its successor, Qwen3.8-27B, reports no video scores yet.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen3.6-27B">HF</a></span></td></tr>
-        <tr><td><span class="name">Kimi K2.5</span><br><small>Moonshot AI, about 1T</small></td><td><span class="badge open">open</span></td><td class="rel">Jan 2026</td><td>Self-reported video scores on par with Qwen3.6-27B. The weights are open under a modified MIT licence, but video input works only through Moonshot's API for now.</td><td><span class="links"><a href="https://huggingface.co/moonshotai/Kimi-K2.5">HF</a></span></td></tr>
+        <tr><td><span class="name">Qwen3.6-27B</span><br><small>Alibaba Qwen</small></td><td><span class="badge open">open</span></td><td class="rel">Apr 2026</td><td>Answers questions about a video from its frames and ignores the audio. On Alibaba's own tests its video scores are close to Claude 4.5 Opus. Fits on one GPU with 80 GB of memory. Apache 2.0. Its successor, Qwen3.8-27B, reports no video scores yet.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen3.6-27B">HF</a></span></td></tr>
+        <tr><td><span class="name">Kimi K2.5</span><br><small>Moonshot AI, about 1T parameters</small></td><td><span class="badge open">open</span></td><td class="rel">Jan 2026</td><td>Self-reported video scores on par with Qwen3.6-27B. The weights are open under a modified MIT licence, but video input works only through Moonshot's API for now.</td><td><span class="links"><a href="https://huggingface.co/moonshotai/Kimi-K2.5">HF</a></span></td></tr>
       </tbody>
     </table></div>
 
@@ -1189,7 +1191,7 @@ with open("bottle.png", "wb") as f:
     <div class="tbl"><table>
       <thead><tr><th>Model</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
       <tbody>
-        <tr><td><span class="name">Gemini Embedding 2</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Mar 2026</td><td>One vector per clip, in the same space as text and images. Clips up to 120 seconds; it ignores the audio.</td><td><span class="links"><a href="https://aistudio.google.com/docs/embeddings">Docs</a></span></td></tr>
+        <tr><td><span class="name">Gemini Embedding 2</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Mar 2026</td><td>One vector per clip, in the same space as text and images. Clips up to 120 seconds. It ignores the audio.</td><td><span class="links"><a href="https://aistudio.google.com/docs/embeddings">Docs</a></span></td></tr>
         <tr><td><span class="name">Qwen3-VL-Embedding</span><br><small>Alibaba Qwen, 2B and 8B</small></td><td><span class="badge open">open</span></td><td class="rel">Jan 2026</td><td>Video embeddings in the same space as text, so you can search clips by description.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen3-VL-Embedding-8B">HF</a></span></td></tr>
         <tr><td><span class="name">V-JEPA 2.1</span><br><small>Meta</small></td><td><span class="badge open">open</span></td><td class="rel">Mar 2026</td><td>Learns what videos look like from video alone, with no text. The best input when you will fit your own regression on an outcome.</td><td><span class="links"><a href="https://github.com/facebookresearch/vjepa2">GitHub</a></span></td></tr>
       </tbody>
@@ -1231,9 +1233,9 @@ print(reply.output_text)</code></pre></div>
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
         <li><p class="cite">Zhou, Mi, George H. Chen, Pedro Ferreira, and Michael D. Smith (2021). "Consumer Behavior in the Online Classroom: Using Video Analytics and Machine Learning to Understand the Consumption of Video Courseware." Journal of Marketing Research 58(6): 1079–1100. <a href="https://doi.org/10.1177/00222437211042013">doi</a></p>
-          <p>Samples one frame every ten seconds from 771 MasterClass videos, measures instructor faces and emotions, motion, and color in each frame with off-the-shelf vision tools, and averages them into video-level features. A gradient-boosting model then predicts whether each viewer finishes a video and watches the next one.</p></li>
+          <p>Measures instructor emotions from one frame every ten seconds, color from sampled frames, and motion from optical flow, across 771 MasterClass videos, with off-the-shelf vision tools. It averages them into video-level features. A gradient-boosting model then predicts whether each viewer finishes a video and watches the next one.</p></li>
         <li><p class="cite">Cascio Rizzo, Giovanni Luca, Jonah Berger, and Mi Zhou (2026). "Talking with Your Hands: How Hand Gestures Influence Communication." Journal of Marketing Research 63(3): 518–537. <a href="https://doi.org/10.1177/00222437251385922">doi</a></p>
-          <p>Measures hand movement in over 2,100 presentation videos with video-processing tools and uses a large multimodal model to classify gesture types in almost 200,000 segments. Experiments then link illustrative gestures to persuasion.</p></li>
+          <p>Measures hand movement in over 2,100 presentation videos with video-processing tools and uses a VLM to classify gesture types in almost 200,000 segments. Experiments then link illustrative gestures to persuasion.</p></li>
       </ul>
     </div>
   </div>
@@ -1242,25 +1244,21 @@ print(reply.output_text)</code></pre></div>
 <section class="s" id="video-generate">
   <header>
     <h2>Generate videos</h2>
-    <p class="lede">Make video ads or video stimuli from a text prompt or a still image. Closed APIs lead on quality, and they change faster here than anywhere else in this guide.</p>
+    <p class="lede">Make video ads or video stimuli from a text prompt or a still image. Closed APIs lead on quality. The ranking changes faster for video generation than for any other task in this guide.</p>
   </header>
   <div class="tbl"><table>
     <thead><tr><th>Model</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
     <tbody>
-      <tr><td><span class="name">Gemini Omni 1.2 Flash</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Nov 2026</td><td>First on Arena for text and image to video. Clips of 3 to 15 seconds with native audio, about $0.07 per second at 720p.</td><td><span class="links"><a href="https://aistudio.google.com/docs/omni">Docs</a></span></td></tr>
-      <tr><td><span class="name">MiniMax H3</span><br><small>MiniMax, 33B</small></td><td><span class="badge open">open</span></td><td class="rel">Jul 2026</td><td>The best open-weights video model on both leaderboards, with audio, 5 to 15 second clips. Its licence excludes the United States, the EU, the UK, and South Korea, and it needs several large GPUs.</td><td><span class="links"><a href="https://huggingface.co/MiniMaxAI/MiniMax-H3">HF</a></span></td></tr>
-      <tr><td><span class="name">Seedance 2.5</span><br><small>ByteDance</small></td><td><span class="badge closed">closed</span></td><td class="rel">Jul 2026</td><td>First on Artificial Analysis image to video. Up to 30 seconds with audio. Sold through BytePlus; US availability unconfirmed.</td><td><span class="links"><a href="https://docs.byteplus.com/en/docs/ModelArk/seedance-2-5">Docs</a></span></td></tr>
+      <tr><td><span class="name">Gemini Omni 1.2 Flash</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Nov 2026</td><td>First on Arena for both text-to-video and image-to-video. Clips of 3 to 15 seconds with native audio, about $0.07 per second at 720p.</td><td><span class="links"><a href="https://aistudio.google.com/docs/omni">Docs</a></span></td></tr>
+      <tr><td><span class="name">MiniMax H3</span><br><small>MiniMax, 33B</small></td><td><span class="badge open">open</span></td><td class="rel">Jul 2026</td><td>The best open video model on both leaderboards. It makes clips of 4 to 15 seconds with audio. Its licence excludes the United States, the EU, the UK, and South Korea, and it needs several large GPUs.</td><td><span class="links"><a href="https://huggingface.co/MiniMaxAI/MiniMax-H3">HF</a></span></td></tr>
+      <tr><td><span class="name">Seedance 2.5</span><br><small>ByteDance</small></td><td><span class="badge closed">closed</span></td><td class="rel">Jul 2026</td><td>First on Artificial Analysis image to video. Up to 30 seconds with audio. Sold through BytePlus, which is not available in the United States.</td><td><span class="links"><a href="https://docs.byteplus.com/en/docs/ModelArk/seedance-2-5">Docs</a></span></td></tr>
       <tr><td><span class="name">Wan 3.0</span><br><small>Alibaba</small></td><td><span class="badge closed">closed</span></td><td class="rel">Aug 2026</td><td>First on Artificial Analysis text to video. Up to 30 seconds at 1080p through Alibaba Cloud, with US and EU regions.</td><td><span class="links"><a href="https://help.aliyun.com/en/model-studio/wan3-0-video">Docs</a></span></td></tr>
-      <tr><td><span class="name">Wan 2.2</span><br><small>Alibaba, 5B and 14B</small></td><td><span class="badge open">open</span></td><td class="rel">Jul 2025</td><td>The only fully permissive open video model (Apache 2.0). The 5B model makes 5-second 720p clips on a 24 GB card. No audio.</td><td><span class="links"><a href="https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B-Diffusers">HF 5B</a><a href="https://huggingface.co/Wan-AI/Wan2.2-T2V-A14B-Diffusers">HF 14B</a></span></td></tr>
+      <tr><td><span class="name">Wan 2.2</span><br><small>Alibaba, 5B and 14B</small></td><td><span class="badge open">open</span></td><td class="rel">Jul 2025</td><td>The only open model in this table with a fully permissive licence (Apache 2.0), which allows commercial use. The 5B model makes 5-second 720p clips on a GPU with 24 GB of memory. No audio. Newer Wan versions (2.5 and later) are available only through Alibaba's API.</td><td><span class="links"><a href="https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B-Diffusers">HF 5B</a><a href="https://huggingface.co/Wan-AI/Wan2.2-T2V-A14B-Diffusers">HF 14B</a></span></td></tr>
     </tbody>
   </table></div>
 
   <div class="stack">
-    <div class="note">
-      <h4>Check the licence</h4>
-      <p>MiniMax H3's licence excludes several countries, including the United States. Of the open video models here, only Wan 2.2 is fully permissive. Newer Wan versions (2.5 and later) are available only through Alibaba's API.</p>
-    </div>
-    <p class="prose">You can also teach an open video model a subject or style from your own videos with a LoRA add-on, as for images. <a href="https://github.com/ostris/ai-toolkit">ai-toolkit</a>, <a href="https://github.com/modelscope/DiffSynth-Studio">DiffSynth-Studio</a>, <a href="https://github.com/kohya-ss/musubi-tuner">musubi-tuner</a>, and <a href="https://github.com/tdrussell/diffusion-pipe">diffusion-pipe</a> support MiniMax H3 and Wan.</p>
+    <p class="prose">You can also teach an open video model a subject or style from your own videos with a LoRA adapter, as for images. The <a href="#generate-images-design-notes-for-stimuli">design notes for image stimuli</a> apply to video too. <a href="https://github.com/ostris/ai-toolkit">ai-toolkit</a>, <a href="https://github.com/modelscope/DiffSynth-Studio">DiffSynth-Studio</a>, <a href="https://github.com/kohya-ss/musubi-tuner">musubi-tuner</a>, and <a href="https://github.com/tdrussell/diffusion-pipe">diffusion-pipe</a> support MiniMax H3 and Wan.</p>
 
     <details class="code">
       <summary><span class="ttl">Generate a clip with Wan 2.2</span> <span class="lang">python · diffusers</span></summary>
@@ -1270,7 +1268,8 @@ from diffusers.utils import export_to_video
 
 model_id = "Wan-AI/Wan2.2-TI2V-5B-Diffusers"
 vae = AutoencoderKLWan.from_pretrained(model_id, subfolder="vae", torch_dtype=torch.float32)
-pipe = WanPipeline.from_pretrained(model_id, vae=vae, torch_dtype=torch.bfloat16).to("cuda")
+pipe = WanPipeline.from_pretrained(model_id, vae=vae, torch_dtype=torch.bfloat16)
+pipe.enable_model_cpu_offload()   # needed to fit a 24 GB GPU
 
 frames = pipe(
     prompt="A hand pours sparkling water into a glass on a sunny terrace, slow motion",
@@ -1299,35 +1298,6 @@ export_to_video(frames, "pour.mp4", fps=24)</code></pre></div>
     </div>
   </div>
 </section>
-<section class="s" id="current">
-  <header>
-    <h2>Stay current</h2>
-    <p class="lede">The picks on this page will age faster than the leaderboards that rank them. Check the board for your task before you start a project and again before you submit, and look at when the board was last updated.</p>
-  </header>
-
-  <div class="tbl"><table>
-    <thead><tr><th>Task</th><th>Leaderboard</th><th>Open vs closed</th></tr></thead>
-    <tbody>
-      <tr><td>Image and multimodal embeddings</td><td><a href="https://huggingface.co/spaces/TIGER-Lab/MMEB-Leaderboard">MMEB</a>, <a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB image tabs (MIEB)</a></td><td>Mostly open models; few closed APIs submit</td></tr>
-      <tr><td>Vision-language models</td><td><a href="https://arena.ai/leaderboard/vision">Arena, vision</a>, <a href="https://huggingface.co/spaces/opencompass/open_vlm_leaderboard">OpenVLM</a></td><td>Arena covers both; OpenVLM is mostly open</td></tr>
-      <tr><td>Image generation and editing</td><td><a href="https://artificialanalysis.ai/image/leaderboard/text-to-image">Artificial Analysis</a>, <a href="https://arena.ai/leaderboard/text-to-image">Arena</a></td><td>Open-weights filter; licence column</td></tr>
-      <tr><td>Video generation</td><td><a href="https://artificialanalysis.ai/video/leaderboard/text-to-video">Artificial Analysis</a>, <a href="https://arena.ai/leaderboard/text-to-video">Arena</a></td><td>Open-weights filter; licence column</td></tr>
-      <tr><td>Video understanding</td><td><a href="https://video-mme-v2.netlify.app/">Video-MME-v2</a>, <a href="https://lvbench.github.io/">LVBench</a></td><td>Both, mostly from model cards</td></tr>
-    </tbody>
-  </table></div>
-
-  <div class="stack">
-    <div class="prose">
-      <p>Three habits keep a study reproducible while the models change.</p>
-      <ul>
-        <li>Record the exact model ID or checkpoint, the library version, and the date for every model you use. Hugging Face pages show a commit hash; cite it.</li>
-        <li>Archive every output the paper depends on: embeddings, labels, generated images and videos. Closed models are retired on short notice.</li>
-        <li>Prefer open weights for any measurement you may need to rerun or extend.</li>
-      </ul>
-    </div>
-
-  </div>
-</section>
 <section class="s" id="more-tools">
   <header>
     <h2>More tools</h2>
@@ -1336,7 +1306,7 @@ export_to_video(frames, "pour.mp4", fps=24)</code></pre></div>
 
   <div class="note">
     <h4>A VLM or a specialist?</h4>
-    <p>You can ask a VLM to answer several questions about an image at once and return the answers as named fields (JSON), for example whether a person appears, how many people there are, and the price shown: <code>{"has_person": true, "n_people": 2, "price": "4.99"}</code>. VLMs answer this kind of question well when the answer is a category, a small count, or text printed in the ad. They do worse than specialist tools when the answer is measured in pixels, such as where an object sits or how much of the image it covers. On the ODinW-13 detection benchmark, Qwen3-VL scores 48.6 and SAM 3 scores 61.0. Use a VLM for codes and a specialist tool for boxes, masks, and areas. Either way, check the output against a hand-coded sample.</p>
+    <p>You can ask a VLM to answer several questions about an image at once and return the answers as named fields (JSON), for example whether a person appears, how many people there are, and the price shown: <code>{"has_person": true, "n_people": 2, "price": "4.99"}</code>. VLMs answer this kind of question well when the answer is a category, a small count, or text printed in the ad. They do worse than specialist tools when the answer is measured in pixels, such as where an object sits or how much of the image it covers. On ODinW-13, a benchmark that scores how well predicted boxes match hand-drawn boxes (mAP), Qwen3-VL-235B scores 48.6 and SAM 3 scores 61.0. Use a VLM for category labels and a specialist tool for boxes, outlines (masks), and areas. Either way, check the output against a hand-coded sample.</p>
   </div>
 
   <h3>Detect and segment objects</h3>
@@ -1346,7 +1316,7 @@ export_to_video(frames, "pour.mp4", fps=24)</code></pre></div>
   <div class="tbl"><table>
     <thead><tr><th>Tool</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
     <tbody>
-      <tr><td><span class="name">SAM 3</span><br><small>Meta</small></td><td><span class="badge open">open</span></td><td class="rel">Nov 2025</td><td>Masks for every instance of a short text prompt. The strongest zero-shot model on the shared benchmarks. Gated SAM licence. The SAM 3.1 checkpoint (Mar 2026) tracks many objects in video about 7 times faster and leaves image masks unchanged.</td><td><span class="links"><a href="https://huggingface.co/facebook/sam3">HF</a><a href="https://arxiv.org/abs/2511.16719">Paper</a><a href="https://huggingface.co/facebook/sam3.1">SAM 3.1</a></span></td></tr>
+      <tr><td><span class="name">SAM 3</span><br><small>Meta</small></td><td><span class="badge open">open</span></td><td class="rel">Nov 2025</td><td>Outlines (masks) for every object that matches a short phrase you type. The strongest zero-shot model on the shared benchmarks. You accept Meta's SAM licence on Hugging Face before downloading. The SAM 3.1 version (Mar 2026) tracks many objects in video about 7 times faster and leaves image masks unchanged.</td><td><span class="links"><a href="https://huggingface.co/facebook/sam3">HF</a><a href="https://arxiv.org/abs/2511.16719">Paper</a><a href="https://huggingface.co/facebook/sam3.1">SAM 3.1</a></span></td></tr>
       <tr><td><span class="name">RF-DETR</span><br><small>Roboflow</small></td><td><span class="badge open">open</span></td><td class="rel">Nov 2026</td><td>A detector you fine-tune on your own labeled boxes. Apache 2.0 from Nano to Large.</td><td><span class="links"><a href="https://github.com/roboflow/rf-detr">GitHub</a></span></td></tr>
       <tr><td><span class="name">Cloud Vision logo detection</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Dec 2023</td><td>Named brand logos with boxes, with no training. It knows only popular logos.</td><td><span class="links"><a href="https://docs.cloud.google.com/vision/docs/detecting-logos">Docs</a></span></td></tr>
     </tbody>
@@ -1376,21 +1346,21 @@ for concept in ["logo", "person", "bottle"]:
     <div class="track">
       <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
       <ul>
-        <li><a href="https://rf100-vl.org">RF100-VL</a><span>100 datasets from unusual domains. Zero-shot scores are low for every model (about 15 AP), which warns that ads far from everyday photos need fine-tuning.</span></li>
-        <li><span class="nm"><a href="https://cocodataset.org/#detection-eval">COCO</a> and <a href="https://www.lvisdataset.org/">LVIS</a></span><span>Standard detection and long-tail benchmarks. The comparison tables in new papers serve as the leaderboard.</span></li>
+        <li><a href="https://rf100-vl.org">RF100-VL</a><span>100 datasets from unusual domains. Without fine-tuning, every model scores low (about 15 average precision, AP, at best). Expect to fine-tune a detector when your images look unlike everyday photos.</span></li>
+        <li><span class="nm"><a href="https://cocodataset.org/#detection-eval">COCO</a> and <a href="https://www.lvisdataset.org/">LVIS</a></span><span>Standard detection benchmarks. LVIS adds rare object categories. Neither has a live leaderboard, so read the comparison tables in new papers.</span></li>
       </ul>
     </div>
   </div>
 
   <h3>Read text in images</h3>
   <div class="prose">
-    <p>Text in a photo of a bottle, billboard, or shelf tag (scene text) and text on a page (document parsing) are different problems with different leaders. Most marketing images are scene text.</p>
+    <p>Reading text in images (optical character recognition, OCR) has two versions. Scene text is text inside a photo, such as on a bottle, a billboard, or a shelf tag. Document text is text on a page, such as a catalog or a flyer. Different tools lead on each. Most marketing images call for a scene-text tool.</p>
   </div>
   <div class="tbl"><table>
     <thead><tr><th>Tool</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
     <tbody>
       <tr><td><span class="name">PaddleOCR (PP-OCRv6)</span><br><small>Baidu</small></td><td><span class="badge open">open</span></td><td class="rel">Jun 2026</td><td>Words with boxes and confidence scores from ads and packaging, on CPU, in 50 languages. The boxes give text area share.</td><td><span class="links"><a href="https://github.com/PaddlePaddle/PaddleOCR">GitHub</a></span></td></tr>
-      <tr><td><span class="name">Gemini 3 Pro</span></td><td><span class="badge closed">closed</span></td><td class="rel">Nov 2025</td><td>Text plus its role (headline, price) in one call. The best closed model on OmniDocBench.</td><td><span class="links"><a href="https://ai.google.dev/gemini-api/docs/image-understanding">Docs</a></span></td></tr>
+      <tr><td><span class="name">Gemini 4 Hydrogen</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Nov 2026</td><td>Text plus its role (headline, price) in one call. Google's image and document guides use this model.</td><td><span class="links"><a href="https://aistudio.google.com/docs/image-understanding">Docs</a></span></td></tr>
       <tr><td><span class="name">Qwen3.6-27B</span></td><td><span class="badge open">open</span></td><td class="rel">Apr 2026</td><td>Hard scene text. General VLMs lead the open entries on OCRBench v2.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen3.6-27B">HF</a></span></td></tr>
       <tr><td><span class="name">PaddleOCR-VL-1.6</span><br><small>Baidu</small></td><td><span class="badge open">open</span></td><td class="rel">May 2026</td><td>Full-page parsing of catalogs, flyers, and print ads, with reading order and tables. Scores above 95 on OmniDocBench and installs with the same toolkit as PP-OCRv6.</td><td><span class="links"><a href="https://huggingface.co/PaddlePaddle/PaddleOCR-VL-1.6">HF</a></span></td></tr>
       <tr><td><span class="name">Mistral OCR 4.1</span>, <span class="name">Document AI</span></td><td><span class="badge closed">closed</span></td><td class="rel">Jul 2026</td><td>Hosted document parsers for large batches of pages. Mistral OCR 4.1 also returns paragraph boxes with block labels and confidence scores, at $4 per 1,000 pages.</td><td><span class="links"><a href="https://docs.mistral.ai/capabilities/document_ai/basic_ocr/">Mistral</a><a href="https://docs.cloud.google.com/document-ai/docs/overview">Google</a></span></td></tr>
@@ -1400,47 +1370,55 @@ for concept in ["logo", "person", "bottle"]:
     <div class="paper">
       <span class="tag">Worked pipelines</span>
       <p class="cite"><a href="https://github.com/yale-som-hpc/ocr-examples">ocr-examples</a>, from the yale-som-hpc GitHub organization, public domain under the Unlicense.</p>
-      <p class="what">Runnable document-OCR pipelines for pypdf, Docling, olmOCR-2, DeepSeek-OCR-2, and GLM-OCR, plus examples for handwriting, historical print, and tables. Three habits carry over to any project: try the PDF's embedded text before running a model, write a provenance file (engine, model version, settings, input hash) next to each output, and check outputs against expected phrases.</p>
+      <p class="what">Runnable document-OCR pipelines for pypdf, Docling, olmOCR-2, DeepSeek-OCR-2, and GLM-OCR, plus examples for handwriting, historical print, and tables. Three habits carry over to any project: try the PDF's embedded text before running a model, save a small record next to each output (the tool, the model version, the settings, and a fingerprint of the input file), and check outputs against expected phrases.</p>
     </div>
     <div class="track">
       <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
       <ul>
-        <li><a href="https://99franklin.github.io/ocrbench_v2/">OCRBench v2</a><span>Scene text and text reasoning, updated quarterly. The closest board to ad and packaging text.</span></li>
+        <li><a href="https://99franklin.github.io/ocrbench_v2/">OCRBench v2</a><span>Scene text and text reasoning, updated about quarterly. The closest board to ad and packaging text.</span></li>
         <li><a href="https://github.com/opendatalab/OmniDocBench">OmniDocBench</a><span>End-to-end document parsing, open and closed.</span></li>
       </ul>
     </div>
   </div>
 
   <h3>Faces and gaze</h3>
-  <div class="tbl"><table>
-    <thead><tr><th>Tool</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
-    <tbody>
-      <tr><td><span class="name">MediaPipe Face Landmarker</span><br><small>Google</small></td><td><span class="badge open">open</span></td><td class="rel">Nov 2026</td><td>Face count, 478 landmarks, smile and blink scores, and head pose, on CPU.</td><td><span class="links"><a href="https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker">Docs</a></span></td></tr>
-      <tr><td><span class="name">py-feat</span></td><td><span class="badge open">open</span></td><td class="rel">Oct 2026</td><td>Facial action units (FACS), from a toolkit built by psychologists.</td><td><span class="links"><a href="https://github.com/cosanlab/py-feat">GitHub</a></span></td></tr>
-      <tr><td><span class="name">L2CS-Net</span></td><td><span class="badge open">open</span></td><td class="rel">Mar 2022</td><td>Gaze direction, to code whether a model looks at the camera. Trained on public gaze datasets (Gaze360, MPIIGaze), so you can check whether your images were in its training data.</td><td><span class="links"><a href="https://github.com/Ahmednull/L2CS-Net">GitHub</a></span></td></tr>
-      <tr><td><span class="name">Amazon Rekognition</span></td><td><span class="badge closed">closed</span></td><td class="rel">Service</td><td>Up to 100 faces per image with pose, gaze direction, smile, and occlusion.</td><td><span class="links"><a href="https://docs.aws.amazon.com/rekognition/latest/dg/faces-detect-images.html">Docs</a></span></td></tr>
-    </tbody>
-  </table></div>
-  <p class="prose" style="margin-top:14px">Report what the tool measures (a smile, an action unit, a gaze angle) and do not call it emotion. Facial configurations do not reliably reveal what a person feels (<a href="https://doi.org/10.1177/1529100619832930">Barrett et al. 2019</a>). InsightFace models are licensed for non-commercial research only. Faces in user posts are personal data under GDPR and some US state laws.</p>
-
-  <h3>Predicted attention</h3>
   <div class="prose">
-    <p>A saliency model predicts where people look in the first seconds of free viewing, so you can measure how much predicted attention falls on the brand without an eye-tracking study. These models are trained on free viewing of natural photos; validate against eye-tracking or recall before relying on them for ads seen in a feed.</p>
+    <p>These tools count faces, measure expressions, and code where the people shown are looking.</p>
   </div>
   <div class="tbl"><table>
     <thead><tr><th>Tool</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
     <tbody>
-      <tr><td><span class="name">DeepGaze MSDB / IIE</span></td><td><span class="badge open">open</span></td><td class="rel">Feb 2026</td><td>First and second on MIT300, within 0.004 AUC of the human ceiling. The repo has no licence file, so ask the authors before commercial use. IIE is trained on public eye-tracking data (SALICON, MIT1003), so you can check whether your images were in its training data.</td><td><span class="links"><a href="https://github.com/matthias-k/DeepGaze">GitHub</a></span></td></tr>
-      <tr><td><span class="name">UNISAL</span></td><td><span class="badge open">open</span></td><td class="rel">Mar 2020</td><td>Apache 2.0, and it also handles video. Trained on public saliency datasets (DHF1K, SALICON, and two others), so you can check whether your images were in its training data.</td><td><span class="links"><a href="https://github.com/rdroste/unisal">GitHub</a></span></td></tr>
-      <tr><td><span class="name">Neurons, 3M VAS</span></td><td><span class="badge closed">closed</span></td><td class="rel">Service</td><td>Commercial heatmaps that agencies use. They publish only vendor validation.</td><td><span class="links"><a href="https://knowledge.neuronsinc.com/how-predict-ai-works">Neurons</a></span></td></tr>
+      <tr><td><span class="name">MediaPipe Face Landmarker</span><br><small>Google</small></td><td><span class="badge open">open</span></td><td class="rel">Nov 2026</td><td>Face count, 478 landmarks, smile and blink scores, and head pose, on CPU.</td><td><span class="links"><a href="https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker">Docs</a></span></td></tr>
+      <tr><td><span class="name">py-feat</span></td><td><span class="badge open">open</span></td><td class="rel">Oct 2026</td><td>Facial action units, the individual muscle movements defined by the Facial Action Coding System (FACS). The toolkit was built by psychologists.</td><td><span class="links"><a href="https://github.com/cosanlab/py-feat">GitHub</a></span></td></tr>
+      <tr><td><span class="name">L2CS-Net</span></td><td><span class="badge open">open</span></td><td class="rel">Mar 2022</td><td>Gaze direction, to code whether the person shown looks at the camera. Public training data (Gaze360, MPIIGaze), so you can check whether your images were in it (training-data leakage).</td><td><span class="links"><a href="https://github.com/Ahmednull/L2CS-Net">GitHub</a></span></td></tr>
+      <tr><td><span class="name">Amazon Rekognition</span></td><td><span class="badge closed">closed</span></td><td class="rel">Service</td><td>Up to 100 faces per image with pose, gaze direction, smile, and occlusion.</td><td><span class="links"><a href="https://docs.aws.amazon.com/rekognition/latest/dg/faces-detect-images.html">Docs</a></span></td></tr>
     </tbody>
   </table></div>
-  <p class="prose" style="margin-top:14px">Track the <a href="https://saliency.tuebingen.ai/results.html">MIT/Tuebingen Saliency Benchmark</a>.</p>
+  <p class="prose" style="margin-top:14px">Report what the tool measures (a smile, an action unit, a gaze angle) and do not call it emotion. Facial configurations do not reliably reveal what a person feels (<a href="https://doi.org/10.1177/1529100619832930">Barrett et al. 2019</a>). InsightFace, a widely used open face library that is not listed above, licenses its models for non-commercial research only. Faces in user posts are personal data under GDPR and some US state laws.</p>
+
+  <h3>Predicted attention</h3>
+  <div class="prose">
+    <p>A saliency model predicts where people look in the first seconds of free viewing, so you can measure how much predicted attention falls on the brand without an eye-tracking study. These models are trained on people looking at natural photos with no task. Validate them against eye-tracking or recall before you rely on them for ads seen in a feed.</p>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Tool</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
+    <tbody>
+      <tr><td><span class="name">DeepGaze MSDB / IIE</span></td><td><span class="badge open">open</span></td><td class="rel">Feb 2026</td><td>First and second on MIT300, the standard benchmark for predicted eye fixations. MSDB's AUC score (0.5 is chance, 1 is perfect) is within 0.004 of the human baseline that predicts each viewer from the others. The repo has no licence file, so ask the authors before commercial use. IIE has public training data (SALICON, MIT1003), so you can check whether your images were in it (training-data leakage).</td><td><span class="links"><a href="https://github.com/matthias-k/DeepGaze">GitHub</a></span></td></tr>
+      <tr><td><span class="name">UNISAL</span></td><td><span class="badge open">open</span></td><td class="rel">Mar 2020</td><td>Apache 2.0, and it also handles video. Public training data (DHF1K, SALICON, and two others), so you can check whether your images were in it (training-data leakage).</td><td><span class="links"><a href="https://github.com/rdroste/unisal">GitHub</a></span></td></tr>
+      <tr><td><span class="name">Neurons, 3M VAS</span></td><td><span class="badge closed">closed</span></td><td class="rel">Service</td><td>Commercial attention heatmaps that agencies use. The only validation studies are the vendors' own.</td><td><span class="links"><a href="https://knowledge.neuronsinc.com/how-predict-ai-works">Neurons</a></span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="track" style="margin-top:14px">
+    <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
+    <ul>
+      <li><a href="https://saliency.tuebingen.ai/results.html">MIT/Tuebingen Saliency Benchmark</a><span>MIT300 and other fixation benchmarks.</span></li>
+    </ul>
+  </div>
   <div class="mkt" style="margin-top:14px">
     <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
     <ul class="mkt-list">
       <li><p class="cite">Ye, Jianping, Michel Wedel, and Rik Pieters (2026). "AdGazer: Improving Contextual Advertising with Theory-Informed Machine Learning." Journal of Marketing 90(4): 122–144. <a href="https://doi.org/10.1177/00222429251396114">doi</a></p>
-        <p>Trains a model on eye-tracking data to predict how much attention a display ad and its brand get on the page where the ad appears. A multimodal LLM extracts topics that measure how well the ad matches the page, and these enter the model as inputs.</p></li>
+        <p>Trains a model on eye-tracking data to predict how much attention a display ad and its brand get on the page where the ad appears. A VLM extracts topics that measure how well the ad matches the page, and these enter the model as inputs.</p></li>
     </ul>
   </div>
 
@@ -1451,24 +1429,53 @@ for concept in ["logo", "person", "bottle"]:
   <div class="tbl"><table>
     <thead><tr><th>Tool</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
     <tbody>
-      <tr><td><span class="name">Q-ReAlign</span><br><small>Q-Future, 0.8B to 9B</small></td><td><span class="badge open">open</span></td><td class="rel">Jun 2026</td><td>Scores each image from 1 to 5 for aesthetics or for technical quality. The 9B reaches Spearman 0.83 on the AVA benchmark. Apache 2.0 weights.</td><td><span class="links"><a href="https://huggingface.co/q-future/Q-ReAlign-Pro-9B">HF</a><a href="https://github.com/Q-Future/Q-ReAlign">GitHub</a></span></td></tr>
+      <tr><td><span class="name">Q-ReAlign</span><br><small>Q-Future, 0.8B to 9B</small></td><td><span class="badge open">open</span></td><td class="rel">Jun 2026</td><td>Scores each image from 0 to 1 for aesthetics or for technical quality. The 9B model's scores have a rank correlation of 0.83 with human ratings on the AVA benchmark. Apache 2.0 weights.</td><td><span class="links"><a href="https://huggingface.co/q-future/Q-ReAlign-Pro-9B">HF</a><a href="https://github.com/Q-Future/Q-ReAlign">GitHub</a></span></td></tr>
       <tr><td><span class="name">pyaesthetics</span></td><td><span class="badge open">open</span></td><td class="rel">Mar 2026</td><td>Pixel statistics: brightness, contrast, Hasler and Süsstrunk colorfulness, visual complexity, symmetry, and the share of the image covered by text. GPL-3.0.</td><td><span class="links"><a href="https://github.com/Gabrock94/pyaesthetics">GitHub</a></span></td></tr>
-      <tr><td><span class="name">Image Analyzer</span><br><small>Exner, Konrad, Hartmann</small></td><td><span class="badge open">open</span></td><td class="rel">Nov 2025</td><td>Many of these measures at once (aesthetic scores, color, composition, blur, text, faces, objects, captions) through a notebook, an app, or Python. AGPL-3.0.</td><td><span class="links"><a href="https://github.com/digital-marketing-tum/image-analyzer">GitHub</a></span></td></tr>
-      <tr><td><span class="name">pyiqa</span></td><td><span class="badge open">open</span></td><td class="rel">Jul 2026</td><td>More than 100 quality and aesthetic metrics behind one Python API, including Q-ReAlign and NIMA. Non-commercial licence.</td><td><span class="links"><a href="https://github.com/chaofengc/IQA-PyTorch">GitHub</a></span></td></tr>
+      <tr><td><span class="name">Image Analyzer</span><br><small>Exner, Konrad, Hartmann</small></td><td><span class="badge open">open</span></td><td class="rel">Nov 2025</td><td>49 image metrics at once. See <a href="#companion">Companion resources</a>. AGPL-3.0.</td><td><span class="links"><a href="https://github.com/digital-marketing-tum/image-analyzer">GitHub</a></span></td></tr>
+      <tr><td><span class="name">pyiqa</span></td><td><span class="badge open">open</span></td><td class="rel">Jul 2026</td><td>About 50 quality and aesthetic metrics, in more than 100 pretrained versions, behind one Python API, including Q-ReAlign and NIMA. Non-commercial licence.</td><td><span class="links"><a href="https://github.com/chaofengc/IQA-PyTorch">GitHub</a></span></td></tr>
       <tr><td><span class="name">visual-clutter</span></td><td><span class="badge open">open</span></td><td class="rel">Aug 2023</td><td>Feature Congestion clutter as a score and a map, plus Subband Entropy. MIT. Runs on Linux and macOS only.</td><td><span class="links"><a href="https://github.com/kargaranamir/visual-clutter">GitHub</a></span></td></tr>
     </tbody>
   </table></div>
-  <p class="prose" style="margin-top:14px">Cite the original measures, such as <a href="https://doi.org/10.1509/jmkg.74.5.048">Pieters, Wedel, and Batra (2010, Journal of Marketing)</a> for visual complexity in ads. Resize and re-encode every image the same way before comparing file-size measures.</p>
+  <p class="prose" style="margin-top:14px">Cite the original measures, such as <a href="https://doi.org/10.1509/jmkg.74.5.048">Pieters, Wedel, and Batra (2010, Journal of Marketing)</a> for visual complexity in ads. Some complexity measures use the size of the compressed image file. Before you compare them, resize every image to the same dimensions and save it in the same format at the same quality.</p>
   <div class="mkt" style="margin-top:14px">
     <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
     <ul class="mkt-list">
       <li><p class="cite">Li, Yiyi, and Ying Xie (2020). "Is a Picture Worth a Thousand Words? An Empirical Study of Image Content and Social Media Engagement." Journal of Marketing Research 57(1): 1–19. <a href="https://doi.org/10.1177/0022243719881113">doi</a></p>
-        <p>Measures the colorfulness of brand photos from their dominant colors and detects faces with Google Cloud Vision, has human raters code photo quality, and relates these to likes and retweets on Twitter and Instagram. Colorfulness matters differently by product category, and high-quality, professionally shot photos get more engagement.</p></li>
+        <p>Measures the colorfulness of photos in social media posts about airline and SUV brands from their dominant colors, detects faces with Google Cloud Vision, has human raters code photo quality, and relates these to likes and retweets. Colorfulness matters differently by product category, and high-quality, professionally shot photos get more engagement.</p></li>
       <li><p class="cite">Zhang, Shunyuan, Dokyun Lee, Param Vir Singh, and Kannan Srinivasan (2022). "What Makes a Good Image? Airbnb Demand Analytics Leveraging Interpretable Image Features." Management Science 68(8): 5644–5666. <a href="https://doi.org/10.1287/mnsc.2021.4175">doi</a></p>
         <p>Computes 12 interpretable photo attributes covering composition, color, and the figure-ground relationship, and relates them to demand for 7,423 Airbnb listings. Listings with verified photos had 8.98% higher occupancy.</p></li>
       <li><p class="cite">Zhang, Mengxia, and Lan Luo (2023). "Can Consumer-Posted Photos Serve as a Leading Indicator of Restaurant Survival? Evidence from Yelp." Management Science 69(1): 25–50. <a href="https://doi.org/10.1287/mnsc.2022.4359">doi</a></p>
         <p>Computes hand-designed photo attributes, such as brightness and composition, and labels photo content with a pretrained model, for 755,758 Yelp photos of 17,719 restaurants. In a model of restaurant survival, what the photos show (such as the share of food photos) predicts survival better than how they were taken.</p></li>
     </ul>
+  </div>
+</section>
+<section class="s" id="current">
+  <header>
+    <h2>Stay current</h2>
+    <p class="lede">The picks on this page will age faster than the leaderboards that rank them. Check the leaderboard for your task before you start a project and again before you submit, and look at when the leaderboard was last updated.</p>
+  </header>
+
+  <div class="tbl"><table>
+    <thead><tr><th>Task</th><th>Leaderboard</th><th>Open vs closed</th></tr></thead>
+    <tbody>
+      <tr><td>Image and multimodal embeddings</td><td><a href="https://huggingface.co/spaces/TIGER-Lab/MMEB-Leaderboard">MMEB</a>, <a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB image tabs (MIEB)</a></td><td>Mostly open models; few closed APIs submit</td></tr>
+      <tr><td>Vision-language models</td><td><a href="https://arena.ai/leaderboard/vision">Arena, vision</a>, <a href="https://huggingface.co/spaces/opencompass/open_vlm_leaderboard">OpenVLM</a></td><td>Arena covers both; OpenVLM is mostly open</td></tr>
+      <tr><td>Image generation and editing</td><td><a href="https://artificialanalysis.ai/image/leaderboard/text-to-image">Artificial Analysis</a>, <a href="https://arena.ai/leaderboard/text-to-image">Arena</a></td><td>Open-weights filter; licence column</td></tr>
+      <tr><td>Video generation</td><td><a href="https://artificialanalysis.ai/video/leaderboard/text-to-video">Artificial Analysis</a>, <a href="https://arena.ai/leaderboard/text-to-video">Arena</a></td><td>Open-weights filter; licence column</td></tr>
+      <tr><td>Video understanding</td><td><a href="https://video-mme-v2.netlify.app/">Video-MME-v2</a>, <a href="https://lvbench.github.io/">LVBench</a></td><td>Both. Most scores are reported by the model's developer.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="stack">
+    <div class="prose">
+      <p>Three habits keep a study reproducible while the models change.</p>
+      <ul>
+        <li>Record the exact model ID or checkpoint, the library version, and the date for every model you use. A Hugging Face model page shows a version code (the commit hash). Cite it.</li>
+        <li>Archive every output the paper depends on: embeddings, labels, generated images and videos. Closed models are retired on short notice.</li>
+        <li>Prefer open models for any measurement you may need to rerun or extend.</li>
+      </ul>
+    </div>
+
   </div>
 </section>
 <section class="s" id="companion">
@@ -1484,7 +1491,7 @@ for concept in ["logo", "person", "bottle"]:
     <div class="paper">
       <span class="tag">Image metrics pipeline</span>
       <p class="cite"><a href="https://github.com/digital-marketing-tum/image-analyzer">Image Analyzer</a>, from Exner, Yannick, Maximilian Konrad, and Jochen Hartmann (2025). "Image Analyzer: A Framework and Pipeline to Analyze Image Metrics." <a href="https://doi.org/10.2139/ssrn.5776702">SSRN 5776702</a></p>
-      <p class="what">Open-source code that extracts 49 image metrics in eleven groups, from color and composition to human presence, text, and generated descriptions. Runs as a Colab notebook, a no-code app, or Python. AGPL-3.0.</p>
+      <p class="what">Open-source code that extracts 49 image metrics, from color and composition to human presence, text, and generated descriptions. Runs as a Colab notebook, a no-code app, or Python. AGPL-3.0.</p>
     </div>
   </div>
 </section>
@@ -1493,7 +1500,7 @@ for concept in ["logo", "person", "bottle"]:
 
 <footer>
   <div class="wrap">
-    <p>Model rankings were checked in November 2026 and will change. Follow the benchmark links in each section for the current order.</p>
+    <p>Model rankings were checked on Nov 17, 2026 and will change. Follow the benchmark links in each section for the current order.</p>
     <p>Code snippets are illustrative, and most were not run. They follow the model cards and official docs as of the check date. Confirm against the linked page before running.</p>
   </div>
 </footer>
@@ -1667,7 +1674,7 @@ function selectText(w) { var r = document.createRange(); r.selectNodeContents(w.
 })();
 </script>
 <script>
-/* Decision guide. Each node is a question with options, or a leaf with picks. Data: window.GUIDE (defined below). */
+/* Decision guide. Each node is a question with options, or a leaf with picks. Data: window.GUIDE (defined above). */
 (function () {
   var host = document.getElementById("guideBody"); if (!host || !window.GUIDE) return;
   var path = [];
@@ -1688,7 +1695,7 @@ function selectText(w) { var r = document.createRange(); r.selectNodeContents(w.
     } else {
       h += '<div class="leaf">';
       n.picks.forEach(function (p) {
-        h += '<div class="pick"><div class="pick-row"><strong>' + esc(p.name) + '</strong><span class="badge ' + p.access + '">' + p.access + "</span></div>";
+        h += '<div class="pick"><div class="pick-row"><strong>' + esc(p.name) + '</strong>' + (p.access ? '<span class="badge ' + p.access + '">' + p.access + "</span>" : "") + "</div>";
         if (p.why) h += '<p class="why">' + p.why + "</p>";
         h += "</div>";
       });
