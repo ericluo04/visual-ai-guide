@@ -1,0 +1,49 @@
+name: Blind mirror
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: blind-mirror
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      MIRROR_REPO: ${{ secrets.MIRROR_REPO }}
+      MIRROR_DEPLOY_KEY: ${{ secrets.MIRROR_DEPLOY_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the blinded copy
+        run: python3 scripts/blind.py "$RUNNER_TEMP/site"
+
+      - name: Push to the mirror
+        if: env.MIRROR_REPO != '' && env.MIRROR_DEPLOY_KEY != ''
+        run: |
+          set -euo pipefail
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$MIRROR_DEPLOY_KEY" > ~/.ssh/mirror_key
+          chmod 600 ~/.ssh/mirror_key
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
+          cd "$RUNNER_TEMP/site"
+          git init -q -b main
+          git add -A
+          GIT_AUTHOR_NAME="Visual AI Practitioner's Guide" \
+          GIT_AUTHOR_EMAIL="noreply@users.noreply.github.com" \
+          GIT_COMMITTER_NAME="Visual AI Practitioner's Guide" \
+          GIT_COMMITTER_EMAIL="noreply@users.noreply.github.com" \
+            git commit -q -m "Update site"
+          GIT_SSH_COMMAND="ssh -i ~/.ssh/mirror_key -o IdentitiesOnly=yes" \
+            git push -q --force "git@github.com:${MIRROR_REPO}.git" main 2>/dev/null
+          rm -f ~/.ssh/mirror_key
+
+      - name: Note a skipped push
+        if: env.MIRROR_REPO == '' || env.MIRROR_DEPLOY_KEY == ''
+        run: echo "Mirror secrets are not set. Built the blinded copy and skipped the push."
