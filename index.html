@@ -355,7 +355,7 @@ footer .wrap { display: grid; gap: 6px; }
       <li><a href="#inference">Inference with predicted variables</a></li>
       <li><a href="#generate-images">Generate and edit images</a></li>
       <li><a href="#video-analyze">Video analysis</a></li>
-      <li><a href="#video-generate">Generate videos</a></li>
+      <li><a href="#video-generate">Generate and edit videos</a></li>
       <li><a href="#more-tools">More tools</a></li>
       <li><a href="#current">Stay current</a></li>
       <li><a href="#companion">Companion resources</a></li>
@@ -527,7 +527,7 @@ footer .wrap { display: grid; gap: 6px; }
       <p class="what">Embed each ad and cluster the embeddings. Score each ad's prototypicality (its similarity to the average ad in its category) or its uniqueness.</p>
       <p class="ex-lbl">Illustrative evaluation</p>
       <p class="what">Whether the clusters look coherent when you inspect them, and whether uniqueness relates to retention.</p>
-      <p class="ex-chips"><a href="#represent">Embed images</a><a href="#video-analyze">Video analysis</a></p>
+      <p class="ex-chips"><a href="#represent">Embed images</a><a href="#video-analyze-embed-videos">Embed videos</a></p>
     </div>
     <div class="paper ex-card">
       <h4>Do theory-guided concepts matter?</h4>
@@ -535,7 +535,7 @@ footer .wrap { display: grid; gap: 6px; }
       <p class="what">Label each concept with a VLM, or with a classifier trained on your hand labels, for example perceptual fluency. Then regress retention on the labels with proper inference: a bias correction method that uses a human-labeled sample, so that labeling errors do not bias the coefficients.</p>
       <p class="ex-lbl">Illustrative evaluation</p>
       <p class="what">Agreement with a human-labeled sample, and the bias-corrected coefficients with their intervals.</p>
-      <p class="ex-chips"><a href="#label">Label images with a VLM</a><a href="#predict">Predict outcomes</a><a href="#inference">Inference with predicted variables</a></p>
+      <p class="ex-chips"><a href="#label">Label images with a VLM</a><a href="#video-analyze-label-videos-with-a-vlm">Label videos with a VLM</a><a href="#predict">Predict outcomes</a><a href="#inference">Inference with predicted variables</a></p>
     </div>
   </div>
   <div class="ex-group">
@@ -576,7 +576,7 @@ footer .wrap { display: grid; gap: 6px; }
       <p class="what">Generate new ads, or edit one element of existing ads, guided by the insights you found above.</p>
       <p class="ex-lbl">Illustrative evaluation</p>
       <p class="what">Retention in an A/B test against the original ads.</p>
-      <p class="ex-chips"><a href="#generate-images">Generate and edit images</a><a href="#video-generate">Generate videos</a></p>
+      <p class="ex-chips"><a href="#generate-images">Generate and edit images</a><a href="#video-generate">Generate and edit videos</a></p>
     </div>
 </section>
 <script>
@@ -645,13 +645,16 @@ footer .wrap { display: grid; gap: 6px; }
           { label: "One vector per clip", next: leaf("#video-analyze-embed-videos", [
             p("Gemini Embedding 2", "closed", "Clips up to 120 seconds."), p("Qwen3-VL-Embedding", "open", "Shared space with text."),
             p("V-JEPA 2.1", "open", "Best input for a regression on your own outcome.")], REG) } ] } },
-      { label: "Generate videos", href: "#video-generate", next: {
-        q: "An API or an open model?", options: [
+      { label: "Generate or edit videos", hint: "Video ads, stimuli, edits of existing clips", href: "#video-generate", next: {
+        q: "What do you need?", options: [
           { label: "Best quality through an API", next: leaf("#video-generate", [
             p("Gemini Omni 1.2 Flash", "closed"), p("Seedance 2.5", "closed"), p("Wan 3.0", "closed")]) },
           { label: "An open model you can fine-tune", next: leaf("#video-generate", [
             p("MiniMax H3", "open", "The best open model. Its licence excludes the US, EU, UK, and South Korea."),
-            p("Wan 2.2", "open", "Its licence allows any use.")]) } ] } },
+            p("Wan 2.2", "open", "Its licence allows any use.")]) },
+          { label: "Edit an existing clip", hint: "Change one element, keep the rest", next: leaf("#video-generate", [
+            p("Gemini Omni 1.2 Flash", "closed", "Edits clips of 15 seconds or less from a text instruction. Not in the EEA, Switzerland, or the UK."),
+            p("Wan2.1-VACE", "open", "Mask the region to change. Its licence allows any use.")]) } ] } },
       { label: "Measure objects, text, or where viewers look", hint: "Specialized tools, including faces", href: "#more-tools", next: leaf("#more-tools", [
         p("SAM 3", "open", "Outlines any object you name. Use it to measure the share of the image that a logo covers."),
         p("PaddleOCR", "open", "Words and their boxes in ads and packaging."),
@@ -1283,7 +1286,7 @@ summary(fit)</code></pre></div>
       <tr><td><span class="name">GPT Image 2.6 / 2.5</span><br><small>OpenAI</small></td><td><span class="badge closed">closed</span></td><td class="rel">Nov 2026</td><td>GPT Image 2.6 ranks first on Artificial Analysis for generation. GPT Image 2.5 ranks first on Arena. Both accept several reference images per edit.</td><td><span class="links"><a href="https://developers.openai.com/api/docs/guides/image-generation">Docs</a></span></td></tr>
       <tr><td><span class="name">MAI-Image-2.7</span><br><small>Microsoft AI</small></td><td><span class="badge closed">closed</span></td><td class="rel">Nov 2026</td><td>First on Artificial Analysis for editing. Up to five reference images per edit. Public preview in Microsoft Foundry, about $35 per 1,000 images.</td><td><span class="links"><a href="https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai">Docs</a><a href="https://microsoft.ai/models/mai-image-2-7/">Model</a></span></td></tr>
       <tr><td><span class="name">Nano Banana 2.1</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Oct 2026</td><td>Generation and conversational editing through the Gemini API. Outputs carry a SynthID watermark.</td><td><span class="links"><a href="https://aistudio.google.com/docs/image-generation">Docs</a></span></td></tr>
-      <tr><td><span class="name">MiniMax H3-Image</span><br><small>MiniMax, 33B</small></td><td><span class="badge open">open</span></td><td class="rel">Nov 2026</td><td>First among open models on Artificial Analysis for generation and editing. Its licence excludes the United States, the EU, the UK, and South Korea. It needs one very large GPU (the transformer alone is 69 GB) or several.</td><td><span class="links"><a href="https://huggingface.co/MiniMaxAI/MiniMax-H3-Image">HF</a></span></td></tr>
+      <tr><td><span class="name">MiniMax H3-Image</span><br><small>MiniMax, 33B</small></td><td><span class="badge open">open</span></td><td class="rel">Nov 2026</td><td>First among open models on Artificial Analysis for generation and editing. Its licence excludes the United States, the EU, the UK, and South Korea, but people there can ask MiniMax for a separate licence. It needs one very large GPU (the transformer alone is 69 GB) or several.</td><td><span class="links"><a href="https://huggingface.co/MiniMaxAI/MiniMax-H3-Image">HF</a></span></td></tr>
       <tr><td><span class="name">Qwen-Image-2.1</span><br><small>Alibaba Qwen, 7B</small></td><td><span class="badge open">open</span></td><td class="rel">Sep 2026</td><td>First among open models on Arena, for generation and editing with up to 10 reference images. Research licence only.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen-Image-2.1">HF</a></span></td></tr>
       <tr><td><span class="name">FLUX 3 Image Klein</span><br><small>Black Forest Labs, 5.6B</small></td><td><span class="badge open">open</span></td><td class="rel">Oct 2026</td><td>Third among open models on Artificial Analysis for generation. A separate base version is for LoRA training. Non-commercial licence, with an exception for outputs made by small firms.</td><td><span class="links"><a href="https://huggingface.co/black-forest-labs/flux-3-image-klein">HF</a><a href="https://huggingface.co/black-forest-labs/flux-3-image-klein-base">Base</a></span></td></tr>
       <tr><td><span class="name">FLUX.2 [klein] 4B</span><br><small>Black Forest Labs</small></td><td><span class="badge open">open</span></td><td class="rel">Jan 2026</td><td>The choice when you need commercial rights: its licence allows any use. It runs on a GPU with about 13 GB of memory. Fine for teaching and brand LoRAs. Ranks far below the leaders.</td><td><span class="links"><a href="https://huggingface.co/black-forest-labs/FLUX.2-klein-4B">HF</a></span></td></tr>
@@ -1596,22 +1599,67 @@ print(reply.output_text)</code></pre></div>
 
 <section class="s" id="video-generate">
   <header>
-    <h2>Generate videos</h2>
-    <p class="lede">Make video ads or video stimuli from a text prompt or a still image. Closed APIs lead on quality. The ranking changes faster for video generation than for any other task in this guide.</p>
+    <h2>Generate and edit videos</h2>
+    <p class="lede">Make video ads or video stimuli from a text prompt or a still image. You can also edit an existing clip, changing one element and keeping the rest. Closed APIs lead on quality. The ranking changes faster for video generation than for any other task in this guide.</p>
   </header>
   <div class="tbl"><table>
     <thead><tr><th>Model</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
     <tbody>
-      <tr><td><span class="name">Gemini Omni 1.2 Flash</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Nov 2026</td><td>First on Arena for both text-to-video and image-to-video. Clips of 3 to 15 seconds with native audio, about $0.07 per second at 720p.</td><td><span class="links"><a href="https://aistudio.google.com/docs/omni">Docs</a></span></td></tr>
-      <tr><td><span class="name">MiniMax H3</span><br><small>MiniMax, 33B</small></td><td><span class="badge open">open</span></td><td class="rel">Jul 2026</td><td>The best open video model on both leaderboards. It makes clips of 4 to 15 seconds with audio. Its licence excludes the United States, the EU, the UK, and South Korea, and it needs several large GPUs.</td><td><span class="links"><a href="https://huggingface.co/MiniMaxAI/MiniMax-H3">HF</a></span></td></tr>
-      <tr><td><span class="name">Seedance 2.5</span><br><small>ByteDance</small></td><td><span class="badge closed">closed</span></td><td class="rel">Jul 2026</td><td>First on Artificial Analysis image to video. Up to 30 seconds with audio. Sold through BytePlus, which is not available in the United States.</td><td><span class="links"><a href="https://docs.byteplus.com/en/docs/ModelArk/seedance-2-5">Docs</a></span></td></tr>
-      <tr><td><span class="name">Wan 3.0</span><br><small>Alibaba</small></td><td><span class="badge closed">closed</span></td><td class="rel">Aug 2026</td><td>First on Artificial Analysis text to video. Up to 30 seconds at 1080p through Alibaba Cloud, with US and EU regions.</td><td><span class="links"><a href="https://help.aliyun.com/en/model-studio/wan3-0-video">Docs</a></span></td></tr>
-      <tr><td><span class="name">Wan 2.2</span><br><small>Alibaba, 5B and 14B</small></td><td><span class="badge open">open</span></td><td class="rel">Jul 2025</td><td>The only open model in this table whose licence allows any use. The 5B model makes 5-second 720p clips on a GPU with 24 GB of memory. No audio.</td><td><span class="links"><a href="https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B-Diffusers">HF 5B</a><a href="https://huggingface.co/Wan-AI/Wan2.2-T2V-A14B-Diffusers">HF 14B</a></span></td></tr>
+      <tr><td><span class="name">Gemini Omni 1.2 Flash</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Nov 2026</td><td>First on Arena for both text-to-video and image-to-video. Clips of 3 to 15 seconds with native audio, about $0.07 per second at 720p. Edits an uploaded clip of 15 seconds or less from a text instruction and keeps what you did not mention. Editing uploaded clips is not available in the EEA, Switzerland, or the UK.</td><td><span class="links"><a href="https://aistudio.google.com/docs/omni">Docs</a></span></td></tr>
+      <tr><td><span class="name">MiniMax H3</span><br><small>MiniMax, 33B</small></td><td><span class="badge open">open</span></td><td class="rel">Jul 2026</td><td>The best open video model on both leaderboards. It makes clips of 4 to 15 seconds with audio. It takes reference videos with a prompt, but documents no edit mode. Its licence excludes the US, the EU, the UK, and South Korea, but people there can ask MiniMax for a separate licence. It needs several large GPUs.</td><td><span class="links"><a href="https://huggingface.co/MiniMaxAI/MiniMax-H3">HF</a></span></td></tr>
+      <tr><td><span class="name">Seedance 2.5</span><br><small>ByteDance</small></td><td><span class="badge closed">closed</span></td><td class="rel">Jul 2026</td><td>First on Artificial Analysis image to video. Up to 30 seconds with audio. Sold through BytePlus, which is not available in the United States. Edits a reference video through an edit task.</td><td><span class="links"><a href="https://docs.byteplus.com/en/docs/ModelArk/seedance-2-5">Docs</a></span></td></tr>
+      <tr><td><span class="name">Wan 3.0</span><br><small>Alibaba</small></td><td><span class="badge closed">closed</span></td><td class="rel">Aug 2026</td><td>First on Artificial Analysis text to video. Up to 30 seconds at 1080p through Alibaba Cloud, with US and EU regions. Edits a reference video when the prompt names the edit, such as "replace", "remove", or "change to".</td><td><span class="links"><a href="https://help.aliyun.com/en/model-studio/wan3-0-video">Docs</a></span></td></tr>
+      <tr><td><span class="name">Wan 2.2</span><br><small>Alibaba, 5B and 14B</small></td><td><span class="badge open">open</span></td><td class="rel">Jul 2025</td><td>Its licence allows any use. The 5B model makes 5-second 720p clips on a GPU with 24 GB of memory. No audio. The listed checkpoints do not edit video. See Wan2.1-VACE below.</td><td><span class="links"><a href="https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B-Diffusers">HF 5B</a><a href="https://huggingface.co/Wan-AI/Wan2.2-T2V-A14B-Diffusers">HF 14B</a></span></td></tr>
+      <tr><td><span class="name">Wan2.1-VACE</span><br><small>Alibaba Wan, 1.3B and 14B</small></td><td><span class="badge open">open</span></td><td class="rel">May 2025</td><td>Edits an existing clip: mask a region, such as the background or a product, and the model regenerates it. Its licence (Apache 2.0) allows any use.</td><td><span class="links"><a href="https://huggingface.co/Wan-AI/Wan2.1-VACE-1.3B-diffusers">HF</a><a href="https://arxiv.org/abs/2503.07598">Paper</a></span></td></tr>
     </tbody>
   </table></div>
 
   <div class="stack">
-    <p class="prose">You can also teach an open video model a subject or style from your own videos with a LoRA adapter, as for images. The <a href="#generate-images-design-notes-for-stimuli">design notes for image stimuli</a> apply to video too. <a href="https://github.com/ostris/ai-toolkit">ai-toolkit</a>, <a href="https://github.com/modelscope/DiffSynth-Studio">DiffSynth-Studio</a>, <a href="https://github.com/kohya-ss/musubi-tuner">musubi-tuner</a>, and <a href="https://github.com/tdrussell/diffusion-pipe">diffusion-pipe</a> support MiniMax H3 and Wan.</p>
+    <details class="code">
+      <summary><span class="ttl">Generate a clip through a closed API</span> <span class="lang">python · google-genai</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import base64
+from google import genai
+
+client = genai.Client()   # reads GEMINI_API_KEY
+clip = client.interactions.create(
+    model="gemini-omni-1.2-flash",
+    input="A hand pours sparkling water into a glass on a sunny terrace, slow motion",
+    response_format={"type": "video", "aspect_ratio": "16:9",
+                     "resolution": "720p", "duration": "8s"},   # 3 to 15 seconds
+)
+# The video comes back as base64. For files over 4 MB the docs suggest "delivery": "uri".
+with open("pour.mp4", "wb") as f:
+    f.write(base64.b64decode(clip.output_video.data))
+# Checked against the docs, not run.</code></pre></div>
+    </details>
+
+    <details class="code">
+      <summary><span class="ttl">Edit a clip through a closed API</span> <span class="lang">python · google-genai</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import time
+import base64
+from google import genai
+
+client = genai.Client()   # reads GEMINI_API_KEY
+video = client.files.upload(file="ad_0193.mp4")   # the existing ad, 15 seconds or less
+while not video.state or video.state.name != "ACTIVE":
+    time.sleep(5)
+    video = client.files.get(name=video.name)
+
+edit = client.interactions.create(
+    model="gemini-omni-1.2-flash",
+    input=[
+        {"type": "video", "uri": video.uri},
+        {"type": "text", "text": "Replace the background with a plain white studio backdrop. "
+                                 "Keep the product, the people, and any text unchanged."},
+    ],
+    # The model infers an edit from the prompt. If it does not, add this line:
+    # generation_config={"video_config": {"task": "edit"}},
+)
+with open("ad_0193_white_background.mp4", "wb") as f:
+    f.write(base64.b64decode(edit.output_video.data))
+# Checked against the docs, not run. Editing uploaded clips is not available
+# in the EEA, Switzerland, or the UK.</code></pre></div>
+    </details>
 
     <details class="code">
       <summary><span class="ttl">Generate a clip with Wan 2.2</span> <span class="lang">python · diffusers</span></summary>
@@ -1633,11 +1681,46 @@ frames = pipe(
 export_to_video(frames, "pour.mp4", fps=24)</code></pre></div>
     </details>
 
+    <details class="code">
+      <summary><span class="ttl">Edit a clip with an open model</span> <span class="lang">python · diffusers</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import torch
+import PIL.Image, PIL.ImageDraw
+from diffusers import WanVACEPipeline, AutoencoderKLWan
+from diffusers.utils import export_to_video, load_video
+
+model_id = "Wan-AI/Wan2.1-VACE-1.3B-diffusers"
+vae = AutoencoderKLWan.from_pretrained(model_id, subfolder="vae", torch_dtype=torch.float32)
+pipe = WanVACEPipeline.from_pretrained(model_id, vae=vae, torch_dtype=torch.bfloat16)
+pipe.to("cuda")
+
+H, W, N = 480, 832, 81   # 81 frames is about 5 s at 16 fps
+frames = [f.resize((W, H)) for f in load_video("ad_0193.mp4")[:N]]
+# Mask: white means regenerate, black means keep. This rectangle covers the top half,
+# where the background is. A mask that traces the object fits better.
+mask = PIL.Image.new("L", (W, H), 0)
+PIL.ImageDraw.Draw(mask).rectangle([0, 0, W, H // 2], fill=255)
+grey = PIL.Image.new("RGB", (W, H), (128, 128, 128))
+frames = [PIL.Image.composite(grey, f, mask) for f in frames]   # grey out the masked area
+
+edited = pipe(
+    video=frames, mask=[mask] * N,
+    prompt="A plain white studio backdrop",   # describe what fills the masked area
+    height=H, width=W, num_frames=N, num_inference_steps=30, guidance_scale=5.0,
+    generator=torch.Generator().manual_seed(0),   # fixed seed: same clip, same edit
+).frames[0]
+export_to_video(edited, "ad_0193_white_background.mp4", fps=16)
+# Tested on Apple MPS in float32 at 256x256, 17 frames, 2 steps.</code></pre></div>
+    </details>
+
+    <p class="prose">You can also teach an open video model a subject or style from your own videos with a LoRA adapter, as for images. The <a href="#generate-images-design-notes-for-stimuli">design notes for image stimuli</a> apply to video too. <a href="https://github.com/ostris/ai-toolkit">ai-toolkit</a>, <a href="https://github.com/modelscope/DiffSynth-Studio">DiffSynth-Studio</a>, <a href="https://github.com/kohya-ss/musubi-tuner">musubi-tuner</a>, and <a href="https://github.com/tdrussell/diffusion-pipe">diffusion-pipe</a> support MiniMax H3 and Wan.</p>
+
     <div class="track">
       <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
       <ul>
         <li><a href="https://artificialanalysis.ai/video/leaderboard/text-to-video">Artificial Analysis, video</a><span>Blind votes for text and image to video, with and without audio. Open-weights filter.</span></li>
         <li><a href="https://arena.ai/leaderboard/text-to-video">Arena, text to video</a><span>Crowd votes with confidence intervals and a licence column.</span></li>
+        <li><a href="https://artificialanalysis.ai/video/leaderboard/video-editing">Artificial Analysis, video editing</a><span>Pairwise human votes on instruction edits of an existing clip.</span></li>
+        <li><a href="https://arena.ai/leaderboard/video-edit">Arena, video edit</a><span>Crowd votes on edits of an existing clip.</span></li>
         <li><a href="https://github.com/Vchitect/VBench">VBench and VBench-2.0</a><span>Automatic scores for motion, physics, and anatomy. Use it to score your own clips.</span></li>
       </ul>
     </div>
