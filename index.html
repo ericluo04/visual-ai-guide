@@ -1125,6 +1125,18 @@ fig.savefig("ig_map.png")
 model = ViTForImageClassification(model.config).eval()</code></pre></div>
     </details>
 
+    <div class="mkt">
+      <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
+      <ul class="mkt-list">
+        <li><p class="cite">Hartmann, Jochen, Mark Heitmann, Christina Schamp, and Oded Netzer (2021). "The Power of Brand Selfies." Journal of Marketing Research 58(6): 1159–1177. <a href="https://doi.org/10.1177/00222437211037258">doi</a></p>
+          <p>Fine-tunes a pretrained image network (VGG-16) to sort brand posts into packshots, brand selfies, and consumer selfies, and explains the classifier with Grad-CAM. The maps show that the network tells a brand selfie by the hand holding the product and a consumer selfie by the face.</p></li>
+        <li><p class="cite">Yang, Jeremy, Juanjuan Zhang, and Yuhan Zhang (2025). "Engagement That Sells: Influencer Video Advertising on TikTok." Marketing Science 44(2): 247–267. <a href="https://doi.org/10.1287/mksc.2021.0107">doi</a></p>
+          <p>Trains a 3D convolutional network to predict engagement with TikTok influencer videos and explains it with gradient-based saliency maps that show which pixels, second by second, drive the prediction. Overlapping that map with where the product appears gives a score that predicts sales.</p></li>
+        <li><p class="cite">Fong, Hortense, Vineet Kumar, and K. Sudhir (2025). "A Theory-Based Explainable Deep Learning Architecture for Music Emotion." Marketing Science 44(1): 196–219. <a href="https://doi.org/10.1287/mksc.2022.0323">doi</a></p>
+          <p>Explains a convolutional classifier of music emotion with Grad-CAM, which highlights the parts of a song's mel spectrogram (a picture of its frequencies over time) that drive each prediction. The paper's network uses filters shaped to the harmonic frequencies of Western music. Its heatmaps can be read in terms of consonance, and it matches a standard network's accuracy with far fewer parameters.</p></li>
+      </ul>
+    </div>
+
     <h4 class="sub-h">Global methods</h4>
     <div class="prose">
       <p>These methods look across many images and name the concepts that the model relies on. A 2026 benchmark found that no unsupervised concept method tracks the model faithfully (<a href="https://arxiv.org/abs/2504.10833">Kumar and Ahuja, CVPR 2026</a>), so treat the concepts as hypotheses to test.</p>
@@ -1137,18 +1149,6 @@ model = ViTForImageClassification(model.config).eval()</code></pre></div>
         <tr><td><a href="https://doi.org/10.1038/s41467-019-08987-4">SpRAy</a><br><small>Lapuschkin et al. 2019</small></td><td>Groups the local heatmaps of many images to find strategies the model uses again and again, such as relying on a watermark or logo.</td><td>Shown in case studies, including a model that recognized horses by a copyright watermark. No benchmark yet.</td><td><a href="https://github.com/virelay/corelay">CoRelAy</a>. Works on maps from any model, including the Captum maps above.</td></tr>
       </tbody>
     </table></div>
-
-    <div class="mkt">
-      <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
-      <ul class="mkt-list">
-        <li><p class="cite">Hartmann, Jochen, Mark Heitmann, Christina Schamp, and Oded Netzer (2021). "The Power of Brand Selfies." Journal of Marketing Research 58(6): 1159–1177. <a href="https://doi.org/10.1177/00222437211037258">doi</a></p>
-          <p>Fine-tunes a pretrained image network (VGG-16) to sort brand posts into packshots, brand selfies, and consumer selfies, and explains the classifier with Grad-CAM. The maps show that the network tells a brand selfie by the hand holding the product and a consumer selfie by the face.</p></li>
-        <li><p class="cite">Yang, Jeremy, Juanjuan Zhang, and Yuhan Zhang (2025). "Engagement That Sells: Influencer Video Advertising on TikTok." Marketing Science 44(2): 247–267. <a href="https://doi.org/10.1287/mksc.2021.0107">doi</a></p>
-          <p>Trains a 3D convolutional network to predict engagement with TikTok influencer videos and explains it with gradient-based saliency maps that show which pixels, second by second, drive the prediction. Overlapping that map with where the product appears gives a score that predicts sales.</p></li>
-        <li><p class="cite">Fong, Hortense, Vineet Kumar, and K. Sudhir (2025). "A Theory-Based Explainable Deep Learning Architecture for Music Emotion." Marketing Science 44(1): 196–219. <a href="https://doi.org/10.1287/mksc.2022.0323">doi</a></p>
-          <p>Explains a convolutional classifier of music emotion with Grad-CAM, which highlights the parts of a song's mel spectrogram (a picture of its frequencies over time) that drive each prediction. The paper's network uses filters shaped to the harmonic frequencies of Western music. Its heatmaps can be read in terms of consonance, and it matches a standard network's accuracy with far fewer parameters.</p></li>
-      </ul>
-    </div>
   </div>
 </section>
 <section class="s" id="inference">
