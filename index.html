@@ -607,11 +607,11 @@ footer .wrap { display: grid; gap: 6px; }
             q: "A map of what?", options: [
               { label: "A concept you can name", next: leaf("#represent", [p("TIPSv2", "open", "Compares each patch of the image with a phrase you type, and maps where the phrase matches.")]) },
               { label: "Similarity to a reference image", hint: "A logo, a product shot", next: leaf("#represent", [p("DINOv3 patch embeddings", "open", "Scores how closely each patch of the image resembles the reference.")]) },
-              { label: "What drives your outcome", next: leaf("#represent", [p("DINOv3 patch embeddings + regression", "open", "Fit a regression of the outcome on the image's patch embeddings, then score each patch. The map averages to the prediction, up to the regression's constant.")]) } ] } } ] } },
+              { label: "What drives your outcome", next: leaf("#represent", [p("DINOv3 patch embeddings + regression", "open", "Fit a ridge regression of the outcome on the average of each image's patch embeddings, then apply the fitted coefficients to each patch. The map averages to the prediction, up to the regression's constant.")]) } ] } } ] } },
       { label: "Label images with categories you define", hint: "Is a person shown? Is it a lifestyle shot?", href: "#label", next: {
         q: "How many images have you labeled by hand?", options: [
           { label: "None, or a handful", next: leaf("#label", [
-            p("Qwen3.8 or Gemma 4", "open", "Ask the question with no training examples. Set the model to always give its most likely answer, so a rerun gives the same labels."),
+            p("Qwen3.8 or Gemma 4", "open", "Ask the question with no training examples. Set the model to always give its most likely answer. You keep the model file, so you can rerun the same model later."),
             p("Claude, Gemini, or GPT-6", "closed", "Use the low-cost tiers and batch APIs for scale.")],
             "Hand-code about 400 random images and report agreement. " + REG) },
           { label: "Hundreds or more", next: leaf("#predict", [
@@ -623,15 +623,15 @@ footer .wrap { display: grid; gap: 6px; }
               { label: "Fewer than about 10,000", next: leaf("#predict", [p("DINOv3 or SigLIP 2 embeddings (one list of numbers per image) + high-dimensional regression", "", "A regression built for many columns (ridge, lasso, elastic net). Predict each image from a fit that never saw it.")], REG) },
               { label: "About 10,000 or more", next: leaf("#predict", [
                 p("Embeddings + high-dimensional regression", "", "Fit this first and compare every other approach with it."),
-                p("Fine-tune the image model (LoRA)", "open", "Only if your images look unlike everyday web photos and fine-tuning predicts held-out images measurably better than the embeddings regression.")], REG) } ] } },
+                p("Fine-tune the image model (LoRA)", "open", "Try it only if your images look unlike everyday web photos. Keep it only if it predicts held-out images measurably better than the embeddings regression.")], REG) } ] } },
           { label: "Text in or beside the image", hint: "Packaging copy, headline, caption", next: leaf("#predict", [
             p("LoRA on Qwen3.8 or Gemma 4", "open", "Needs thousands of images with an observed outcome. Compare with the embeddings regression on the same held-out images.")], "With fewer images, take the VLM's internal representation of each image as an embedding and fit the embeddings regression. " + REG) } ] } },
       { label: "Use model outputs in a regression", hint: "Any predicted label, score, or index", href: "#inference", next: {
         q: "Where does the predicted variable enter?", options: [
           { label: "As the outcome", next: leaf("#inference", [p("Prediction-powered inference (PPI++)", "", "ppi_py in Python, ipd in R.")], HAND) },
           { label: "As a regressor or treatment", next: leaf("#inference", [
-            p("Design-based supervised learning (DSL)", "", "dsl in R. Egami, Hinck, Stewart, and Wei (2024) extend it to predicted regressors."),
-            p("Battaglia et al. correction", "", "ValidMLInference in Python, MLBC in R.")], HAND) } ] } },
+            p("Design-based supervised learning (DSL)", "", "dsl in R. Needs a random hand-coded sample of a few hundred images. Egami, Hinck, Stewart, and Wei (2024) extend it to predicted regressors."),
+            p("Battaglia et al. correction", "", "ValidMLInference in Python, MLBC in R. The bias correction needs the classifier's false-positive rate from a hand-coded sample. The one-step estimator runs without one.")]) } ] } },
       { label: "Generate or edit images", hint: "Stimuli, ad variants, brand imagery", href: "#generate-images", next: {
         q: "What matters most?", options: [
           { label: "Best quality for a fixed stimulus set", next: leaf("#generate-images", [
@@ -833,7 +833,7 @@ heat = (P[0] @ probe.coef_).reshape(H, W)   # per-patch contribution for image 0
 # heat.mean() + probe.intercept_ equals the prediction for image 0.
 # Upsample heat to the image size (bilinear) and overlay it on the ad.</code></pre></div>
     </details>
-    <p class="prose">Meta's <a href="https://github.com/facebookresearch/dinov3/blob/main/notebooks/foreground_segmentation.ipynb">foreground segmentation notebook</a> trains a simple regression on patch embeddings, and its <a href="https://github.com/facebookresearch/dinov3/blob/main/notebooks/pca.ipynb">PCA notebook</a> plots the patch embeddings directly.</p>
+    <p class="prose">Meta's <a href="https://github.com/facebookresearch/dinov3/blob/main/notebooks/foreground_segmentation.ipynb">foreground segmentation notebook</a> trains a logistic regression (a linear probe) on patch embeddings, and its <a href="https://github.com/facebookresearch/dinov3/blob/main/notebooks/pca.ipynb">PCA notebook</a> plots the patch embeddings directly.</p>
 
     <div class="track">
       <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
@@ -933,14 +933,14 @@ def label_image(path):
 <section class="s" id="predict">
   <header>
     <h2>Predict outcomes</h2>
-    <p class="lede">To predict clicks, likes, or sales from images, transfer what a pretrained model already knows. Start with the cheapest version. Move up only when the next version predicts held-out data measurably better.</p>
+    <p class="lede">To predict clicks, likes, or sales from images, transfer what a pretrained model already knows. Start with the cheapest version. Keep a costlier version only if it predicts held-out data measurably better.</p>
   </header>
 
   <div class="tbl"><table>
     <thead><tr><th>Approach</th><th>When</th><th>Images needed</th><th>Cost</th></tr></thead>
     <tbody>
       <tr><td><span class="name">Embeddings + high-dimensional regression</span><br><small>DINOv3 or SigLIP 2, with ridge, lasso, elastic net, or Bayesian shrinkage</small></td><td>The default for every market outcome. The image model stays as it is. Only the regression is fit. Report it even when you use something else.</td><td>Hundreds and up</td><td>One pass per image, then a CPU regression</td></tr>
-      <tr><td><span class="name">Fine-tune the image model</span><br><small>LoRA on DINOv3 or SigLIP 2</small></td><td>The image model itself is adjusted to your outcome. Use it when you have about 10,000 or more images with an observed outcome, the images look unlike everyday web photos (packaging close-ups, text-heavy thumbnails), and fine-tuning predicts held-out data measurably better than the embeddings regression.</td><td>About 10,000 and up</td><td>One GPU, hours, repeated for each of the five folds (see below)</td></tr>
+      <tr><td><span class="name">Fine-tune the image model</span><br><small>LoRA on DINOv3 or SigLIP 2</small></td><td>The image model itself is adjusted to your outcome. Try it when you have about 10,000 or more images with an observed outcome and the images look unlike everyday web photos (packaging close-ups, text-heavy thumbnails). Keep it only if it predicts held-out data measurably better than the embeddings regression.</td><td>About 10,000 and up</td><td>One GPU, hours, repeated for each of the five folds (see below)</td></tr>
       <tr><td><span class="name">Fine-tune a VLM</span><br><small>LoRA on Qwen3.8 or Gemma 4</small></td><td>The outcome depends on text in or beside the image (packaging copy, the ad headline, the post caption) or on how things in the scene relate, such as who is holding the product.</td><td>Thousands and up</td><td>One large GPU, hours to days</td></tr>
       <tr><td><span class="name">Zero-shot VLM</span></td><td>Only for concepts a person can define. See <a href="#label">Label</a>.</td><td>None, plus a hand-coded sample</td><td>Running the model, or API fees</td></tr>
     </tbody>
@@ -1064,7 +1064,7 @@ print(out.logits)   # shape (1, 1): one number for the image and prompt
 
     <h3 id="predict-explain-the-predictions">Explain the predictions</h3>
     <div class="prose">
-      <p>A heatmap shows which parts of an image pushed a prediction up or down. The methods below make such a map for any trained model, after training and without changing the model. For the embeddings regression, the <a href="#represent">outcome heatmap in Embed images</a> already splits each prediction across the image.</p>
+      <p>A heatmap shows which parts of an image pushed a prediction up or down. The methods below make such a map after a model is trained, without changing the model. If you fit the embeddings regression on the average of each image's patch embeddings, the <a href="#represent">outcome heatmap in Embed images</a> already splits each prediction across the image, up to the regression's constant.</p>
       <p>A local method explains one prediction: it shows which pixels in this image moved this score. A global method explains the model as a whole, by naming the concepts it relies on across many images, such as faces or text overlays. These methods also work on the embeddings regression: the frozen image model and the regression on top form one network, so you can run them from the pixels to the predicted outcome.</p>
     </div>
     <h4 class="sub-h">Local methods</h4>
@@ -1074,7 +1074,7 @@ print(out.logits)   # shape (1, 1): one number for the image and prompt
     <div class="tbl"><table>
       <thead><tr><th>Method</th><th>What it shows</th><th>Evidence that it is reliable</th><th>In Captum</th></tr></thead>
       <tbody>
-        <tr><td><a href="https://proceedings.mlr.press/v70/sundararajan17a.html">Integrated Gradients</a></td><td>How much each pixel moves the score. The method fades a starting image (typically random noise) into yours in small steps and adds up each pixel's effect.</td><td>The best general-purpose method on convolutional networks (an older family of image models) and vision transformers in <a href="https://arxiv.org/abs/2407.11910">Hesse et al. (2024)</a>, when the starting image is random noise.</td><td><code>IntegratedGradients</code></td></tr>
+        <tr><td><a href="https://proceedings.mlr.press/v70/sundararajan17a.html">Integrated Gradients</a></td><td>How much each pixel moves the score. The method fades a starting image (such as random noise) into yours in small steps and adds up each pixel's effect.</td><td>The best general-purpose method on convolutional networks (an older family of image models) and vision transformers in <a href="https://arxiv.org/abs/2407.11910">Hesse et al. (2024)</a>, when the starting image is random noise.</td><td><code>IntegratedGradients</code></td></tr>
         <tr><td><a href="https://doi.org/10.1109/ICCV.2017.74">Grad-CAM</a></td><td>A coarse map of the regions that the model's last layer of image features relied on.</td><td>Passes the sanity checks below and does well on convolutional networks. A vision transformer needs its patches reshaped into a grid first.</td><td><code>LayerGradCam</code></td></tr>
         <tr><td><a href="https://arxiv.org/abs/1806.10758">SmoothGrad-Squared</a></td><td>A gradient map averaged over many noisy copies of the image.</td><td><a href="https://arxiv.org/abs/1806.10758">Hooker et al. (2019)</a> removed the pixels that each method ranked highest, retrained the model, and measured how far accuracy fell. Only SmoothGrad-Squared and a related method, VarGrad, did better than a random map. Plain <a href="https://arxiv.org/abs/1706.03825">SmoothGrad</a> did not. The test used convolutional networks.</td><td><code>NoiseTunnel</code>, <code>nt_type="smoothgrad_sq"</code></td></tr>
         <tr><td><a href="https://doi.org/10.1007/978-3-319-10590-1_53">Occlusion</a></td><td>How much the score drops when a gray patch covers each region.</td><td>A direct test that needs no gradients and works on any model. The gray patches look unlike real images, which can distort the map (<a href="https://proceedings.mlr.press/v162/rong22a.html">Rong et al. 2022</a>).</td><td><code>Occlusion</code></td></tr>
