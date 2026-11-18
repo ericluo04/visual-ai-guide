@@ -551,7 +551,7 @@ footer .wrap { display: grid; gap: 6px; }
       <div class="paper ex-card ex-loc">
         <h4>What drives individual predictions?</h4>
         <p class="ex-lbl">Illustrative approach</p>
-        <p class="what">Make heatmaps for that predictor on a random set of ads: the patch-level outcome map from Embed images, or Integrated Gradients run through the image model and the regression together.</p>
+        <p class="what">Make heatmaps for that predictor on a random set of ads, either from predictions on image patches (as in Embed images) or with local interpretable machine learning methods.</p>
         <p class="ex-lbl">Illustrative evaluation</p>
         <p class="what">Whether the maps pass sanity checks and point to elements you can name.</p>
         <p class="ex-chips"><a href="#predict-explain-the-predictions">Explain the predictions</a></p>
@@ -559,7 +559,7 @@ footer .wrap { display: grid; gap: 6px; }
       <div class="paper ex-card ex-glob">
         <h4>What does the model rely on overall?</h4>
         <p class="ex-lbl">Illustrative approach</p>
-        <p class="what">Run TCAV or CRAFT on the same predictor, or group many of its heatmaps with SpRAy, to find what it relies on across ads.</p>
+        <p class="what">Run global interpretable machine learning methods on the same predictor to extract relevant concepts that apply across all ads.</p>
         <p class="ex-lbl">Illustrative evaluation</p>
         <p class="what">Whether the concepts hold up as hypotheses when you test them, for example in an experiment.</p>
         <p class="ex-chips"><a href="#predict-explain-the-predictions">Explain the predictions</a></p>
