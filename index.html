@@ -776,7 +776,7 @@ heat = (P[0] @ probe.coef_).reshape(H, W)   # per-patch contribution for image 0
         <li>Split your images at random into a development set and a held-out set. Set the held-out set aside.</li>
         <li>On the development set, write a codebook: the question, the allowed answers, and two or three edge cases. The codebook is the prompt you give the model. Revise it as often as you like at this stage.</li>
         <li>Freeze the prompt and the model version. Run the model on the held-out images and set it to always give its single most likely answer (greedy decoding), so a rerun gives the same labels. Log the model ID and date. For a closed API, call the dated model ID and store every raw response, because a rerun can still differ.</li>
-        <li>Hand-code a random sample of about 400 held-out images and report how often people and the model agree. Also report Cohen's kappa, which is agreement corrected for the agreement you would get by chance (0 is chance, 1 is perfect). Example: for a yes or no label that splits evenly, 85% agreement on 400 images gives a kappa of 0.70, with a 95% interval of about 0.63 to 0.77. For a rare label, add extra images that the model marks positive and record each image's chance of being drawn. Have two people code the sample and report their agreement as the ceiling.</li>
+        <li>Hand-code a random sample of about 400 held-out images and report how often people and the model agree. Also report inter-rater reliability measures such as Krippendorff's alpha.</li>
         <li>If the labels enter a regression, correct for their errors with the <a href="#inference">methods below</a>.</li>
       </ol>
     </div>
