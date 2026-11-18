@@ -154,6 +154,9 @@ section.s > header { display: grid; gap: 12px; margin-bottom: 20px; }
 p.prose { display: block; }
 .tbl table { min-width: 620px; }
 .prose ul, .prose ol { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+.prose ol.ways { padding-left: 1.6em; }
+.prose ol.ways > li::marker { font: 700 1.15rem var(--font-display); color: var(--accent); }
+.ways-next { border-top: 1px solid var(--line); padding-top: 22px; margin-top: 14px; }
 
 /* Decision guide */
 .guide { margin-top: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
@@ -1169,31 +1172,17 @@ with open("bottle.png", "wb") as f:
   <div class="stack" style="margin-top:0">
     <div class="prose">
       <p>There are three ways to do this, from richest to cheapest. The first asks questions. The second and third make embeddings.</p>
-      <ol>
+      <ol class="ways" start="1">
         <li>Send the whole video to a VLM and ask the questions in your codebook: is the product shown, when does the brand first appear, what claims are spoken. Gemini watches the video and listens to its audio. It looks at 1 frame per second by default, so raise the rate for fast-cut ads.</li>
-        <li>Turn each clip into one embedding with a video embedding model. It captures motion that a single frame misses. The vector then goes into a regression, clustering, or similarity search, as in <a href="#represent">Embed images</a>.</li>
-        <li>Take a frame every second or so, embed each frame with an <a href="#represent">image model</a>, and average them. This is cheap and reproducible but ignores sound and motion. Keep the frame-level vectors if timing matters.</li>
       </ol>
-      <p>Treat answers from the first approach as measurements with error. Follow the <a href="#label">labeling workflow</a> and the <a href="#inference">inference corrections</a>.</p>
     </div>
 
-    <h3>Models that answer questions about videos</h3>
     <div class="tbl"><table>
       <thead><tr><th>Model</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
       <tbody>
         <tr><td><span class="name">Gemini 4</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Nov 2026</td><td>Answers questions about a video and its audio, up to 3 hours long. It comes in three versions: Carbon (strongest reasoning), Argon (faster and uses fewer tokens than Carbon), and Hydrogen (built for speed on everyday tasks, with a free tier).</td><td><span class="links"><a href="https://aistudio.google.com/docs/video-understanding">Docs</a></span></td></tr>
         <tr><td><span class="name">Qwen3.6-27B</span><br><small>Alibaba Qwen</small></td><td><span class="badge open">open</span></td><td class="rel">Apr 2026</td><td>Answers questions about a video from its frames and ignores the audio. Fits on one GPU with 80 GB of memory. Its successor, Qwen3.8-27B, reports no video scores yet.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen3.6-27B">HF</a></span></td></tr>
         <tr><td><span class="name">Kimi K2.5</span><br><small>Moonshot AI, about 1T parameters</small></td><td><span class="badge open">open</span></td><td class="rel">Jan 2026</td><td>The weights are open, but video input works only through Moonshot's API for now.</td><td><span class="links"><a href="https://huggingface.co/moonshotai/Kimi-K2.5">HF</a></span></td></tr>
-      </tbody>
-    </table></div>
-
-    <h3>Video embedding models</h3>
-    <div class="tbl"><table>
-      <thead><tr><th>Model</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
-      <tbody>
-        <tr><td><span class="name">Gemini Embedding 2</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Mar 2026</td><td>One vector per clip, in the same space as text and images. Clips up to 120 seconds. It ignores the audio.</td><td><span class="links"><a href="https://aistudio.google.com/docs/embeddings">Docs</a></span></td></tr>
-        <tr><td><span class="name">Qwen3-VL-Embedding</span><br><small>Alibaba Qwen, 2B and 8B</small></td><td><span class="badge open">open</span></td><td class="rel">Jan 2026</td><td>Video embeddings in the same space as text, so you can search clips by description.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen3-VL-Embedding-8B">HF</a></span></td></tr>
-        <tr><td><span class="name">V-JEPA 2.1</span><br><small>Meta</small></td><td><span class="badge open">open</span></td><td class="rel">Mar 2026</td><td>Learns what videos look like from video alone, with no text. The best input when you will fit your own regression on an outcome.</td><td><span class="links"><a href="https://github.com/facebookresearch/vjepa2">GitHub</a></span></td></tr>
       </tbody>
     </table></div>
 
@@ -1219,6 +1208,46 @@ reply = client.interactions.create(
 )
 print(reply.output_text)</code></pre></div>
     </details>
+
+    <p class="prose">Treat answers from the first approach as measurements with error. Follow the <a href="#label">labeling workflow</a> and the <a href="#inference">inference corrections</a>.</p>
+
+    <div class="prose ways-next">
+      <ol class="ways" start="2">
+        <li>Turn each clip into one embedding with a video embedding model. It captures motion that a single frame misses. The vector then goes into a regression, clustering, or similarity search, as in <a href="#represent">Embed images</a>.</li>
+      </ol>
+    </div>
+
+    <div class="tbl"><table>
+      <thead><tr><th>Model</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
+      <tbody>
+        <tr><td><span class="name">Gemini Embedding 2</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Mar 2026</td><td>One vector per clip, in the same space as text and images. Clips up to 120 seconds. It ignores the audio.</td><td><span class="links"><a href="https://aistudio.google.com/docs/embeddings">Docs</a></span></td></tr>
+        <tr><td><span class="name">Qwen3-VL-Embedding</span><br><small>Alibaba Qwen, 2B and 8B</small></td><td><span class="badge open">open</span></td><td class="rel">Jan 2026</td><td>Video embeddings in the same space as text, so you can search clips by description.</td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen3-VL-Embedding-8B">HF</a></span></td></tr>
+        <tr><td><span class="name">V-JEPA 2.1</span><br><small>Meta</small></td><td><span class="badge open">open</span></td><td class="rel">Mar 2026</td><td>Learns what videos look like from video alone, with no text. The best input when you will fit your own regression on an outcome.</td><td><span class="links"><a href="https://github.com/facebookresearch/vjepa2">GitHub</a></span></td></tr>
+      </tbody>
+    </table></div>
+
+    <details class="code">
+      <summary><span class="ttl">Embed video ads with Qwen3-VL-Embedding</span> <span class="lang">python · Qwen3-VL-Embedding</span></summary>
+      <div class="codewrap"><pre><code class="language-python"># Run from a clone of github.com/QwenLM/Qwen3-VL-Embedding
+from src.models.qwen3_vl_embedding import Qwen3VLEmbedder
+
+model = Qwen3VLEmbedder(model_name_or_path="Qwen/Qwen3-VL-Embedding-8B")
+
+videos = ["ad_0193.mp4", "ad_0194.mp4", "ad_0195.mp4"]
+# Sample 1 frame per second, at most 64 frames per video
+inputs = [{"video": v, "fps": 1.0, "max_frames": 64} for v in videos]
+emb = model.process(inputs)     # one normalized vector per video
+
+X = emb.float().cpu().numpy()   # one row per video, 4,096 columns
+# X goes into the same high-dimensional regression as image embeddings (see Predict outcomes)
+print(X.shape)</code></pre></div>
+    </details>
+
+    <div class="prose ways-next">
+      <ol class="ways" start="3">
+        <li>Take a frame every second or so, embed each frame with an <a href="#represent">image model</a>, and average them. This is cheap and reproducible but ignores sound and motion. Keep the frame-level vectors if timing matters.</li>
+      </ol>
+    </div>
 
     <div class="track">
       <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
