@@ -1094,6 +1094,38 @@ summary(fit)</code></pre></div>
   </table></div>
 
   <div class="stack">
+    <details class="code">
+      <summary>Generate through a closed API <span class="lang">python · openai</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import base64
+from openai import OpenAI
+
+client = OpenAI()   # reads OPENAI_API_KEY
+result = client.images.generate(
+    model="gpt-image-2.5-sunburst",   # first on Arena. "gpt-image-2.6-sunburst" leads Artificial Analysis.
+    prompt="A green glass bottle of sparkling water on a marble counter, studio light",
+)
+with open("bottle.png", "wb") as f:
+    f.write(base64.b64decode(result.data[0].b64_json))
+# Editing: client.images.edit(model=..., image=[open("a.png", "rb")], prompt=...)</code></pre></div>
+    </details>
+
+    <details class="code">
+      <summary><span class="ttl">Generate with an open model</span> <span class="lang">python · diffusers</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import torch
+from diffusers import Flux2KleinPipeline  # pip install -U diffusers
+
+pipe = Flux2KleinPipeline.from_pretrained(
+    "black-forest-labs/FLUX.2-klein-4B", torch_dtype=torch.bfloat16)
+pipe.enable_model_cpu_offload()
+
+image = pipe(
+    prompt="A green glass bottle of sparkling water on a marble counter, studio light",
+    height=1024, width=1024, guidance_scale=1.0, num_inference_steps=4,
+    generator=torch.Generator("cuda").manual_seed(0),   # fix the seed for every stimulus
+).images[0]
+image.save("bottle.png")</code></pre></div>
+    </details>
+
     <div class="note">
       <h4>Read the licence before you pick an open model</h4>
       <p>Most top open image models allow research use but not commercial use. Anything you train on top of a model carries the same licence, so start from an Apache 2.0 model such as FLUX.2 [klein] 4B if a brand partner will use the images.</p>
@@ -1109,7 +1141,7 @@ summary(fit)</code></pre></div>
       </ul>
     </div>
 
-    <h3>Fine-tune a generator on your own images</h3>
+    <h3>Fine-tune a generator with LoRA</h3>
     <div class="prose">
       <p>You can teach an open model a subject or a visual style from your own images. The standard method is LoRA, described in <a href="#predict">Predict outcomes</a>. The original model stays untouched, and training produces a small adapter file.</p>
       <ul>
@@ -1121,39 +1153,17 @@ summary(fit)</code></pre></div>
     </div>
 
     <details class="code">
-      <summary><span class="ttl">Generate with an open model, then add your LoRA</span> <span class="lang">python · diffusers</span></summary>
-      <div class="codewrap"><pre><code class="language-python">import torch
-from diffusers import Flux2KleinPipeline  # pip install -U diffusers
-
-pipe = Flux2KleinPipeline.from_pretrained(
-    "black-forest-labs/FLUX.2-klein-4B", torch_dtype=torch.bfloat16)
-pipe.enable_model_cpu_offload()
+      <summary><span class="ttl">Add your LoRA to the open model</span> <span class="lang">python · diffusers</span></summary>
+      <div class="codewrap"><pre><code class="language-python"># pipe is the FLUX.2 [klein] pipeline from "Generate with an open model" above
+pipe.load_lora_weights("path/to/your-lora", adapter_name="brand")
+pipe.set_adapters("brand", adapter_weights=0.8)   # 0 = base model, 1 = full LoRA
 
 image = pipe(
     prompt="A green glass bottle of sparkling water on a marble counter, studio light",
     height=1024, width=1024, guidance_scale=1.0, num_inference_steps=4,
-    generator=torch.Generator("cuda").manual_seed(0),   # fix the seed for every stimulus
+    generator=torch.Generator("cuda").manual_seed(0),   # same seed, so only the LoRA changes
 ).images[0]
-image.save("bottle.png")
-
-# After training a LoRA on your own images:
-pipe.load_lora_weights("path/to/your-lora", adapter_name="brand")
-pipe.set_adapters("brand", adapter_weights=0.8)   # 0 = base model, 1 = full LoRA</code></pre></div>
-    </details>
-
-    <details class="code">
-      <summary>Generate through a closed API <span class="lang">python · openai</span></summary>
-      <div class="codewrap"><pre><code class="language-python">import base64
-from openai import OpenAI
-
-client = OpenAI()   # reads OPENAI_API_KEY
-result = client.images.generate(
-    model="gpt-image-2.5-sunburst",   # first on Arena. "gpt-image-2.6-sunburst" leads Artificial Analysis.
-    prompt="A green glass bottle of sparkling water on a marble counter, studio light",
-)
-with open("bottle.png", "wb") as f:
-    f.write(base64.b64decode(result.data[0].b64_json))
-# Editing: client.images.edit(model=..., image=[open("a.png", "rb")], prompt=...)</code></pre></div>
+image.save("bottle_lora.png")</code></pre></div>
     </details>
 
     <div class="mkt">
