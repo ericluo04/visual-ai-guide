@@ -1305,8 +1305,26 @@ result = client.images.generate(
     prompt="A green glass bottle of sparkling water on a marble counter, studio light",
 )
 with open("bottle.png", "wb") as f:
+    f.write(base64.b64decode(result.data[0].b64_json))</code></pre></div>
+    </details>
+
+    <details class="code">
+      <summary><span class="ttl">Edit an image through a closed API</span> <span class="lang">python · openai</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import base64
+from openai import OpenAI
+
+client = OpenAI()   # reads OPENAI_API_KEY
+result = client.images.edit(
+    model="gpt-image-2.5-sunburst",
+    image=open("ad.png", "rb"),   # the existing ad
+    # Optional. Transparent pixels mark the area to edit, but only as guidance.
+    mask=open("ad_background_mask.png", "rb"),
+    prompt="Replace the background with a plain white studio backdrop. "
+           "Keep the product, logo, and text unchanged.",
+)
+with open("ad_white_background.png", "wb") as f:
     f.write(base64.b64decode(result.data[0].b64_json))
-# Editing: client.images.edit(model=..., image=[open("a.png", "rb")], prompt=...)</code></pre></div>
+# Checked against the OpenAI docs and the openai 3.55.1 SDK signature, not run.</code></pre></div>
     </details>
 
     <details class="code">
@@ -1324,6 +1342,28 @@ image = pipe(
     generator=torch.Generator("cuda").manual_seed(0),   # fix the seed for every stimulus
 ).images[0]
 image.save("bottle.png")</code></pre></div>
+    </details>
+
+    <details class="code">
+      <summary><span class="ttl">Edit an image with an open model</span> <span class="lang">python · diffusers</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import torch
+from diffusers import Flux2KleinPipeline
+from diffusers.utils import load_image
+
+pipe = Flux2KleinPipeline.from_pretrained(
+    "black-forest-labs/FLUX.2-klein-4B", torch_dtype=torch.bfloat16)
+pipe.enable_model_cpu_offload()
+
+edited = pipe(
+    image=load_image("ad.png"),   # the existing ad, passed as a reference image
+    prompt="Replace the background with a plain white studio backdrop. "
+           "Keep the product, logo, and text unchanged.",
+    guidance_scale=1.0, num_inference_steps=4,
+    # Fixed seed: the same ad and prompt always give the same edit.
+    generator=torch.Generator("cuda").manual_seed(0),
+).images[0]
+edited.save("ad_white_background.png")
+# Tested on CPU in float32 at 256x256 with 2 steps.</code></pre></div>
     </details>
 
     <div class="note">
