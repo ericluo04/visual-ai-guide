@@ -955,6 +955,40 @@ model.print_trainable_parameters()
       </ul>
     </div>
 
+    <details class="code">
+      <summary><span class="ttl">Integrated Gradients map for a vision transformer</span> <span class="lang">python · captum</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import numpy as np
+import torch
+from PIL import Image
+from transformers import AutoImageProcessor, ViTForImageClassification
+from captum.attr import IntegratedGradients, visualization as viz
+
+MODEL_ID = "google/vit-base-patch16-224"   # load your own fine-tuned model here (see the LoRA section)
+processor = AutoImageProcessor.from_pretrained(MODEL_ID)
+model = ViTForImageClassification.from_pretrained(MODEL_ID).eval()
+
+def forward(pixel_values):                  # Captum needs a tensor, so return only the logits
+    return model(pixel_values=pixel_values).logits
+
+image = Image.open("ad_0193.jpg").convert("RGB")
+x = processor(images=image, return_tensors="pt").pixel_values   # 1 x 3 x 224 x 224
+target = forward(x).argmax(-1).item()       # the predicted class; or the column of your outcome
+
+torch.manual_seed(0)
+baseline = torch.randn_like(x)              # start from random noise (Hesse et al. 2024)
+ig = IntegratedGradients(forward)
+attr = ig.attribute(x, baselines=baseline, target=target, n_steps=50, internal_batch_size=10)
+
+heat = attr[0].abs().sum(0).detach().numpy()       # 224 x 224 map, summed over color channels
+photo = np.asarray(image.resize((224, 224))) / 255.0
+fig, ax = viz.visualize_image_attr(heat, photo, method="blended_heat_map",
+                                   sign="absolute_value", show_colorbar=True, use_pyplot=False)
+fig.savefig("ig_map.png")
+
+# Sanity check (Adebayo et al. 2018): give the model random weights, then rerun the lines from ig = on
+model = ViTForImageClassification(model.config).eval()</code></pre></div>
+    </details>
+
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
