@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Visual AI Field Guide</title>
+<title>Visual AI Practitioner's Guide</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="A practitioner guide to current visual AI tools for marketing research: image embeddings, labeling, prediction, inference with predicted variables, video analysis, image and video generation, and specialized measurement tools.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -90,6 +90,8 @@ code { font-family: var(--font-mono); font-size: 0.86em; background: var(--surfa
 }
 .topbar .wrap { display: flex; align-items: center; gap: 16px; height: 58px; }
 .brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 650; font-size: 1.02rem; color: var(--fg); text-decoration: none; white-space: nowrap; }
+.brand-short { display: none; }
+@media (max-width: 600px) { .brand-full { display: none; } .brand-short { display: inline; } }
 .brand-mark { display: grid; grid-template-columns: repeat(4, 5px); gap: 2px; }
 .brand-mark i { width: 5px; height: 5px; border-radius: 1px; background: var(--accent); }
 .topnav { display: flex; gap: 2px; margin-left: auto; overflow-x: auto; scrollbar-width: none; min-width: 0; }
@@ -323,9 +325,9 @@ footer .wrap { display: grid; gap: 6px; }
 
 <header class="topbar">
   <div class="wrap">
-    <a class="brand" href="#top" aria-label="Visual AI Field Guide, back to top">
+    <a class="brand" href="#top" aria-label="Visual AI Practitioner's Guide, back to top">
       <span class="brand-mark" aria-hidden="true"><i></i><i style="opacity:.35"></i><i style="opacity:.7"></i><i style="opacity:.2"></i><i style="opacity:.55"></i><i></i><i style="opacity:.3"></i><i style="opacity:.8"></i></span>
-      Visual AI Field Guide
+      <span class="brand-full">Visual AI Practitioner's Guide</span><span class="brand-short" aria-hidden="true">Visual AI Guide</span>
     </a>
     <nav class="topnav" aria-label="Sections">
       <a href="#choose">Choose</a>
