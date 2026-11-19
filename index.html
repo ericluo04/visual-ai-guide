@@ -699,14 +699,6 @@ footer .wrap { display: grid; gap: 6px; }
   <div class="stack">
     <p class="prose">No independent benchmark compares the two closed APIs, Gemini Embedding 2 and voyage-multimodal-3.5. Listing Gemini first is a judgment call. OpenAI offers no image embedding model.</p>
 
-    <div class="mkt">
-      <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
-      <ul class="mkt-list">
-        <li><p class="cite">Cao, Jingcun, Xiaolin Li, and Lingling Zhang (2025). "Is Relevancy Everything? A Deep-Learning Approach to Understand the Effect of Image-Text Congruence." Management Science 71(12): 10579–10602. <a href="https://doi.org/10.1287/mnsc.2022.01896">doi</a></p>
-          <p>Embeds each image with a pretrained image network (ResNet) and its text with a language model (BERT), scores how well the two match, and uses that score as a regressor. Reader preference is U-shaped in image-text congruence.</p></li>
-      </ul>
-    </div>
-
     <div class="track">
       <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
       <ul>
@@ -714,6 +706,14 @@ footer .wrap { display: grid; gap: 6px; }
         <li><a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB, image tabs (MIEB)</a><span>130 image tasks, including regressions on embeddings (linear probes) and clustering, the closest board to "features for my own model".</span></li>
         <li><a href="https://huggingface.co/spaces/vidore/vidore-leaderboard">ViDoRe</a><span>Retrieval of document pages such as catalogs and slides.</span></li>
         <li>Patch quality<span>No standing leaderboard. Read the ADE20k linear-probe and zero-shot segmentation tables in each new model's paper.</span></li>
+      </ul>
+    </div>
+
+    <div class="mkt">
+      <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
+      <ul class="mkt-list">
+        <li><p class="cite">Cao, Jingcun, Xiaolin Li, and Lingling Zhang (2025). "Is Relevancy Everything? A Deep-Learning Approach to Understand the Effect of Image-Text Congruence." Management Science 71(12): 10579–10602. <a href="https://doi.org/10.1287/mnsc.2022.01896">doi</a></p>
+          <p>Embeds each image with a pretrained image network (ResNet) and its text with a language model (BERT), scores how well the two match, and uses that score as a regressor. Reader preference is U-shaped in image-text congruence.</p></li>
       </ul>
     </div>
 
@@ -793,7 +793,7 @@ vectors = [e.values for e in result.embeddings]   # 3 lists of 768 floats</code>
 
     <h3>Use embeddings in a regression</h3>
     <div class="prose">
-      <p>An embedding has hundreds or thousands of columns, often more than you have images, so ordinary least squares breaks down. Use a high-dimensional regression that shrinks or selects coefficients. Common choices are ridge, lasso, and elastic net, with the amount of shrinkage chosen by cross-validation (try each amount on held-out images and keep the best). Bayesian versions such as spike-and-slab or horseshoe priors do the same job and give a posterior distribution for every coefficient. Use the logistic versions for a yes or no outcome.</p>
+      <p>An embedding has hundreds or thousands of columns, often more than you have images, so ordinary least squares breaks down. Use a high-dimensional regression that shrinks or selects coefficients. Common choices are ridge, lasso, and elastic net, with the amount of shrinkage chosen by cross-validation (try each amount on held-out images and keep the best). Bayesian versions such as spike-and-slab or horseshoe priors do the same job and give a posterior distribution for every coefficient, allowing for uncertainty quantification. Use the logistic versions for a yes or no outcome.</p>
       <p>Avoid reducing the embedding to a handful of principal components (PCA) by default. PCA keeps the directions where images vary most, and those need not be the directions that matter for your outcome. A handful of linear components can also drop information that the model stored in other directions or nonlinearly.</p>
       <p>Often the image is a control and the question is about something else: the effect of price, a promotion, or a person's face in the ad. The image is then a confounder: it is related to both the cause you study and the outcome. <a href="https://doi.org/10.1073/pnas.2530532123">Imai and Nakamura (2026, PNAS)</a> read a compact summary of each image from inside a generative model that is made to reproduce it. They adjust for that summary with machine learning. The effect of one image feature is then not credited to features that tend to appear with it. Their paper points to further work, such as <a href="https://arxiv.org/abs/2402.01785">DoubleMLDeep (Klaassen et al. 2024)</a>, which applies double machine learning, the method in the code below, with image and text controls.</p>
     </div>
