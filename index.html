@@ -707,6 +707,16 @@ footer .wrap { display: grid; gap: 6px; }
       </ul>
     </div>
 
+    <div class="track">
+      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
+      <ul>
+        <li><a href="https://huggingface.co/spaces/TIGER-Lab/MMEB-Leaderboard">MMEB leaderboard</a><span>Universal multimodal embeddings. For image work, read the MMEB-V2 and Image columns. The default V3 tab gives a model zero for every input type it cannot read, such as video or audio.</span></li>
+        <li><a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB, image tabs (MIEB)</a><span>130 image tasks, including regressions on embeddings (linear probes) and clustering, the closest board to "features for my own model".</span></li>
+        <li><a href="https://huggingface.co/spaces/vidore/vidore-leaderboard">ViDoRe</a><span>Retrieval of document pages such as catalogs and slides.</span></li>
+        <li>Patch quality<span>No standing leaderboard. Read the ADE20k linear-probe and zero-shot segmentation tables in each new model's paper.</span></li>
+      </ul>
+    </div>
+
     <h3>Which output is the global embedding</h3>
     <p class="prose">Each model returns its global embedding under a different name. The code below already takes the right one. Skip this table unless you write your own code. It uses the output names of the Hugging Face transformers classes.</p>
     <div class="tbl"><table>
@@ -835,15 +845,6 @@ heat = (P[0] @ probe.coef_).reshape(H, W)   # per-patch contribution for image 0
     </details>
     <p class="prose">Meta's <a href="https://github.com/facebookresearch/dinov3/blob/main/notebooks/foreground_segmentation.ipynb">foreground segmentation notebook</a> trains a logistic regression (a linear probe) on patch embeddings, and its <a href="https://github.com/facebookresearch/dinov3/blob/main/notebooks/pca.ipynb">PCA notebook</a> plots the patch embeddings directly.</p>
 
-    <div class="track">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
-      <ul>
-        <li><a href="https://huggingface.co/spaces/TIGER-Lab/MMEB-Leaderboard">MMEB leaderboard</a><span>Universal multimodal embeddings. For image work, read the MMEB-V2 and Image columns. The default V3 tab gives a model zero for every input type it cannot read, such as video or audio.</span></li>
-        <li><a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB, image tabs (MIEB)</a><span>130 image tasks, including regressions on embeddings (linear probes) and clustering, the closest board to "features for my own model".</span></li>
-        <li><a href="https://huggingface.co/spaces/vidore/vidore-leaderboard">ViDoRe</a><span>Retrieval of document pages such as catalogs and slides.</span></li>
-        <li>Patch quality<span>No standing leaderboard. Read the ADE20k linear-probe and zero-shot segmentation tables in each new model's paper.</span></li>
-      </ul>
-    </div>
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
