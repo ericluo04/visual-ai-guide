@@ -604,7 +604,9 @@ footer .wrap { display: grid; gap: 6px; }
             q: "A map of what?", options: [
               { label: "A concept you can name", next: leaf("#represent", [p("TIPSv2", "open", "Compares each patch of the image with a phrase you type, and maps where the phrase matches.")]) },
               { label: "Similarity to a reference image", hint: "A logo, a product shot", next: leaf("#represent", [p("DINOv3 patch embeddings", "open", "Scores how closely each patch of the image resembles the reference.")]) },
-              { label: "What drives your outcome", next: leaf("#represent", [p("DINOv3 patch embeddings + regression", "open", "Fit a ridge regression of the outcome on the average of each image's patch embeddings, then apply the fitted coefficients to each patch. The map averages to the prediction, up to the regression's constant.")]) } ] } } ] } },
+              { label: "What drives your outcome", next: leaf("#represent", [p("DINOv3 patch embeddings + regression", "open", "Fit a ridge regression of the outcome on the average of each image's patch embeddings, then apply the fitted coefficients to each patch. The map averages to the prediction, up to the regression's constant.")]) } ] } },
+          { label: "Adjust for the image while studying something else", hint: "The effect of price or a promotion, with the image as a control", next: leaf("#represent-use-embeddings-in-a-regression", [
+            p("Double machine learning with embeddings as controls", "", "econml or DoubleML in Python. The embedding enters as controls, and you estimate the effect of the variable you study.")]) } ] } },
       { label: "Label images with categories you define", hint: "Is a person shown? Is it a lifestyle shot?", href: "#label", next: {
         q: "How many images have you labeled by hand?", options: [
           { label: "None, or a handful", next: leaf("#label", [
@@ -623,6 +625,16 @@ footer .wrap { display: grid; gap: 6px; }
                 p("Fine-tune the image model (LoRA)", "open", "Try it only if your images look unlike everyday web photos. Keep it only if it predicts held-out images measurably better than the embeddings regression.")], REG) } ] } },
           { label: "Text in or beside the image", hint: "Packaging copy, headline, caption", next: leaf("#predict", [
             p("LoRA on Qwen3.8 or Gemma 4", "open", "Needs thousands of images with an observed outcome. Compare with the embeddings regression on the same held-out images.")], "With fewer images, take the VLM's internal representation of each image as an embedding and fit the embeddings regression. " + REG) } ] } },
+      { label: "Explain a trained predictor", hint: "Which parts of the image drive its predictions", href: "#predict-explain-the-predictions", next: {
+        q: "What do you want to explain?", options: [
+          { label: "Why the model made one prediction (local)", hint: "A heatmap for each image", next: leaf("#predict-local-methods", [
+            p("Integrated Gradients", "", "Captum. The best general-purpose method in a 2024 benchmark, with random noise as the starting image."),
+            p("Occlusion or Shapley value sampling", "", "Captum. They need no gradients, so they work on any model.")],
+            "Run the Adebayo sanity check, and show maps for a random set of images.") },
+          { label: "What the model relies on overall (global)", hint: "Concepts across many images", next: leaf("#predict-global-methods", [
+            p("TCAV", "", "Captum. Tests a concept you define with example images."),
+            p("CRAFT", "", "Xplique. Finds recurring image parts automatically.")],
+            "Treat the concepts as hypotheses to test.") } ] } },
       { label: "Use model outputs in a regression", hint: "Any predicted label, score, or index", href: "#inference", next: {
         q: "Where does the predicted variable enter?", options: [
           { label: "As the outcome", next: leaf("#inference", [p("Prediction-powered inference (PPI++)", "", "ppi_py in Python, ipd in R.")], HAND) },
@@ -638,13 +650,18 @@ footer .wrap { display: grid; gap: 6px; }
             p("Qwen-Image-2.1", "open", "The best open model whose licence covers the US, EU, and UK. Research use only.")]) },
           { label: "A model trained on your images", next: leaf("#generate-images-fine-tune-a-generator-with-lora", [
             p("LoRA on FLUX.2 [klein] 4B", "open", "Its licence allows any use, so a brand partner can use the outputs."),
-            p("LoRA on Qwen-Image-2.1", "open", "Higher quality, research use only.")]) } ] } },
+            p("LoRA on Qwen-Image-2.1", "open", "Higher quality, research use only.")]) },
+          { label: "Edit an existing image", hint: "Change one element, keep the rest", next: leaf("#generate-images", [
+            p("GPT Image 2.6", "closed", "Edits from a text instruction, with an optional mask."),
+            p("FLUX.2 [klein] 4B", "open", "Edits from a prompt and a reference image. Its licence allows any use.")]) } ] } },
       { label: "Video analysis", hint: "Ads, short-form posts, livestreams", href: "#video-analyze", next: {
         q: "What do you need from each video?", options: [
           { label: "Answers to the questions in your codebook", next: leaf("#video-analyze-label-videos-with-a-vlm", [p("Gemini 4", "closed", "Reads video with audio."), p("Qwen3.6-27B", "open", "One 80 GB GPU.")], REG) },
           { label: "One vector per clip", next: leaf("#video-analyze-embed-videos", [
             p("Gemini Embedding 2", "closed", "Clips up to 120 seconds."), p("Qwen3-VL-Embedding", "open", "Shared space with text."),
-            p("V-JEPA 2.1", "open", "Best input for a regression on your own outcome.")], REG) } ] } },
+            p("V-JEPA 2.1", "open", "Best input for a regression on your own outcome.")], REG) },
+          { label: "Predict an outcome", hint: "Views, retention, sales", next: leaf("#video-analyze-predict-outcomes-and-inference", [
+            p("V-JEPA 2.1 or Qwen3-VL-Embedding + high-dimensional regression", "open", "One vector per clip (average V-JEPA's patch vectors), then the embeddings regression from Predict outcomes.")], REG) } ] } },
       { label: "Generate or edit videos", hint: "Video ads, stimuli, edits of existing clips", href: "#video-generate", next: {
         q: "What do you need?", options: [
           { label: "Best quality through an API", next: leaf("#video-generate", [
@@ -655,10 +672,23 @@ footer .wrap { display: grid; gap: 6px; }
           { label: "Edit an existing clip", hint: "Change one element, keep the rest", next: leaf("#video-generate", [
             p("Gemini Omni 1.2 Flash", "closed", "Edits clips of 15 seconds or less from a text instruction. Not in the EEA, Switzerland, or the UK."),
             p("Wan2.1-VACE", "open", "Mask the region to change. Its licence allows any use.")]) } ] } },
-      { label: "Measure objects, text, or where viewers look", hint: "Specialized tools, including faces", href: "#more-tools", next: leaf("#more-tools", [
-        p("SAM 3", "open", "Outlines any object you name. Use it to measure the share of the image that a logo covers."),
-        p("PaddleOCR", "open", "Words and their boxes in ads and packaging."),
-        p("DeepGaze", "open", "Predicts where viewers will look.")], REG) }
+      { label: "Measure specific elements of an image", hint: "Objects, text, faces, attention, aesthetics", href: "#more-tools", next: {
+        q: "What do you want to measure?", options: [
+          { label: "Objects and logos", hint: "The share of the image a logo covers", next: leaf("#more-tools-detect-and-segment-objects", [
+            p("SAM 3", "open", "Outlines any object you name."),
+            p("RF-DETR", "open", "A detector you fine-tune on your own labeled boxes.")], REG) },
+          { label: "Text in the image", hint: "Headlines, prices, packaging copy", next: leaf("#more-tools-read-text-in-images", [
+            p("PaddleOCR", "open", "Words and their boxes in ads and packaging."),
+            p("Gemini 4", "closed", "Text plus its role, such as headline or price.")], REG) },
+          { label: "Faces and gaze", hint: "Smiles, action units, looking at the camera", next: leaf("#more-tools-faces-and-gaze", [
+            p("MediaPipe Face Landmarker", "open", "Face count, smile, and head pose, on CPU."),
+            p("py-feat", "open", "Facial action units."),
+            p("L2CS-Net", "open", "Gaze direction of the person shown.")], REG) },
+          { label: "Where viewers look", hint: "Predicted attention", next: leaf("#more-tools-predicted-attention", [
+            p("DeepGaze", "open", "Predicts where viewers will look.")], REG) },
+          { label: "Aesthetics and low-level features", hint: "Brightness, colorfulness, clutter, quality", next: leaf("#more-tools-aesthetics-and-low-level-features", [
+            p("Image Analyzer", "open", "49 image metrics at once."),
+            p("Q-ReAlign", "open", "Scores aesthetics or technical quality from 0 to 1.")], REG) } ] } }
     ]
   };
 })();
