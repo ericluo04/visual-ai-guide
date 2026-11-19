@@ -557,7 +557,7 @@ footer .wrap { display: grid; gap: 6px; }
         <p class="what">Make heatmaps for that predictor on a random set of ads, either from predictions on image patches (as in Embed images) or with local interpretable machine learning methods.</p>
         <p class="ex-lbl">Illustrative evaluation</p>
         <p class="what">Whether the maps pass sanity checks and point to elements you can name.</p>
-        <p class="ex-chips"><a href="#predict-explain-the-predictions">Explain the predictions</a></p>
+        <p class="ex-chips"><a href="#predict-local-methods">Explain the predictions (local)</a></p>
       </div>
       <div class="paper ex-card ex-glob">
         <h4>What does the model rely on overall?</h4>
@@ -565,7 +565,7 @@ footer .wrap { display: grid; gap: 6px; }
         <p class="what">Run global interpretable machine learning methods on the same predictor to extract relevant concepts that apply across all ads.</p>
         <p class="ex-lbl">Illustrative evaluation</p>
         <p class="what">Whether the concepts hold up as hypotheses when you test them, for example in an experiment.</p>
-        <p class="ex-chips"><a href="#predict-explain-the-predictions">Explain the predictions</a></p>
+        <p class="ex-chips"><a href="#predict-global-methods">Explain the predictions (global)</a></p>
       </div>
     </div>
   </div>
@@ -1119,7 +1119,7 @@ print(out.logits)   # shape (1, 1): one number for the image and prompt
       <p>A heatmap shows which parts of an image pushed a prediction up or down. The methods below make such a map after a model is trained, without changing the model. If you fit the embeddings regression on the average of each image's patch embeddings, the <a href="#represent">outcome heatmap in Embed images</a> already splits each prediction across the image, up to the regression's constant.</p>
       <p>A local method explains one prediction: it shows which pixels in this image moved this score. A global method explains the model as a whole, by naming the concepts it relies on across many images, such as faces or text overlays. These methods also work on the embeddings regression: the frozen image model and the regression on top form one network, so you can run them from the pixels to the predicted outcome.</p>
     </div>
-    <h4 class="sub-h">Local methods</h4>
+    <h4 class="sub-h" id="predict-local-methods">Local methods</h4>
     <div class="prose">
       <p><a href="https://captum.ai/docs/attribution_algorithms">Captum</a> implements the widely used local methods for PyTorch models. The table lists the ones with the best evidence that their maps reflect what the model does.</p>
     </div>
@@ -1189,7 +1189,7 @@ model = ViTForImageClassification(model.config).eval()</code></pre></div>
       </ul>
     </div>
 
-    <h4 class="sub-h">Global methods</h4>
+    <h4 class="sub-h" id="predict-global-methods">Global methods</h4>
     <div class="prose">
       <p>These methods look across many images and name the concepts that the model relies on. A 2026 benchmark found that no unsupervised concept method tracks the model faithfully (<a href="https://arxiv.org/abs/2504.10833">Kumar and Ahuja, CVPR 2026</a>), so treat the concepts as hypotheses to test.</p>
     </div>
