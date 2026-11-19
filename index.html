@@ -232,6 +232,7 @@ p.prose { display: block; }
 .map-kid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 4px 16px; align-items: baseline; padding: 6px 0 6px 14px; border-left: 2px solid var(--line); font-size: 0.88rem; }
 .map-kid .if { color: var(--muted); }
 .map-kid .then { font-weight: 600; }
+#guideBody .nw { white-space: nowrap; }
 @media (max-width: 640px) { .map-branch { grid-template-columns: minmax(0, 1fr); } .map-kid { grid-template-columns: minmax(0, 1fr); } }
 
 /* Picks table */
@@ -2259,6 +2260,20 @@ function selectText(w) { var r = document.createRange(); r.selectNodeContents(w.
   var host = document.getElementById("guideBody"); if (!host || !window.GUIDE) return;
   var path = [];
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  /* Wrap each hyphenated word in a nowrap span so lines break only at spaces. Runs on text nodes, so markup and hrefs stay as they are. */
+  function keepWhole(root) {
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = [], t;
+    while ((t = w.nextNode())) if (/\S-\S/.test(t.nodeValue)) nodes.push(t);
+    nodes.forEach(function (t) {
+      var f = document.createDocumentFragment();
+      t.nodeValue.split(/(\S+-\S+)/).forEach(function (part, i) {
+        if (!part) return;
+        if (i % 2) { var s = document.createElement("span"); s.className = "nw"; s.textContent = part; f.appendChild(s); }
+        else f.appendChild(document.createTextNode(part));
+      });
+      t.parentNode.replaceChild(f, t);
+    });
+  }
   function nodeAt(p) { var n = window.GUIDE; p.forEach(function (i) { n = n.options[i].next; }); return n; }
   function renderStep() {
     var n = nodeAt(path), h = "";
@@ -2283,6 +2298,7 @@ function selectText(w) { var r = document.createRange(); r.selectNodeContents(w.
       h += '<div class="pick-row"><a class="btn" href="' + n.href + '">Read the section</a><button type="button" class="btn ghost" data-go="0">Start over</button></div></div>';
     }
     host.innerHTML = h;
+    keepWhole(host);
   }
   function renderMap() {
     var h = '<div class="map">';
@@ -2294,6 +2310,7 @@ function selectText(w) { var r = document.createRange(); r.selectNodeContents(w.
       h += "</div></div>";
     });
     host.innerHTML = h + "</div>";
+    keepWhole(host);
   }
   function flatten(n, cond) {
     if (!n.options) return [{ cond: cond, picks: n.picks.map(function (p) { return p.name; }).join("  ·  ") }];
