@@ -875,6 +875,16 @@ heat = (P[0] @ probe.coef_).reshape(H, W)   # per-patch contribution for image 0
   <div class="stack">
     <p class="prose">The top 15 models on the Arena vision leaderboard have overlapping rank ranges, so treat them as tied. Choose on price, data policy, and whether you need to rerun the model later. Sending consumer photos to a closed API shares them with that company, so check your ethics approval and the platform's terms. For labeling thousands of images, the low-cost tiers and batch APIs (you submit all images at once and get the answers later at a lower price) matter more than the top rank. For a fast first pass on simple categories, <a href="#represent">SigLIP 2 zero-shot scores</a> are cheaper still. Once you have a few hundred hand labels, also fit a high-dimensional logistic regression on embeddings (see <a href="#predict">Predict outcomes</a>) and compare it with the VLM on the same held-out images.</p>
 
+    <div class="track">
+      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
+      <ul>
+        <li><a href="https://arena.ai/leaderboard/vision">Arena, vision</a><span>Human preference votes on image prompts, open and closed, with OCR and diagram tabs.</span></li>
+        <li><a href="https://huggingface.co/spaces/opencompass/open_vlm_leaderboard">OpenVLM Leaderboard</a><span>Average over a fixed set of benchmarks, run with <a href="https://github.com/open-compass/VLMEvalKit">VLMEvalKit</a>.</span></li>
+        <li><a href="https://mmmu-benchmark.github.io/">MMMU and MMMU-Pro</a><span>College-level questions with images, including business and design subjects.</span></li>
+        <li>Your own data<span>None of these measures how well a model labels your images. Your hand-coded sample is the only test of that.</span></li>
+      </ul>
+    </div>
+
     <h3>A labeling workflow</h3>
     <div class="prose">
       <p>The workflow below follows the split-sample framework of <a href="https://doi.org/10.1126/sciadv.abg2652">Egami, Fong, Grimmer, Roberts, and Stewart (2022, Science Advances)</a>. Their paper is about text, and the same logic carries over to images: develop the measure on one part of the data and use it, unchanged, on another.</p>
@@ -911,16 +921,6 @@ def label_image(path):
     text = processor.decode(out[0][inputs["input_ids"].shape[-1]:], skip_special_tokens=True)
     return next((l for l in LABELS if l in text.lower()), "unparsed")</code></pre></div>
     </details>
-
-    <div class="track">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
-      <ul>
-        <li><a href="https://arena.ai/leaderboard/vision">Arena, vision</a><span>Human preference votes on image prompts, open and closed, with OCR and diagram tabs.</span></li>
-        <li><a href="https://huggingface.co/spaces/opencompass/open_vlm_leaderboard">OpenVLM Leaderboard</a><span>Average over a fixed set of benchmarks, run with <a href="https://github.com/open-compass/VLMEvalKit">VLMEvalKit</a>.</span></li>
-        <li><a href="https://mmmu-benchmark.github.io/">MMMU and MMMU-Pro</a><span>College-level questions with images, including business and design subjects.</span></li>
-        <li>Your own data<span>None of these measures how well a model labels your images. Your hand-coded sample is the only test of that.</span></li>
-      </ul>
-    </div>
 
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
