@@ -583,113 +583,156 @@ footer .wrap { display: grid; gap: 6px; }
 <script>
 (function () {
   var REG = 'If the output enters a regression, correct for its errors: see <a href="#inference">Inference</a>.';
-  var HAND = 'All of these need a random hand-coded sample of a few hundred images.';
   function leaf(href, picks, then) { return { href: href, picks: picks, then: then }; }
   function p(name, access, why) { return { name: name, access: access, why: why }; }
   window.GUIDE = {
     q: "What do you want to do?",
     options: [
       { label: "Turn images into numbers", hint: "Features for regression, clustering, or search", href: "#represent", next: {
-        q: "What should the numbers capture?", options: [
-          { label: "How the images look", hint: "Style, composition, product appearance", next: leaf("#represent",
-            [p("DINOv3", "open", "Trained on images alone, with no text. Gives one vector per image.")], REG) },
-          { label: "Images and text in one space", hint: "Search by text, zero-shot scores", next: {
-            q: "An open model or an API?", options: [
-              { label: "An open model", next: leaf("#represent", [
-                p("SigLIP 2", "open", "Short labels and captions. Fast."),
-                p("Qwen3-VL-Embedding or WeMM-Embedding", "open", "Long or compositional queries, documents, video. Needs a GPU.")], REG) },
-              { label: "An API", next: leaf("#represent", [
-                p("Gemini Embedding 2", "closed", "Text, images, video, audio, and PDFs in one space."),
-                p("voyage-multimodal-3.5", "closed", "Mixed text, image, and video inputs.")], REG) } ] } },
-          { label: "Where in the image something is", hint: "Heatmaps", next: {
+        q: "What will you use the numbers for?", options: [
+          { label: "Group or compare images", hint: "Clusters, typicality, uniqueness", next: leaf("#represent", [
+            p("DINOv3", "open", "Appearance features, one vector per image. Commercial use allowed."),
+            p("SigLIP 2", "open", "Content in a space shared with text. Any use."),
+            p("Gemini Embedding 2", "closed", "No GPU.")], REG) },
+          { label: "Search images by text", hint: "Short phrases or long queries", next: leaf("#represent", [
+            p("SigLIP 2", "open", "Short phrases, up to 64 tokens. Fast."),
+            p("Qwen3-VL-Embedding or WeMM-Embedding", "open", "Long, detailed queries and documents. Needs a GPU."),
+            p("Gemini Embedding 2", "closed", "No GPU. Up to 6 images per request."),
+            p("voyage-multimodal-3.5", "closed", "Document-like images such as catalog pages.")]) },
+          { label: "Map where something is", hint: "Heatmaps", next: {
             q: "A map of what?", options: [
-              { label: "A concept you can name", next: leaf("#represent", [p("TIPSv2", "open", "Compares each patch of the image with a phrase you type, and maps where the phrase matches.")]) },
-              { label: "Similarity to a reference image", hint: "A logo, a product shot", next: leaf("#represent", [p("DINOv3 patch embeddings", "open", "Scores how closely each patch of the image resembles the reference.")]) },
-              { label: "What drives your outcome", next: leaf("#represent", [p("DINOv3 patch embeddings + regression", "open", "Fit a ridge regression of the outcome on the average of each image's patch embeddings, then apply the fitted coefficients to each patch. The map averages to the prediction, up to the regression's constant.")]) } ] } },
-          { label: "Adjust for the image while studying something else", hint: "The effect of price or a promotion, with the image as a control", next: leaf("#represent-use-embeddings-in-a-regression", [
+              { label: "A concept you can name", next: leaf("#represent-heatmaps-from-patch-embeddings", [
+                p("TIPSv2", "open", "Compares each patch of the image with a phrase you type, and maps where the phrase matches."),
+                p("dino.txt for DINOv3", "open", "The same idea on DINOv3 patch embeddings.")]) },
+              { label: "Similarity to a reference image", hint: "A logo, a product shot", next: leaf("#represent-heatmaps-from-patch-embeddings", [
+                p("DINOv3 patch embeddings", "open", "Scores how closely each patch of the image resembles the reference.")]) },
+              { label: "What drives your outcome", next: leaf("#represent-heatmaps-from-patch-embeddings", [
+                p("DINOv3 patch embeddings + ridge regression", "open", "Fit a ridge regression of the outcome on the average of each image's patch embeddings, then apply the fitted coefficients to each patch. The map averages to the prediction, up to the regression's constant.")]) } ] } },
+          { label: "Control for the image while studying something else", hint: "The effect of price or a promotion, with the image as a control", next: leaf("#represent-use-embeddings-in-a-regression", [
             p("Double machine learning with embeddings as controls", "", "econml or DoubleML in Python. The embedding enters as controls, and you estimate the effect of the variable you study.")]) } ] } },
       { label: "Label images with categories you define", hint: "Is a person shown? Is it a lifestyle shot?", href: "#label", next: {
         q: "How many images have you labeled by hand?", options: [
-          { label: "None, or a handful", next: leaf("#label", [
-            p("Qwen3.8 or Gemma 4", "open", "Ask the question with no training examples. Set the model to always give its most likely answer. You keep the model file, so you can rerun the same model later."),
-            p("Claude, Gemini, or GPT-6", "closed", "Use the low-cost tiers and batch APIs for scale.")],
-            "Hand-code about 400 random images and report agreement. " + REG) },
+          { label: "None, or a handful", next: {
+            q: "Can the images go to a closed API?", options: [
+              { label: "Yes", next: leaf("#label", [
+                p("Claude, Gemini 4, or GPT-6", "closed", "The top models are tied, so choose on price. Use the low-cost tiers and batch APIs.")], REG) },
+              { label: "No, or I must rerun the same model later", next: leaf("#label", [
+                p("Qwen3.8-27B or Gemma 4", "open", "Turn thinking off and use greedy decoding, so the model always gives its most likely answer. Gemma 4 E4B runs on a laptop-class GPU."),
+                p("Molmo 2 8B", "open", "Its training data is public, so you can check for leakage. Weaker."),
+                p("SigLIP 2 zero-shot", "open", "The cheapest first pass for simple categories.")], REG) } ] } },
           { label: "Hundreds or more", next: leaf("#predict", [
-            p("DINOv3 or SigLIP 2 embeddings + high-dimensional logistic regression", "", "Train on your hand labels and test on images the regression never saw. Compare with a VLM given no examples.")], REG) } ] } },
+            p("Embeddings + high-dimensional logistic regression", "", "Train on your hand labels and test on held-out images."),
+            p("Fine-tune a VLM on your hand labels", "open", "LoRA on Qwen3.8 or Gemma 4.")], REG) } ] } },
       { label: "Predict an outcome", hint: "Clicks, likes, sales, ratings", href: "#predict", next: {
         q: "What does the outcome depend on?", options: [
           { label: "What the image shows", next: {
             q: "For how many images do you observe the outcome?", options: [
-              { label: "Fewer than about 10,000", next: leaf("#predict", [p("DINOv3 or SigLIP 2 embeddings (one list of numbers per image) + high-dimensional regression", "", "A regression built for many columns (ridge, lasso, elastic net). Predict each image from a fit that never saw it.")], REG) },
+              { label: "Hundreds to about 10,000", next: leaf("#predict", [
+                p("DINOv3 or SigLIP 2 embeddings + high-dimensional regression", "", "Ridge, lasso, elastic net, or a Bayesian prior for coefficient uncertainty.")], REG) },
               { label: "About 10,000 or more", next: leaf("#predict", [
-                p("Embeddings + high-dimensional regression", "", "Fit this first and compare every other approach with it."),
-                p("Fine-tune the image model (LoRA)", "open", "Try it only if your images look unlike everyday web photos. Keep it only if it predicts held-out images measurably better than the embeddings regression.")], REG) } ] } },
-          { label: "Text in or beside the image", hint: "Packaging copy, headline, caption", next: leaf("#predict", [
-            p("LoRA on Qwen3.8 or Gemma 4", "open", "Needs thousands of images with an observed outcome. Compare with the embeddings regression on the same held-out images.")], "With fewer images, take the VLM's internal representation of each image as an embedding and fit the embeddings regression. " + REG) } ] } },
+                p("Embeddings + high-dimensional regression", "", "Fit this first and report it."),
+                p("Fine-tune the image model", "open", "LoRA on DINOv3 or SigLIP 2. Try it if your images look unlike everyday web photos. Keep it only if it predicts held-out data measurably better. One GPU, hours per fold.")], REG) } ] } },
+          { label: "Text in or beside the image, or how things in the scene relate", hint: "Packaging copy, headline, who holds the product", next: {
+            q: "For how many images do you observe the outcome?", options: [
+              { label: "Fewer than a few thousand", next: leaf("#predict-getting-a-number-out-of-a-vlm", [
+                p("VLM embedding + high-dimensional regression", "open", "Take the VLM's internal representation of each image as an embedding. The cheapest check.")], REG) },
+              { label: "A few thousand or more", next: leaf("#predict-fine-tune-a-model-on-your-own-data", [
+                p("Fine-tune a VLM", "open", "LoRA on Qwen3.8 or Gemma 4. One large GPU, hours to days.")], REG) } ] } } ] } },
       { label: "Explain a trained predictor", hint: "Which parts of the image drive its predictions", href: "#predict-explain-the-predictions", next: {
         q: "What do you want to explain?", options: [
           { label: "Why the model made one prediction (local)", hint: "A heatmap for each image", next: leaf("#predict-local-methods", [
             p("Integrated Gradients", "", "Captum. The best general-purpose method in a 2024 benchmark, with random noise as the starting image."),
-            p("Occlusion or Shapley value sampling", "", "Captum. They need no gradients, so they work on any model.")],
-            "Run the Adebayo sanity check, and show maps for a random set of images.") },
+            p("Grad-CAM", "", "A coarse map. A vision transformer needs its patches reshaped first."),
+            p("Occlusion or Shapley value sampling", "", "Captum. They need no gradients, so they work on any model. Occlusion's gray patches can distort the map.")]) },
           { label: "What the model relies on overall (global)", hint: "Concepts across many images", next: leaf("#predict-global-methods", [
-            p("TCAV", "", "Captum. Tests a concept you define with example images."),
-            p("CRAFT", "", "Xplique. Finds recurring image parts automatically.")],
-            "Treat the concepts as hypotheses to test.") } ] } },
+            p("TCAV", "", "Captum. Tests a concept you define with example images. Results depend on the examples and the layer."),
+            p("CRAFT", "", "Xplique. Finds recurring image parts automatically."),
+            p("SpRAy", "", "Groups many local maps to find shortcuts, such as a watermark.")]) } ] } },
       { label: "Use model outputs in a regression", hint: "Any predicted label, score, or index", href: "#inference", next: {
         q: "Where does the predicted variable enter?", options: [
-          { label: "As the outcome", next: leaf("#inference", [p("Prediction-powered inference (PPI++)", "", "ppi_py in Python, ipd in R.")], HAND) },
-          { label: "As a regressor or treatment", next: leaf("#inference", [
+          { label: "As the outcome", next: leaf("#inference", [p("Prediction-powered inference (PPI++)", "", "ppi_py in Python, ipd in R. Needs a random hand-coded sample of a few hundred images.")]) },
+          { label: "As a regressor or treatment", next: leaf("#inference-pick-the-correction-by-where-the-prediction-sits", [
             p("Design-based supervised learning (DSL)", "", "dsl in R. Needs a random hand-coded sample of a few hundred images. Egami, Hinck, Stewart, and Wei (2024) extend it to predicted regressors."),
-            p("Battaglia et al. correction", "", "ValidMLInference in Python, MLBC in R. The bias correction needs the classifier's false-positive rate from a hand-coded sample. The one-step estimator runs without one.")]) } ] } },
+            p("Battaglia et al. correction", "", "ValidMLInference in Python, MLBC in R. The bias correction needs the classifier's false-positive rate from a hand-coded sample. The one-step estimator runs without one."),
+            p("Wei and Malik (2026)", "", "When the extraction error may carry other image content that moves the outcome. No package."),
+            p("EnsembleIV", "", "When an instrumental-variables correction is acceptable.")]) } ] } },
       { label: "Generate or edit images", hint: "Stimuli, ad variants, brand imagery", href: "#generate-images", next: {
         q: "What matters most?", options: [
-          { label: "Best quality for a fixed stimulus set", next: leaf("#generate-images", [
-            p("GPT Image 2.6", "closed", "First on Artificial Analysis for generation."), p("Nano Banana 2.1", "closed", "Gemini API, SynthID watermark.")],
-            "Archive every file with its prompt, model ID, and date. Closed models get retired.") },
-          { label: "Reproducible or controlled stimuli", hint: "Same seed, one attribute changed", next: leaf("#generate-images", [
-            p("Qwen-Image-2.1", "open", "The best open model whose licence covers the US, EU, and UK. Research use only.")]) },
+          { label: "Best quality", next: leaf("#generate-images", [
+            p("GPT Image 2.6 or 2.5", "closed", "First on Artificial Analysis and on Arena. Cannot fix a seed."),
+            p("Nano Banana 2.1", "closed", "Conversational editing. SynthID watermark."),
+            p("MiniMax H3-Image", "open", "The best open model. Its licence excludes the US, EU, UK, and South Korea unless MiniMax grants one. Very large GPU.")]) },
+          { label: "Controlled stimuli", hint: "Same seed, one attribute changed", next: leaf("#generate-images-design-notes-for-stimuli", [
+            p("Qwen-Image-2.1", "open", "Research use only."),
+            p("FLUX.2 [klein] 4B", "open", "Any use. About 13 GB of GPU memory."),
+            p("Imagen on Vertex AI or FLUX.2 [pro]", "closed", "The closed APIs that let you fix the seed.")]) },
           { label: "A model trained on your images", next: leaf("#generate-images-fine-tune-a-generator-with-lora", [
-            p("LoRA on FLUX.2 [klein] 4B", "open", "Its licence allows any use, so a brand partner can use the outputs."),
+            p("LoRA on FLUX.2 [klein] base 4B", "open", "Any use, so a brand partner can use the outputs."),
             p("LoRA on Qwen-Image-2.1", "open", "Higher quality, research use only.")]) },
           { label: "Edit an existing image", hint: "Change one element, keep the rest", next: leaf("#generate-images", [
-            p("GPT Image 2.6", "closed", "Edits from a text instruction, with an optional mask."),
-            p("FLUX.2 [klein] 4B", "open", "Edits from a prompt and a reference image. Its licence allows any use.")]) } ] } },
+            p("MAI-Image-2.7", "closed", "First on Artificial Analysis for editing. Public preview, about $35 per 1,000 images."),
+            p("GPT Image 2.5", "closed", "The model in the page's edit code. A mask is guidance only."),
+            p("Qwen-Image-2.1", "open", "Up to 10 reference images. Research use only."),
+            p("FLUX.2 [klein] 4B", "open", "Any use.")]) } ] } },
       { label: "Video analysis", hint: "Ads, short-form posts, livestreams", href: "#video-analyze", next: {
         q: "What do you need from each video?", options: [
-          { label: "Answers to the questions in your codebook", next: leaf("#video-analyze-label-videos-with-a-vlm", [p("Gemini 4", "closed", "Reads video with audio."), p("Qwen3.6-27B", "open", "One 80 GB GPU.")], REG) },
-          { label: "One vector per clip", next: leaf("#video-analyze-embed-videos", [
-            p("Gemini Embedding 2", "closed", "Clips up to 120 seconds."), p("Qwen3-VL-Embedding", "open", "Shared space with text."),
-            p("V-JEPA 2.1", "open", "Best input for a regression on your own outcome.")], REG) },
+          { label: "Answers to the questions in your codebook", next: {
+            q: "Does the audio matter?", options: [
+              { label: "Yes", next: leaf("#video-analyze-label-videos-with-a-vlm", [
+                p("Gemini 4", "closed", "Reads the video and its audio, up to 3 hours. Hydrogen has a free tier.")], REG) },
+              { label: "No", next: leaf("#video-analyze-label-videos-with-a-vlm", [
+                p("Gemini 4", "closed"),
+                p("Qwen3.6-27B", "open", "Frames only. One 80 GB GPU.")], REG) } ] } },
           { label: "Predict an outcome", hint: "Views, retention, sales", next: leaf("#video-analyze-predict-outcomes-and-inference", [
-            p("V-JEPA 2.1 or Qwen3-VL-Embedding + high-dimensional regression", "open", "One vector per clip (average V-JEPA's patch vectors), then the embeddings regression from Predict outcomes.")], REG) } ] } },
+            p("Gemini Embedding 2", "closed", "No GPU, about $0.025 per clip."),
+            p("Qwen3-VL-Embedding", "open", "The best open pick. Needs a GPU."),
+            p("V-JEPA 2.1", "open", "Captures motion. Average within windows of a few seconds when motion is your hypothesis.")], REG) },
+          { label: "Embeddings for search or clustering", next: leaf("#video-analyze-embed-videos", [
+            p("Gemini Embedding 2", "closed", "Clips up to 120 seconds. Audio only on Vertex AI, if you turn it on."),
+            p("Qwen3-VL-Embedding", "open", "Search clips by description."),
+            p("Frame averaging", "open", "Embed one frame per second with an image model and average. Cheap and reproducible, but loses sound and motion.")], REG) } ] } },
       { label: "Generate or edit videos", hint: "Video ads, stimuli, edits of existing clips", href: "#video-generate", next: {
         q: "What do you need?", options: [
           { label: "Best quality through an API", next: leaf("#video-generate", [
-            p("Gemini Omni 1.2 Flash", "closed"), p("Seedance 2.5", "closed"), p("Wan 3.0", "closed")]) },
-          { label: "An open model you can fine-tune", next: leaf("#video-generate", [
-            p("MiniMax H3", "open", "The best open model. Its licence excludes the US, EU, UK, and South Korea."),
-            p("Wan 2.2", "open", "Its licence allows any use.")]) },
+            p("Gemini Omni 1.2 Flash", "closed", "3 to 15 seconds with native audio, about $0.07 per second."),
+            p("Seedance 2.5", "closed", "Up to 30 seconds with audio. Not available in the US."),
+            p("Wan 3.0", "closed", "Up to 30 seconds at 1080p. US and EU regions.")]) },
+          { label: "An open model you can rerun or fine-tune", next: leaf("#video-generate", [
+            p("MiniMax H3", "open", "The best open model, with audio. Its licence excludes the US, EU, UK, and South Korea unless MiniMax grants one. Several large GPUs."),
+            p("Wan 2.2 5B", "open", "Any use. 5-second 720p clips on a 24 GB GPU. No audio.")]) },
           { label: "Edit an existing clip", hint: "Change one element, keep the rest", next: leaf("#video-generate", [
-            p("Gemini Omni 1.2 Flash", "closed", "Edits clips of 15 seconds or less from a text instruction. Not in the EEA, Switzerland, or the UK."),
-            p("Wan2.1-VACE", "open", "Mask the region to change. Its licence allows any use.")]) } ] } },
-      { label: "Measure specific elements of an image", hint: "Objects, text, faces, attention, aesthetics", href: "#more-tools", next: {
+            p("Gemini Omni 1.2 Flash", "closed", "Clips of 15 seconds or less. Not in the EEA, Switzerland, or the UK."),
+            p("Wan 3.0", "closed", "Edits when the prompt names the edit."),
+            p("Wan2.1-VACE", "open", "Mask the region to change. Any use.")]) } ] } },
+      { label: "Measure standard, low-level visual features", hint: "Faces, text, objects, attention, aesthetics. No codebook needed.", href: "#more-tools", next: {
         q: "What do you want to measure?", options: [
           { label: "Objects and logos", hint: "The share of the image a logo covers", next: leaf("#more-tools-detect-and-segment-objects", [
-            p("SAM 3", "open", "Outlines any object you name."),
-            p("RF-DETR", "open", "A detector you fine-tune on your own labeled boxes.")], REG) },
-          { label: "Text in the image", hint: "Headlines, prices, packaging copy", next: leaf("#more-tools-read-text-in-images", [
-            p("PaddleOCR", "open", "Words and their boxes in ads and packaging."),
-            p("Gemini 4", "closed", "Text plus its role, such as headline or price.")], REG) },
+            p("SAM 3", "open", "Outlines any object you name, with no training."),
+            p("RF-DETR", "open", "Fine-tune on a few hundred labeled images when your images look unlike everyday photos. Any use."),
+            p("Cloud Vision logo detection", "closed", "Named brand logos with no training. Popular logos only.")], REG) },
+          { label: "Text in the image", hint: "Headlines, prices, packaging copy", next: {
+            q: "What kind of text?", options: [
+              { label: "Text in ads, packaging, or photos", hint: "Scene text", next: leaf("#more-tools-read-text-in-images", [
+                p("PaddleOCR (PP-OCRv6)", "open", "Words and boxes on CPU, 50 languages."),
+                p("Qwen3.6-27B", "open", "Hard scene text."),
+                p("Gemini 4", "closed", "Text plus its role, such as headline or price.")], REG) },
+              { label: "Full pages", hint: "Catalogs, flyers, print ads", next: leaf("#more-tools-read-text-in-images", [
+                p("PaddleOCR-VL-1.6", "open", "Reading order and tables."),
+                p("Mistral OCR 4.1 or Document AI", "closed", "Large batches. Mistral is $4 per 1,000 pages.")], REG) } ] } },
           { label: "Faces and gaze", hint: "Smiles, action units, looking at the camera", next: leaf("#more-tools-faces-and-gaze", [
-            p("MediaPipe Face Landmarker", "open", "Face count, smile, and head pose, on CPU."),
+            p("MediaPipe Face Landmarker", "open", "Count, smile, and head pose, on CPU."),
             p("py-feat", "open", "Facial action units."),
-            p("L2CS-Net", "open", "Gaze direction of the person shown.")], REG) },
+            p("L2CS-Net", "open", "Gaze direction. Public training data."),
+            p("Amazon Rekognition", "closed", "Up to 100 faces, with gaze and smile.")], REG) },
           { label: "Where viewers look", hint: "Predicted attention", next: leaf("#more-tools-predicted-attention", [
-            p("DeepGaze", "open", "Predicts where viewers will look.")], REG) },
+            p("DeepGaze IIE", "open", "The most accurate. No licence file, so ask before commercial use."),
+            p("UNISAL", "open", "Also handles video. Any use."),
+            p("Neurons or 3M VAS", "closed", "Only vendor validation.")], REG) },
           { label: "Aesthetics and low-level features", hint: "Brightness, colorfulness, clutter, quality", next: leaf("#more-tools-aesthetics-and-low-level-features", [
-            p("Image Analyzer", "open", "49 image metrics at once."),
-            p("Q-ReAlign", "open", "Scores aesthetics or technical quality from 0 to 1.")], REG) } ] } }
+            p("Image Analyzer", "open", "49 metrics at once. AGPL-3.0."),
+            p("pyaesthetics", "open", "Transparent pixel statistics. GPL-3.0."),
+            p("Q-ReAlign", "open", "Aesthetics or technical quality, 0 to 1. Any use."),
+            p("visual-clutter", "open", "Clutter score and map.")], REG) } ] } }
     ]
   };
 })();
@@ -1543,9 +1586,9 @@ image.save("sks_lora.png")</code></pre></div>
     <div class="tbl"><table>
       <thead><tr><th>Model</th><th>Access</th><th>Released</th><th>Use it for</th><th>Links</th></tr></thead>
       <tbody>
-        <tr><td><span class="name">Gemini Embedding 2</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Mar 2026</td><td>One vector per clip, in the same space as text and images. Clips up to 120 seconds. It ignores the audio.<br><small>(global only)</small></td><td><span class="links"><a href="https://aistudio.google.com/docs/embeddings">Docs</a></span></td></tr>
+        <tr><td><span class="name">Gemini Embedding 2</span><br><small>Google</small></td><td><span class="badge closed">closed</span></td><td class="rel">Mar 2026</td><td>One vector per clip, in the same space as text and images. Clips up to 120 seconds. On the Gemini API it ignores the audio. Vertex AI can read the audio if you turn it on, for clips up to about 80 seconds.<br><small>(global only)</small></td><td><span class="links"><a href="https://aistudio.google.com/docs/embeddings">Docs</a></span></td></tr>
         <tr><td><span class="name">Qwen3-VL-Embedding</span><br><small>Alibaba Qwen, 2B and 8B</small></td><td><span class="badge open">open</span></td><td class="rel">Jan 2026</td><td>Video embeddings in the same space as text, so you can search clips by description.<br><small>(global only)</small></td><td><span class="links"><a href="https://huggingface.co/Qwen/Qwen3-VL-Embedding-8B">HF</a></span></td></tr>
-        <tr><td><span class="name">V-JEPA 2.1</span><br><small>Meta</small></td><td><span class="badge open">open</span></td><td class="rel">Mar 2026</td><td>Learns what videos look like from video alone, with no text. The best input when you will fit your own regression on an outcome.<br><small>(patch by time: one vector per patch every 2 frames; no global vector, so average them)</small></td><td><span class="links"><a href="https://github.com/facebookresearch/vjepa2">GitHub</a></span></td></tr>
+        <tr><td><span class="name">V-JEPA 2.1</span><br><small>Meta</small></td><td><span class="badge open">open</span></td><td class="rel">Mar 2026</td><td>Learns what videos look like from video alone, with no text. Captures motion. Average within windows of a few seconds when motion is your hypothesis. Its reported results use a trained probe.<br><small>(patch by time: one vector per patch every 2 frames; no global vector, so average them)</small></td><td><span class="links"><a href="https://github.com/facebookresearch/vjepa2">GitHub</a></span></td></tr>
       </tbody>
     </table></div>
 
@@ -2291,7 +2334,7 @@ function selectText(w) { var r = document.createRange(); r.selectNodeContents(w.
     }
     if (n.options) {
       h += '<p class="q">' + esc(n.q) + '</p><div class="opts">';
-      n.options.forEach(function (o, i) { h += '<button type="button" class="opt" data-pick="' + i + '">' + esc(o.label) + (o.hint ? "<small>" + esc(o.hint) + "</small>" : "") + "</button>"; });
+      n.options.forEach(function (o, i) { h += '<button type="button" class="opt" data-pick="' + i + '"><span>' + esc(o.label) + "</span>" + (o.hint ? "<small>" + esc(o.hint) + "</small>" : "") + "</button>"; });
       h += "</div>";
     } else {
       h += '<div class="leaf">';
