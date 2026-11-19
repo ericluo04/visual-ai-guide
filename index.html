@@ -1549,6 +1549,13 @@ image.save("sks_lora.png")</code></pre></div>
       </tbody>
     </table></div>
 
+    <div class="track">
+      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
+      <ul>
+        <li><a href="https://huggingface.co/spaces/TIGER-Lab/MMEB-Leaderboard">MMEB-V2</a><span>Embedding models, with video classification and retrieval columns.</span></li>
+      </ul>
+    </div>
+
     <details class="code">
       <summary><span class="ttl">Embed video ads with Qwen3-VL-Embedding</span> <span class="lang">python · Qwen3-VL-Embedding</span></summary>
       <div class="codewrap"><pre><code class="language-python"># Run from a clone of github.com/QwenLM/Qwen3-VL-Embedding
@@ -1580,6 +1587,14 @@ print(X.shape)</code></pre></div>
       </tbody>
     </table></div>
 
+    <div class="track">
+      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
+      <ul>
+        <li><a href="https://video-mme-v2.netlify.app/">Video-MME-v2</a><span>Video question answering, scored on consistency across related questions.</span></li>
+        <li><span class="nm"><a href="https://lvbench.github.io/">LVBench</a> and <a href="https://github.com/JUNJIE99/MLVU">MLVU</a></span><span>Understanding of long videos.</span></li>
+      </ul>
+    </div>
+
     <details class="code">
       <summary><span class="ttl">Ask Gemini about a video ad</span> <span class="lang">python · google-genai</span></summary>
       <div class="codewrap"><pre><code class="language-python">import time
@@ -1607,15 +1622,6 @@ print(reply.output_text)</code></pre></div>
 
     <h3 id="video-analyze-predict-outcomes-and-inference">Predict outcomes and inference</h3>
     <p class="prose">Put the video embedding matrix from <a href="#video-analyze-embed-videos">Embed videos</a> into the same cross-fitted high-dimensional regression as in <a href="#predict">Predict outcomes</a>, and the code there runs unchanged. Fine-tuning works the same way. Keep all clips from one ad, or one account, in the same fold. Labels that a VLM coded from videos need the same bias correction as in <a href="#inference">Inference with predicted variables</a>.</p>
-
-    <div class="track" style="margin-top:18px">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
-      <ul>
-        <li><a href="https://video-mme-v2.netlify.app/">Video-MME-v2</a><span>Video question answering, scored on consistency across related questions.</span></li>
-        <li><span class="nm"><a href="https://lvbench.github.io/">LVBench</a> and <a href="https://github.com/JUNJIE99/MLVU">MLVU</a></span><span>Understanding of long videos.</span></li>
-        <li><a href="https://huggingface.co/spaces/TIGER-Lab/MMEB-Leaderboard">MMEB-V2</a><span>Embedding models, with video classification and retrieval columns.</span></li>
-      </ul>
-    </div>
 
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
