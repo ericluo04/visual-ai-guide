@@ -651,7 +651,7 @@ footer .wrap { display: grid; gap: 6px; }
       { label: "Use model outputs in a regression", hint: "Any predicted label, score, or index", href: "#inference", next: {
         q: "Where does the predicted variable enter?", options: [
           { label: "As the outcome", next: leaf("#inference", [p("Prediction-powered inference (PPI++)", "", "ppi_py in Python, ipd in R. Needs a random hand-coded sample of a few hundred images.")]) },
-          { label: "As a regressor or treatment", next: leaf("#inference-pick-the-correction-by-where-the-prediction-sits", [
+          { label: "As a regressor or treatment", next: leaf("#inference", [
             p("Design-based supervised learning (DSL)", "", "dsl in R. Needs a random hand-coded sample of a few hundred images. Egami, Hinck, Stewart, and Wei (2024) extend it to predicted regressors."),
             p("Battaglia et al. correction", "", "ValidMLInference in Python, MLBC in R. The bias correction needs the classifier's false-positive rate from a hand-coded sample. The one-step estimator runs without one."),
             p("Wei and Malik (2026)", "", "When the extraction error may carry other image content that moves the outcome. No package."),
@@ -1294,7 +1294,6 @@ model = ViTForImageClassification(model.config).eval()</code></pre></div>
     <p>If you trained the model yourself, leave its training images out of the regression, or use cross-fitted predictions.</p>
   </div>
 
-  <h3>Pick the correction by where the prediction sits</h3>
   <div class="tbl"><table>
     <thead><tr><th>The predicted variable is</th><th>Method</th><th>Package</th></tr></thead>
     <tbody>
