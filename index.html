@@ -1106,9 +1106,9 @@ model = AutoModelForMultimodalLM.from_pretrained(
     MODEL_ID, dtype=torch.bfloat16, device_map="auto")
 
 lora = LoraConfig(
-    r=16, lora_alpha=16, lora_dropout=0.05,
+    r=16, lora_alpha=64, lora_dropout=0.05,
     target_modules="all-linear",   # every linear layer: language model, vision encoder, audio encoder
-    use_rslora=True,               # or use_dora=True
+    use_dora=False,                # True to try DoRA
     task_type="CAUSAL_LM",
 )
 args = SFTConfig(output_dir=OUTPUT_DIR, num_train_epochs=3,
