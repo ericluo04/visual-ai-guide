@@ -250,6 +250,7 @@ th, td { text-align: left; vertical-align: top; padding: 10px 8px; border-bottom
 tr:last-child td { border-bottom: 0; }
 th { font: 600 0.72rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); background: var(--surface-2); white-space: nowrap; }
 td .name { font-weight: 600; }
+.tbl td:first-child .nw { white-space: nowrap; }   /* model names wrap at spaces, never at a hyphen (see keepWhole) */
 td.rel { font: 500 0.8rem var(--font-mono); color: var(--muted); white-space: nowrap; }
 td.rel small { white-space: normal; }   /* a second release date may wrap so it does not widen the column */
 td .links { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 0.82rem; }
@@ -2731,6 +2732,11 @@ function selectText(w) { var r = document.createRange(); r.selectNodeContents(w.
     });
   });
   render();
+  /* Table name cells follow the same rule. A short last token ("8B", "2.5") also stays with the word before it. t-infer holds sentences, not names. */
+  document.querySelectorAll(".tbl table:not(.t-infer) td:first-child").forEach(function (td) {
+    td.querySelectorAll(".name, a").forEach(function (n) { var t = n.lastChild; if (t && t.nodeType === 3) t.nodeValue = t.nodeValue.replace(/ (\S{1,4})$/, " $1"); });
+    keepWhole(td);
+  });
 })();
 </script>
 </body>
