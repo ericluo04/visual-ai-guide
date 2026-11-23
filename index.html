@@ -1140,7 +1140,7 @@ has_person: true if at least one person (or part of a person, such as a hand) is
 n_people: the number of people visible; 0 if none.
 ad_type: lifestyle (the product shown in use or in a scene), product-only (the product on a
 plain background), text-heavy (text covers more than half the image), or other.
-price_shown: the price printed in the ad, exactly as printed, or "" if none."""
+price: the price printed in the ad, exactly as printed, or "" if none."""
 
 SCHEMA = {                                   # the answers come back as these named fields
     "type": "object",
@@ -1148,9 +1148,9 @@ SCHEMA = {                                   # the answers come back as these na
         "has_person": {"type": "boolean"},
         "n_people": {"type": "integer"},     # no minimum/maximum: the API rejects them
         "ad_type": {"type": "string", "enum": ["lifestyle", "product-only", "text-heavy", "other"]},
-        "price_shown": {"type": "string"},
+        "price": {"type": "string"},
     },
-    "required": ["has_person", "n_people", "ad_type", "price_shown"],
+    "required": ["has_person", "n_people", "ad_type", "price"],
     "additionalProperties": False,
 }
 
@@ -1495,6 +1495,57 @@ fig.savefig("ig_map.png")
 model = ViTForImageClassification(model.config).eval()</code></pre></div>
     </details>
 
+    <p class="prose">On a DINOv3 regression, Integrated Gradients gave noisy maps in our check, while Occlusion, which greys out one 16 x 16 patch at a time, landed on the object. The code below runs it on the embeddings regression from <a href="#predict">Predict outcomes</a>.</p>
+    <details class="code">
+      <summary><span class="ttl">Occlusion map for the DINOv3 embeddings regression</span> <span class="lang">python · captum</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import numpy as np, torch
+from torch import nn
+from PIL import Image
+from sklearn.linear_model import RidgeCV
+from transformers import AutoImageProcessor, AutoModel
+from captum.attr import Occlusion, visualization as viz
+
+MODEL_ID = "facebook/dinov3-vitb16-pretrain-lvd1689m"   # tested with "facebook/dinov3-vits16-pretrain-lvd1689m", the small one
+processor = AutoImageProcessor.from_pretrained(MODEL_ID)
+backbone = AutoModel.from_pretrained(MODEL_ID).eval()
+
+# X, y: global embeddings and outcomes from the cross-fitted regression snippet above.
+# cross_val_predict keeps no fitted model, so fit one ridge on all images to explain.
+ridge = RidgeCV(alphas=np.logspace(-2, 4, 25)).fit(X, y)
+
+class Predictor(nn.Module):   # image in, predicted outcome out: DINOv3, then the ridge
+    def __init__(self, backbone, ridge):
+        super().__init__()
+        self.backbone = backbone
+        self.register_buffer("coef", torch.tensor(ridge.coef_, dtype=torch.float32))
+        self.intercept = float(ridge.intercept_)
+    def forward(self, pixel_values):
+        z = self.backbone(pixel_values=pixel_values).pooler_output   # the global embedding
+        return z @ self.coef + self.intercept
+
+model = Predictor(backbone, ridge).eval()
+# The fine-tuned Regressor from the LoRA snippet drops in the same way: use its trained model in place of this one.
+
+image = Image.open("ad_0193.jpg").convert("RGB")
+x = processor(images=image, return_tensors="pt").pixel_values   # 1 x 3 x 224 x 224, ImageNet-normalized
+
+# Cover one 16 x 16 patch at a time (the patches DINOv3 sees) with the image's mean color,
+# and record how much the prediction changes (captum.ai/api/occlusion.html).
+occ = Occlusion(model)
+attr = occ.attribute(x, sliding_window_shapes=(3, 16, 16), strides=(3, 16, 16),
+                     baselines=x.mean(dim=(2, 3), keepdim=True), perturbations_per_eval=14)
+
+heat = attr[0].abs().sum(0).detach().numpy()       # 224 x 224 map, one value per patch
+photo = np.asarray(image.resize(x.shape[-2:][::-1])) / 255.0
+fig, ax = viz.visualize_image_attr(heat[..., None], photo, method="blended_heat_map",
+                                   sign="absolute_value", show_colorbar=True, use_pyplot=False)
+fig.savefig("occlusion_map.png")
+
+# Sanity check (Adebayo et al. 2018): give the image model random weights, then rerun the lines from occ = on.
+# A map that barely changes shows the image, not what the model learned.
+model.backbone = AutoModel.from_config(backbone.config).eval()</code></pre></div>
+    </details>
+
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
@@ -1583,7 +1634,7 @@ craft.plot_concepts_crops(nb_crops=10)       # the crops that score highest on e
     <tbody>
       <tr><td>The outcome. Example: a VLM codes whether each ad shows a person, and you compare that share across campaigns.</td><td>Prediction-powered inference, PPI and PPI++ (<a href="https://doi.org/10.1126/science.adi6000">Angelopoulos et al. 2023</a>; <a href="https://doi.org/10.1214/26-aoas2215">Angelopoulos, Duchi, and Zrnic 2026</a>)</td><td><a href="https://github.com/aangelopoulos/ppi_py">ppi_py</a> (Python), <a href="https://github.com/ipd-tools/ipd">ipd</a> (R)</td></tr>
       <tr><td>A regressor or treatment, when the hand-coded sample is a random draw from the images in your regression, as in step 1.</td><td>Design-based supervised learning, DSL (<a href="https://naokiegami.com/paper/dsl_ss.pdf">Egami, Hinck, Stewart, and Wei 2024</a>).</td><td><a href="https://naokiegami.com/dsl/">dsl</a> (R)</td></tr>
-      <tr><td>A regressor generated by a classifier, when the hand-coded sample comes from other images, or there is none.</td><td>Bias-corrected regression (<a href="https://arxiv.org/abs/2402.15585">Battaglia, Christensen, Hansen, and Sacher 2025</a>)</td><td><a href="https://github.com/timothymchristensen/ValidMLInference">ValidMLInference</a> (Python), <a href="https://CRAN.R-project.org/package=MLBC">MLBC</a> (R)</td></tr>
+      <tr><td>A yes/no regressor, when you cannot hand-code a random draw from your regression images. Needs the classifier's false-positive rate from any checked sample, or joint estimation (<code>one_step</code>) with none.</td><td>Bias-corrected regression (<a href="https://arxiv.org/abs/2402.15585">Battaglia, Christensen, Hansen, and Sacher 2025</a>)</td><td><a href="https://github.com/timothymchristensen/ValidMLInference">ValidMLInference</a> (Python), <a href="https://CRAN.R-project.org/package=MLBC">MLBC</a> (R)</td></tr>
       <tr><td>An image feature whose extraction error may carry other content of the same image that also moves the outcome.</td><td><a href="https://doi.org/10.2139/ssrn.4113608">Wei and Malik (2026)</a>, accepted at Management Science</td><td>None released</td></tr>
       <tr><td>A regressor, when an instrumental-variables correction is acceptable.</td><td>EnsembleIV (<a href="https://doi.org/10.1287/mnsc.2024.08999">Burtch, McFowland, Yang, and Adomavicius 2026</a>)</td><td><a href="https://github.com/mochenyang/EnsembleIV">EnsembleIV</a> (R)</td></tr>
     </tbody>
