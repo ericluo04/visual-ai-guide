@@ -907,19 +907,13 @@ vectors = [e.values for e in result.embeddings]   # 3 lists of 768 floats</code>
     <h3 id="represent-compare-group-and-search-images">Compare, group, and search images</h3>
     <div class="prose">
       <p>Two images are alike when their global embeddings point in the same direction. Cosine similarity measures that, on a scale from -1 to 1, where 1 means the same direction. The code below uses it three ways.</p>
-      <ul>
+      <ol>
         <li>Compare. Score how alike two images are, or how typical each image is of its category: its cosine similarity to the average embedding of that category. A low score marks an unusual image.</li>
-        <li>Group. Let a clustering method find groups of similar images. <a href="https://scikit-learn.org/stable/modules/generated/sklearn.cluster.HDBSCAN.html">HDBSCAN</a> (in scikit-learn) chooses the number of groups itself and marks images that fit no group as outliers, which are the unique ones. It works poorly in many dimensions, so first reduce the embeddings to about 50 with PCA. For millions of images where you want a set number of groups, <a href="https://arxiv.org/abs/2611.09501">e-means</a> (Bessa et al. 2026, in the <a href="https://github.com/facebookresearch/faiss/tree/main/contrib/e_means">Faiss library</a>) is a fast version of k-means.</li>
-        <li>Search. Type a phrase and rank the images by how well they match it. This needs a model with a text side, such as SigLIP 2, because DINOv3 embeds images only.</li>
-      </ul>
+      </ol>
     </div>
     <details class="code">
-      <summary><span class="ttl">Compare, group, and search images</span> <span class="lang">python · scikit-learn + transformers</span></summary>
-      <div class="codewrap"><pre><code class="language-python">import numpy as np, torch
-from PIL import Image
-from sklearn.decomposition import PCA
-from sklearn.cluster import HDBSCAN
-from transformers import AutoModel, AutoProcessor
+      <summary><span class="ttl">Compare images</span> <span class="lang">python · numpy</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import numpy as np
 
 # X: DINOv3 global embeddings, one row per image (n x 768), from embed() in Predict outcomes
 # category: a NumPy array with each image's category, such as its product type
@@ -932,7 +926,21 @@ typicality = np.zeros(len(Z))
 for c in np.unique(category):
     m = category == c
     proto = Z[m].mean(axis=0)
-    typicality[m] = Z[m] @ (proto / np.linalg.norm(proto))
+    typicality[m] = Z[m] @ (proto / np.linalg.norm(proto))</code></pre></div>
+    </details>
+    <div class="prose">
+      <ol start="2">
+        <li>Group. Let a clustering method find groups of similar images. <a href="https://scikit-learn.org/stable/modules/generated/sklearn.cluster.HDBSCAN.html">HDBSCAN</a> (in scikit-learn) chooses the number of groups itself and marks images that fit no group as outliers, which are the unique ones. It works poorly in many dimensions, so first reduce the embeddings to about 50 with PCA. For millions of images where you want a set number of groups, <a href="https://arxiv.org/abs/2611.09501">e-means</a> (Bessa et al. 2026, in the <a href="https://github.com/facebookresearch/faiss/tree/main/contrib/e_means">Faiss library</a>) is a fast version of k-means.</li>
+      </ol>
+    </div>
+    <details class="code">
+      <summary><span class="ttl">Group images</span> <span class="lang">python · scikit-learn</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.cluster import HDBSCAN
+
+# X: DINOv3 global embeddings, one row per image (n x 768), from embed() in Predict outcomes
+Z = X / np.linalg.norm(X, axis=1, keepdims=True)   # unit length, so distances follow cosine similarity
 
 # Groups. HDBSCAN works poorly in hundreds of dimensions, so reduce them first
 # (umap-learn.readthedocs.io/en/latest/clustering.html). PCA to 50 is the simple route
@@ -942,8 +950,20 @@ groups = HDBSCAN(min_cluster_size=5, copy=True).fit_predict(Z50)
 # HDBSCAN chooses the number of groups itself. Images that fit no group get the label -1:
 # these outliers are the most unusual images in the collection.
 # For a fixed number of groups in a very large collection, use k-means, or e-means
-# (Bessa et al. 2026), a faster version in Faiss: github.com/facebookresearch/faiss/tree/main/contrib/e_means
+# (Bessa et al. 2026), a faster version in Faiss: github.com/facebookresearch/faiss/tree/main/contrib/e_means</code></pre></div>
+    </details>
+    <div class="prose">
+      <ol start="3">
+        <li>Search. Type a phrase and rank the images by how well they match it. This needs a model with a text side, such as SigLIP 2, because DINOv3 embeds images only.</li>
+      </ol>
+    </div>
+    <details class="code">
+      <summary><span class="ttl">Search images by text</span> <span class="lang">python · transformers</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import torch
+from PIL import Image
+from transformers import AutoModel, AutoProcessor
 
+# image_paths: a list of paths to the image files
 # Text search. DINOv3 has no text side, so embed the images again with SigLIP 2.
 ckpt = "google/siglip2-so400m-patch16-384"   # tested with "google/siglip2-base-patch16-224", the small one
 model = AutoModel.from_pretrained(ckpt).eval()
