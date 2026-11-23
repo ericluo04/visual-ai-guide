@@ -1129,7 +1129,8 @@ def label_image(path):
     <p class="prose">You can ask a VLM to answer several questions about an image at once and return the answers as named fields (JSON), for example whether a person appears, how many people there are, and the price shown: <code>{"has_person": true, "n_people": 2, "price": "4.99"}</code>. VLMs answer this kind of question well when the answer is a category, a small count, or text printed in the ad.</p>
     <details class="code">
       <summary><span class="ttl">Label ads through a closed API</span> <span class="lang">python · anthropic</span></summary>
-      <div class="codewrap"><pre><code class="language-python">import base64, datetime, json, mimetypes
+      <div class="codewrap"><pre><code class="language-python"># Checked against the anthropic SDK types; not yet run against the live API.
+import base64, datetime, json, mimetypes
 import anthropic
 
 client = anthropic.Anthropic()               # reads ANTHROPIC_API_KEY from the environment
