@@ -96,7 +96,8 @@ code { font-family: var(--font-mono); font-size: 0.86em; background: var(--surfa
 .brand-mark i { width: 5px; height: 5px; border-radius: 1px; background: var(--accent); }
 .topnav { display: flex; gap: 2px; margin-left: auto; overflow-x: auto; scrollbar-width: none; min-width: 0; }
 .topnav::-webkit-scrollbar { display: none; }
-.topnav a { font-size: 0.86rem; color: var(--muted); text-decoration: none; padding: 6px 8px; border-radius: 6px; white-space: nowrap; }
+.topnav a { font-size: 0.86rem; color: var(--muted); text-decoration: none; padding: 6px; border-radius: 6px; white-space: nowrap; }
+.topnav .nav-m { display: none; }   /* phone-only links: on wider screens the rail lists these sections */
 .topnav a:hover { color: var(--fg); background: var(--surface-2); }
 .theme-btn {
   flex: none; display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px;
@@ -106,6 +107,14 @@ code { font-family: var(--font-mono); font-size: 0.86em; background: var(--surfa
 .theme-btn:hover { border-color: var(--muted); }
 .theme-btn svg { width: 15px; height: 15px; }
 @media (max-width: 1100px) { .topnav { display: none; } .theme-btn { margin-left: auto; } }
+/* Below 900 px the rail is hidden, so the section links return as a second row that scrolls sideways. */
+@media (max-width: 900px) {
+  html { scroll-padding-top: 112px; }
+  .topbar .wrap { flex-wrap: wrap; height: auto; row-gap: 0; }
+  .brand { height: 58px; }
+  .topnav { display: flex; order: 3; flex: 1 0 100%; margin: -4px 0 0 -6px; padding-bottom: 6px; }
+  .topnav .nav-m { display: block; }
+}
 
 /* Page grid */
 .page { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); gap: 56px; padding-block: 40px 96px; }
@@ -217,7 +226,6 @@ p.prose { display: block; }
 }
 .ex-lbl { margin-top: 4px; font: 600 0.78rem var(--font-body); color: var(--fg); }
 .ex-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-.sub-h { margin: 24px 0 8px; }
 .ex-chips a { display: inline-block; flex: 0 0 auto; max-width: 100%; white-space: nowrap; padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-2); font: 500 0.8rem var(--font-body); text-decoration: none; }
 .ex-chips a:hover { border-color: var(--accent); background: var(--accent-soft); }
 
@@ -248,6 +256,40 @@ td .links { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 0.82rem; }
 .badge { display: inline-block; font: 600 0.68rem var(--font-mono); padding: 2px 7px; border-radius: 999px; letter-spacing: 0.02em; white-space: nowrap; }
 .badge.open { color: var(--open); background: var(--open-soft); }
 .badge.closed { color: var(--closed); background: var(--closed-soft); }
+/* Phones: each table row becomes a stacked block. In the picks tables (rows with a Released cell) the name,
+   badge, and date share one line and the remaining cells run full width beneath. The other tables label
+   each cell with its column name, set per table class below. */
+@media (max-width: 640px) {
+  .tbl { overflow-x: visible; }
+  .tbl table, .tbl tbody, .tbl tr, .tbl td { display: block; }
+  .tbl table { min-width: 0; }
+  .tbl thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .tbl tr { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 10px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+  .tbl tr:last-child { border-bottom: 0; }
+  .tbl td { flex: 1 1 100%; min-width: 0; padding: 0; border-bottom: 0; }
+  .tbl tr:has(> td.rel) > td:first-child, .tbl td:has(> .badge), .tbl td.rel { flex: 0 1 auto; }
+  .tbl tr:has(> td.rel) > td:first-child { margin-right: auto; }
+  td .name { white-space: normal; }
+  #represent .tbl td:nth-child(4) { min-width: 0; }
+  .tbl td::before { display: block; margin-bottom: 2px; font: 600 0.68rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+  #represent .tbl tr:has(> td.rel) > td:nth-child(4)::before { content: "Embeds"; }
+  .t-output td:nth-child(2)::before { content: "Global embedding"; }
+  .t-output td:nth-child(3)::before { content: "Patch embeddings"; }
+  .t-approach td:nth-child(2)::before { content: "When"; }
+  .t-approach td:nth-child(3)::before { content: "Images needed"; }
+  .t-approach td:nth-child(4)::before { content: "Cost"; }
+  .t-peft td:nth-child(2)::before { content: "What it does"; }
+  .t-peft td:nth-child(3)::before { content: "Setting in peft"; }
+  .t-explain td:nth-child(2)::before { content: "What it shows"; }
+  .t-explain td:nth-child(3)::before { content: "Evidence that it is reliable"; }
+  .t-local td:nth-child(4)::before { content: "In Captum"; }
+  .t-global td:nth-child(4)::before { content: "Code"; }
+  .t-infer td:nth-child(1)::before { content: "The predicted variable is"; }
+  .t-infer td:nth-child(2)::before { content: "Method"; }
+  .t-infer td:nth-child(3)::before { content: "Package"; }
+  .t-current td:nth-child(2)::before { content: "Leaderboard"; }
+  .t-current td:nth-child(3)::before { content: "Open vs closed"; }
+}
 
 /* Note, track, paper */
 .note { padding: 14px 16px; border-radius: var(--radius); background: var(--accent-soft); font-size: 0.93rem; display: grid; gap: 8px; }
@@ -332,11 +374,14 @@ footer .wrap { display: grid; gap: 6px; }
       <a href="#represent">Embed</a>
       <a href="#label">Label</a>
       <a href="#predict">Predict</a>
+      <a href="#predict-explain-the-predictions">Explain</a>
       <a href="#inference">Inference</a>
       <a href="#generate-images">Generate</a>
       <a href="#video-analyze">Video</a>
+      <a class="nav-m" href="#video-generate">Generate video</a>
       <a href="#more-tools">More tools</a>
       <a href="#current">Stay current</a>
+      <a class="nav-m" href="#companion">Companion</a>
     </nav>
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch color theme">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg>
@@ -353,6 +398,7 @@ footer .wrap { display: grid; gap: 6px; }
       <li><a href="#represent">Embed images</a></li>
       <li><a href="#label">Label images with a VLM</a></li>
       <li><a href="#predict">Predict outcomes</a></li>
+      <li><a href="#predict-explain-the-predictions">Explain the predictions</a></li>
       <li><a href="#inference">Inference with predicted variables</a></li>
       <li><a href="#generate-images">Generate and edit images</a></li>
       <li><a href="#video-analyze">Video analysis</a></li>
@@ -767,37 +813,6 @@ footer .wrap { display: grid; gap: 6px; }
   <div class="stack">
     <p class="prose">No independent benchmark compares the two closed APIs, Gemini Embedding 2 and voyage-multimodal-3.5. Listing Gemini first is a judgment call. OpenAI offers no image embedding model.</p>
 
-    <div class="track">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
-      <ul>
-        <li><a href="https://huggingface.co/spaces/TIGER-Lab/MMEB-Leaderboard">MMEB leaderboard</a><span>Universal multimodal embeddings. For image work, read the MMEB-V2 and Image columns. The default V3 tab gives a model zero for every input type it cannot read, such as video or audio.</span></li>
-        <li><a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB, image tabs (MIEB)</a><span>130 image tasks, including regressions on embeddings (linear probes) and clustering, the closest board to "features for my own model".</span></li>
-        <li><a href="https://mteb-leaderboard.hf.space/?benchmark_name=ViDoRe(v3)">ViDoRe V3</a><span>Retrieval of document pages such as catalogs and slides. Its results now live on the MTEB leaderboard.</span></li>
-        <li>Patch quality<span>No standing leaderboard. Read the ADE20k linear-probe and zero-shot segmentation tables in each new model's paper.</span></li>
-      </ul>
-    </div>
-
-    <div class="mkt">
-      <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
-      <ul class="mkt-list">
-        <li><p class="cite">Cao, Jingcun, Xiaolin Li, and Lingling Zhang (2025). "Is Relevancy Everything? A Deep-Learning Approach to Understand the Effect of Image-Text Congruence." Management Science 71(12): 10579–10602. <a href="https://doi.org/10.1287/mnsc.2022.01896">doi</a></p>
-          <p>Embeds each image with a pretrained image network (ResNet) and its text with a language model (BERT), scores how well the two match, and uses that score as a regressor. Reader preference is U-shaped in image-text congruence.</p></li>
-      </ul>
-    </div>
-
-    <h3>Which output is the global embedding</h3>
-    <p class="prose">Each model returns its global embedding under a different name. The code below already takes the right one. Skip this table unless you write your own code. It uses the output names of the Hugging Face transformers classes.</p>
-    <div class="tbl"><table>
-      <thead><tr><th>Model</th><th>Global embedding</th><th>Patch embeddings</th></tr></thead>
-      <tbody>
-        <tr><td><span class="name">DINOv3</span></td><td><code>pooler_output</code>: the CLS token after the final layer norm. The CLS token concatenated with the mean patch is a common alternative.</td><td><code>last_hidden_state[:, 5:]</code>. Skip 1 CLS and 4 register tokens. Patch size 16, so 224 px gives a 14 × 14 grid.</td></tr>
-        <tr><td><span class="name">SigLIP 2</span></td><td><code>image_embeds</code> or <code>pooler_output</code> from an attention-pooling head. There is no CLS token.</td><td>Available, but poorly aligned with text. Use TIPSv2 or DINOv3 for maps.</td></tr>
-        <tr><td><span class="name">TIPSv2</span></td><td><code>pooler_output</code>, which is token 0.</td><td>Skip 2 tokens. Patch size 14, and the default 448 px gives 32 × 32.</td></tr>
-        <tr><td><span class="name">Qwen3-VL-Embedding, WeMM-Embedding</span></td><td>The last token of the language model, returned directly.</td><td>None.</td></tr>
-        <tr><td><span class="name">Closed APIs</span></td><td>One vector per input item. The company does not document how it is computed.</td><td>None.</td></tr>
-      </tbody>
-    </table></div>
-
     <details class="code">
       <summary>DINOv3: global and patch embeddings <span class="lang">python · transformers</span></summary>
       <div class="codewrap"><pre><code class="language-python">import torch
@@ -858,6 +873,37 @@ result = client.models.embed_content(
 )
 vectors = [e.values for e in result.embeddings]   # 3 lists of 768 floats</code></pre></div>
     </details>
+
+    <div class="track">
+      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
+      <ul>
+        <li><a href="https://huggingface.co/spaces/TIGER-Lab/MMEB-Leaderboard">MMEB leaderboard</a><span>Universal multimodal embeddings. For image work, read the MMEB-V2 and Image columns. The default V3 tab gives a model zero for every input type it cannot read, such as video or audio.</span></li>
+        <li><a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB, image tabs (MIEB)</a><span>130 image tasks, including regressions on embeddings (linear probes) and clustering, the closest board to "features for my own model".</span></li>
+        <li><a href="https://mteb-leaderboard.hf.space/?benchmark_name=ViDoRe(v3)">ViDoRe V3</a><span>Retrieval of document pages such as catalogs and slides. Its results now live on the MTEB leaderboard.</span></li>
+        <li>Patch quality<span>No standing leaderboard. Read the ADE20k linear-probe and zero-shot segmentation tables in each new model's paper.</span></li>
+      </ul>
+    </div>
+
+    <div class="mkt">
+      <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
+      <ul class="mkt-list">
+        <li><p class="cite">Cao, Jingcun, Xiaolin Li, and Lingling Zhang (2025). "Is Relevancy Everything? A Deep-Learning Approach to Understand the Effect of Image-Text Congruence." Management Science 71(12): 10579–10602. <a href="https://doi.org/10.1287/mnsc.2022.01896">doi</a></p>
+          <p>Embeds each image with a pretrained image network (ResNet) and its text with a language model (BERT), scores how well the two match, and uses that score as a regressor. Reader preference is U-shaped in image-text congruence.</p></li>
+      </ul>
+    </div>
+
+    <h3>Which output is the global embedding</h3>
+    <p class="prose">Each model returns its global embedding under a different name. The code above already takes the right one. Skip this table unless you write your own code. It uses the output names of the Hugging Face transformers classes.</p>
+    <div class="tbl"><table class="t-output">
+      <thead><tr><th>Model</th><th>Global embedding</th><th>Patch embeddings</th></tr></thead>
+      <tbody>
+        <tr><td><span class="name">DINOv3</span></td><td><code>pooler_output</code>: the CLS token after the final layer norm. The CLS token concatenated with the mean patch is a common alternative.</td><td><code>last_hidden_state[:, 5:]</code>. Skip 1 CLS and 4 register tokens. Patch size 16, so 224 px gives a 14 × 14 grid.</td></tr>
+        <tr><td><span class="name">SigLIP 2</span></td><td><code>image_embeds</code> or <code>pooler_output</code> from an attention-pooling head. There is no CLS token.</td><td>Available, but poorly aligned with text. Use TIPSv2 or DINOv3 for maps.</td></tr>
+        <tr><td><span class="name">TIPSv2</span></td><td><code>pooler_output</code>, which is token 0.</td><td>Skip 2 tokens. Patch size 14, and the default 448 px gives 32 × 32.</td></tr>
+        <tr><td><span class="name">Qwen3-VL-Embedding, WeMM-Embedding</span></td><td>The last token of the language model, returned directly.</td><td>None.</td></tr>
+        <tr><td><span class="name">Closed APIs</span></td><td>One vector per input item. The company does not document how it is computed.</td><td>None.</td></tr>
+      </tbody>
+    </table></div>
 
     <h3 id="represent-compare-group-and-search-images">Compare, group, and search images</h3>
     <p class="prose">Two images are alike when their global embeddings point in the same direction. Cosine similarity measures that, on a scale from -1 to 1, where 1 means the same direction.</p>
@@ -1159,7 +1205,7 @@ def label_image(path, log_file="labels_raw.jsonl"):
     <p class="lede">To predict clicks, likes, or sales from images, transfer what a pretrained model already knows. Start with the cheapest version. Keep a costlier version only if it predicts held-out data measurably better.</p>
   </header>
 
-  <div class="tbl"><table>
+  <div class="tbl"><table class="t-approach">
     <thead><tr><th>Approach</th><th>When</th><th>Images needed</th><th>Cost</th></tr></thead>
     <tbody>
       <tr><td><span class="name">Embeddings + high-dimensional regression</span><br><small>DINOv3 or SigLIP 2, with ridge, lasso, elastic net, or Bayesian shrinkage</small></td><td>The default for every market outcome. The image model stays as it is. Only the regression is fit. Report it even when you use something else.</td><td>Hundreds and up</td><td>One pass per image, then a CPU regression</td></tr>
@@ -1217,7 +1263,7 @@ print("out-of-fold R2:", 1 - ((y - yhat) ** 2).sum() / ((y - y.mean()) ** 2).sum
       <p>Fine-tuning means training an existing model further on your own data. Full fine-tuning updates billions of numbers inside the model, which takes more computing power and data than most research projects have. Parameter-efficient fine-tuning (PEFT) leaves the original model as it is and learns a small set of extra adjustments on top, called an adapter. The adapter fits on one GPU and is saved as a small file next to the model.</p>
       <p>The most common PEFT method is LoRA (low-rank adaptation), and plain LoRA applied to every layer is a good default. On small and medium datasets it matches full fine-tuning, provided the learning rate (the step size of each training update) is about 10 times the rate used for full fine-tuning (<a href="https://thinkingmachines.ai/blog/lora/">LoRA Without Regret</a>). The variants in the table change how the adapter is set up or stored, and you can try them with one setting each.</p>
     </div>
-    <div class="tbl"><table>
+    <div class="tbl"><table class="t-peft">
       <thead><tr><th>Method</th><th>What it does</th><th>Setting in the Hugging Face peft library</th></tr></thead>
       <tbody>
         <tr><td><a href="https://arxiv.org/abs/2106.09685">LoRA</a></td><td>Adds a small adapter to each layer of the model.</td><td><code>LoraConfig</code></td></tr>
@@ -1379,17 +1425,23 @@ print(out.logits)   # shape (1, 1): one number for the image and prompt
 # To train it, wrap with get_peft_model(..., task_type="SEQ_CLS") and train with a plain
 # PyTorch loop and nn.MSELoss, as in the DINOv3 snippet. SFTTrainer does not work here.</code></pre></div>
     </details>
+  </div>
+</section>
+<section class="s" id="predict-explain-the-predictions">
+  <header>
+    <h2>Explain the predictions</h2>
+    <p class="lede">A heatmap shows which parts of an image pushed a prediction up or down. The methods below make such a map after a model is trained, without changing the model. If you fit the embeddings regression on the average of each image's patch embeddings, the <a href="#represent">outcome heatmap in Embed images</a> already splits each prediction across the image, up to the regression's constant.</p>
+  </header>
 
-    <h3 id="predict-explain-the-predictions">Explain the predictions</h3>
+  <div class="stack">
     <div class="prose">
-      <p>A heatmap shows which parts of an image pushed a prediction up or down. The methods below make such a map after a model is trained, without changing the model. If you fit the embeddings regression on the average of each image's patch embeddings, the <a href="#represent">outcome heatmap in Embed images</a> already splits each prediction across the image, up to the regression's constant.</p>
       <p>A local method explains one prediction: it shows which pixels in this image moved this score. A global method explains the model as a whole, by naming the concepts it relies on across many images, such as faces or text overlays. These methods also work on the embeddings regression: the frozen image model and the regression on top form one network, so you can run them from the pixels to the predicted outcome.</p>
     </div>
-    <h4 class="sub-h" id="predict-local-methods">Local methods</h4>
+    <h3 id="predict-local-methods">Local methods</h3>
     <div class="prose">
       <p><a href="https://captum.ai/docs/attribution_algorithms">Captum</a> implements the widely used local methods for PyTorch models. The table lists the ones with the best evidence that their maps reflect what the model does.</p>
     </div>
-    <div class="tbl"><table>
+    <div class="tbl"><table class="t-explain t-local">
       <thead><tr><th>Method</th><th>What it shows</th><th>Evidence that it is reliable</th><th>In Captum</th></tr></thead>
       <tbody>
         <tr><td><a href="https://proceedings.mlr.press/v70/sundararajan17a.html">Integrated Gradients</a></td><td>How much each pixel moves the score. The method fades a starting image (such as random noise) into yours in small steps and adds up each pixel's effect.</td><td>The best model-agnostic method on a convolutional network (an older family of image models), and tied for best on a vision transformer, in <a href="https://arxiv.org/abs/2407.11910">Hesse et al. (2024)</a>, when the starting image is uniform random noise.</td><td><code>IntegratedGradients</code></td></tr>
@@ -1455,11 +1507,11 @@ model = ViTForImageClassification(model.config).eval()</code></pre></div>
       </ul>
     </div>
 
-    <h4 class="sub-h" id="predict-global-methods">Global methods</h4>
+    <h3 id="predict-global-methods">Global methods</h3>
     <div class="prose">
       <p>These methods look across many images and name the concepts that the model relies on. A 2026 benchmark found that no unsupervised concept method tracks the model faithfully (<a href="https://arxiv.org/abs/2504.10833">Kumar and Ahuja, CVPR 2026</a>), so treat the concepts as hypotheses to test.</p>
     </div>
-    <div class="tbl"><table>
+    <div class="tbl"><table class="t-explain t-global">
       <thead><tr><th>Method</th><th>What it shows</th><th>Evidence that it is reliable</th><th>Code</th></tr></thead>
       <tbody>
         <tr><td><a href="https://doi.org/10.1093/qje/qjad055">Ludwig and Mullainathan</a><br><small>QJE 2024</small></td><td>Pairs of synthetic images that differ only in what raises or lowers the model's prediction. People describe in their own words what changed, and each description is a hypothesis to test.</td><td>In their mugshot study, people named features such as "well-groomed" and "heavy-faced", which predicted judges' detention decisions beyond the factors already known.</td><td>No package. You need a generative model trained on your images (a GAN or diffusion model) and your predictor. The authors' <a href="https://doi.org/10.7910/DVN/ILO46V">replication record</a> describes their pipeline but holds only a README.</td></tr>
@@ -1526,7 +1578,7 @@ craft.plot_concepts_crops(nb_crops=10)       # the crops that score highest on e
     <p>If you trained the model yourself, leave its training images out of the regression, or use cross-fitted predictions.</p>
   </div>
 
-  <div class="tbl"><table>
+  <div class="tbl"><table class="t-infer">
     <thead><tr><th>The predicted variable is</th><th>Method</th><th>Package</th></tr></thead>
     <tbody>
       <tr><td>The outcome. Example: a VLM codes whether each ad shows a person, and you compare that share across campaigns.</td><td>Prediction-powered inference, PPI and PPI++ (<a href="https://doi.org/10.1126/science.adi6000">Angelopoulos et al. 2023</a>; <a href="https://doi.org/10.1214/26-aoas2215">Angelopoulos, Duchi, and Zrnic 2026</a>)</td><td><a href="https://github.com/aangelopoulos/ppi_py">ppi_py</a> (Python), <a href="https://github.com/ipd-tools/ipd">ipd</a> (R)</td></tr>
@@ -1678,6 +1730,17 @@ edited.save("ad_white_background.png")
       <p>The top open image models all restrict use. Qwen-Image-2.1 is research only. FLUX 3 Image Klein allows commercial use only for firms under US$5 million in revenue. MiniMax H3-Image grants no rights in the United States, the EU, the UK, or South Korea. A LoRA you train on one of these falls under the same terms, so start from an Apache 2.0 model such as FLUX.2 [klein] 4B if a brand partner will use the images.</p>
     </div>
 
+    <div class="track">
+      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
+      <ul>
+        <li><a href="https://artificialanalysis.ai/image/leaderboard/text-to-image">Artificial Analysis, text to image</a><span>Blind pairwise votes. Has an open-weights filter (open models only) and price per image.</span></li>
+        <li><a href="https://artificialanalysis.ai/image/leaderboard/editing">Artificial Analysis, editing</a><span>The same method for instruction edits. Editing ranks differ from generation ranks.</span></li>
+        <li><a href="https://arena.ai/leaderboard/text-to-image">Arena, text to image</a><span>Crowd votes with a licence column (formerly LMArena). Entries with few votes are marked preliminary.</span></li>
+        <li><a href="https://arena.ai/leaderboard/image-edit">Arena, image edit</a><span>Crowd votes on single-image edits.</span></li>
+        <li><a href="https://github.com/PKU-YuanGroup/ImgEdit">ImgEdit-Bench</a><span>Fixed prompts. Its detail-preservation score measures whether an edit leaves the rest of the image alone.</span></li>
+      </ul>
+    </div>
+
     <div class="mkt">
       <div class="mkt-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></svg>In marketing research</div>
       <ul class="mkt-list">
@@ -1776,20 +1839,9 @@ image.save("sks_lora.png")</code></pre></div>
     <div class="prose">
       <ul>
         <li>An image generator starts every picture from random noise, and a number called the seed fixes that noise. To change one attribute and hold everything else fixed, keep the seed the same and change only the prompt or the strength of your LoRA. OpenAI's and Microsoft's image APIs do not let you fix the seed. Some closed APIs do, such as FLUX.2 [pro].</li>
-        <li>Asking a model to edit an image ("make the bottle green") can also change things you did not ask for. Measure how much the rest of the image changed and report it as a manipulation check. ImgEdit-Bench's detail-preservation score, in Track it below, is one such measure.</li>
+        <li>Asking a model to edit an image ("make the bottle green") can also change things you did not ask for. Measure how much the rest of the image changed and report it as a manipulation check. ImgEdit-Bench's detail-preservation score, in Track it above, is one such measure.</li>
         <li>Generate the full stimulus set once and archive the files with their prompts, the model name, and the date (see <a href="#current">Stay current</a>). If you may need new stimuli later, use an open model and keep a copy of it.</li>
         <li>Gemini images carry a hidden SynthID watermark. OpenAI images can carry the same watermark and content credentials (C2PA), a record inside the file that says how the image was made. Open models add no marking. Since 2 August 2026, Article 50(2) of the EU AI Act requires providers of image generators to mark outputs in a machine-readable way. Generators already on the market before that date must comply by 2 December 2026. Article 50(4) requires anyone who uses an AI system to make or alter a deepfake (a realistic AI-made image of a real person, object, or place) to disclose that it is AI-generated.</li>
-      </ul>
-    </div>
-
-    <div class="track">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Track it</h4>
-      <ul>
-        <li><a href="https://artificialanalysis.ai/image/leaderboard/text-to-image">Artificial Analysis, text to image</a><span>Blind pairwise votes. Has an open-weights filter (open models only) and price per image.</span></li>
-        <li><a href="https://artificialanalysis.ai/image/leaderboard/editing">Artificial Analysis, editing</a><span>The same method for instruction edits. Editing ranks differ from generation ranks.</span></li>
-        <li><a href="https://arena.ai/leaderboard/text-to-image">Arena, text to image</a><span>Crowd votes with a licence column (formerly LMArena). Entries with few votes are marked preliminary.</span></li>
-        <li><a href="https://arena.ai/leaderboard/image-edit">Arena, image edit</a><span>Crowd votes on single-image edits.</span></li>
-        <li><a href="https://github.com/PKU-YuanGroup/ImgEdit">ImgEdit-Bench</a><span>Fixed prompts. Its detail-preservation score measures whether an edit leaves the rest of the image alone.</span></li>
       </ul>
     </div>
 
@@ -2323,7 +2375,7 @@ print(df[["fileName", "brightnessMean", "colorfulness", "visualComplexity", "nim
     <p class="lede">The picks on this page will age faster than the leaderboards that rank them. Check the leaderboard for your task before you start a project and again before you submit, and look at when the leaderboard was last updated.</p>
   </header>
 
-  <div class="tbl"><table>
+  <div class="tbl"><table class="t-current">
     <thead><tr><th>Task</th><th>Leaderboard</th><th>Open vs closed</th></tr></thead>
     <tbody>
       <tr><td>Image and multimodal embeddings</td><td><a href="https://huggingface.co/spaces/TIGER-Lab/MMEB-Leaderboard">MMEB</a>, <a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB image tabs (MIEB)</a></td><td>Mostly open models; few closed APIs submit</td></tr>
