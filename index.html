@@ -1503,7 +1503,7 @@ edited.save("ad_white_background.png")
         <li>To teach a visual style, use a few hundred images, each with a short caption.</li>
         <li>Some makers release two versions of a model: a fast version that has been simplified for quick generation, and the full "base" version. Train on the base version when there is one.</li>
       </ul>
-      <p>Two maintained training tools support Qwen-Image and FLUX.2. The <a href="https://github.com/huggingface/diffusers/tree/main/examples/dreambooth">diffusers DreamBooth scripts</a>, used in the code below, show every step in Python. <a href="https://github.com/ostris/ai-toolkit">ai-toolkit</a> is the quickest to start and has a point-and-click interface.</p>
+      <p>The <a href="https://github.com/huggingface/diffusers/tree/main/examples/dreambooth">diffusers DreamBooth scripts</a>, used in the code below, show every step in Python. <a href="https://github.com/ostris/ai-toolkit">ai-toolkit</a> is the quickest to start and has a point-and-click interface. Both support Qwen-Image and FLUX.2.</p>
     </div>
 
     <details class="code">
@@ -1818,7 +1818,7 @@ src, src_fps = load_video("ad_0193.mp4", return_fps=True)
 step = src_fps / 16                     # resample to 16 fps, or the edit plays in slow motion
 if (N - 1) * step >= len(src):
     raise ValueError(f"The ad is {len(src) / src_fps:.1f} s long. "
-                     f"{N} frames at 16 fps need at least {(N - 1) / 16:.1f} s.")
+                     f"{N} frames at 16 fps need at least {N / 16:.1f} s.")
 frames = [src[int(i * step)].resize((W, H)) for i in range(N)]
 # Mask: white means regenerate, black means keep. This rectangle covers the top half,
 # where the background is. A mask that traces the object fits better.
