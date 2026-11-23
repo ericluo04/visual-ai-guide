@@ -1015,7 +1015,7 @@ def label_image(path):
     <thead><tr><th>Approach</th><th>When</th><th>Images needed</th><th>Cost</th></tr></thead>
     <tbody>
       <tr><td><span class="name">Embeddings + high-dimensional regression</span><br><small>DINOv3 or SigLIP 2, with ridge, lasso, elastic net, or Bayesian shrinkage</small></td><td>The default for every market outcome. The image model stays as it is. Only the regression is fit. Report it even when you use something else.</td><td>Hundreds and up</td><td>One pass per image, then a CPU regression</td></tr>
-      <tr><td><span class="name">Fine-tune the image model</span><br><small>LoRA on DINOv3 or SigLIP 2</small></td><td>The image model itself is adjusted to your outcome. Try it when you have about 10,000 or more images with an observed outcome and the images look unlike everyday web photos (packaging close-ups, text-heavy thumbnails). Keep it only if it predicts held-out data measurably better than the embeddings regression.</td><td>About 10,000 and up</td><td>One GPU, hours, repeated for each of the five folds (see below)</td></tr>
+      <tr><td><span class="name">Fine-tune the image model</span><br><small>LoRA on DINOv3 or SigLIP 2, with a regression head on the global embedding</small></td><td>The image model itself is adjusted to your outcome. Try it when you have about 10,000 or more images with an observed outcome and the images look unlike everyday web photos (packaging close-ups, text-heavy thumbnails). Keep it only if it predicts held-out data measurably better than the embeddings regression.</td><td>About 10,000 and up</td><td>One GPU, hours, repeated for each of the five folds (see below)</td></tr>
       <tr><td><span class="name">Fine-tune a VLM</span><br><small>LoRA on Qwen3.8 or Gemma 4</small></td><td>The outcome depends on text in or beside the image (packaging copy, the ad headline, the post caption) or on how things in the scene relate, such as who is holding the product.</td><td>Thousands and up</td><td>One large GPU, hours to days</td></tr>
       <tr><td><span class="name">Zero-shot VLM</span></td><td>Only for concepts a person can define. See <a href="#label">Label</a>.</td><td>None, plus a hand-coded sample</td><td>Running the model, or API fees</td></tr>
     </tbody>
@@ -1032,7 +1032,7 @@ from transformers import AutoImageProcessor, AutoModel
 from sklearn.linear_model import RidgeCV
 from sklearn.model_selection import KFold, cross_val_predict
 
-MODEL_ID = "facebook/dinov3-vitl16-pretrain-lvd1689m"   # gated: accept the licence on HF
+MODEL_ID = "facebook/dinov3-vitb16-pretrain-lvd1689m"   # gated: accept the licence on HF
 processor = AutoImageProcessor.from_pretrained(MODEL_ID)
 model = AutoModel.from_pretrained(MODEL_ID, device_map="auto").eval()
 
@@ -1045,7 +1045,7 @@ def embed(paths, bs=32):
         out.append(model(**x).pooler_output.float().cpu().numpy())
     return np.vstack(out)
 
-X = embed(image_paths)                       # n x 1024
+X = embed(image_paths)                       # n x 768
 y = np.log1p(likes)                          # long-tailed outcome on the log scale
 folds = KFold(5, shuffle=True, random_state=0)   # if images share accounts: GroupKFold(5), and pass groups= below
 yhat = cross_val_predict(RidgeCV(alphas=np.logspace(-2, 4, 25)), X, y, cv=folds)
@@ -1078,7 +1078,7 @@ print("out-of-fold R2:", 1 - ((y - yhat) ** 2).sum() / ((y - y.mean()) ** 2).sum
         <tr><td><a href="https://arxiv.org/abs/2312.03732">rsLoRA</a></td><td>Rescales each adapter's update so that larger adapters still train smoothly.</td><td><code>use_rslora=True</code></td></tr>
       </tbody>
     </table></div>
-    <p class="prose">The easiest start on one GPU is a ready-made notebook from <a href="https://github.com/unslothai/unsloth">Unsloth</a> (<a href="https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_5_%284B%29_Vision.ipynb">Qwen3.5 4B</a>, <a href="https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Gemma4_%28E4B%29-Vision.ipynb">Gemma 4 E4B</a>): open it and swap in your own images and labels. <a href="https://huggingface.co/docs/trl/main/training_vlm_sft">TRL</a> is the standard Hugging Face library for the same job. <a href="https://github.com/hiyouga/LlamaFactory">LlamaFactory</a> runs from a config file or web UI. <a href="https://github.com/modelscope/ms-swift">ms-swift</a> has command-line options for models that output a class or a number. To fine-tune an image model such as DINOv3 or SigLIP 2 instead, wrap it with the same <code>LoraConfig</code> and add a small output layer for your outcome (<a href="https://huggingface.co/docs/peft/main/en/task_guides/image_classification_lora">PEFT guide for a ViT</a>).</p>
+    <p class="prose">The easiest start on one GPU is a ready-made notebook from <a href="https://github.com/unslothai/unsloth">Unsloth</a> (<a href="https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_5_%284B%29_Vision.ipynb">Qwen3.5 4B</a>, <a href="https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Gemma4_%28E4B%29-Vision.ipynb">Gemma 4 E4B</a>): open it and swap in your own images and labels. <a href="https://huggingface.co/docs/trl/main/training_vlm_sft">TRL</a> is the standard Hugging Face library for the same job. <a href="https://github.com/hiyouga/LlamaFactory">LlamaFactory</a> runs from a config file or web UI. <a href="https://github.com/modelscope/ms-swift">ms-swift</a> has command-line options for models that output a class or a number. To fine-tune an image model such as DINOv3 or SigLIP 2 instead, put a small output layer (a regression head) on the global embedding, because your outcome belongs to the whole image. A head on the patch embeddings is for tasks that need one answer per region, such as segmentation. Wrap the model with the same <code>LoraConfig</code> and train the head and the adapter together (<a href="https://huggingface.co/docs/peft/main/en/task_guides/image_classification_lora">PEFT guide for a ViT</a>).</p>
 
     <details class="code">
       <summary><span class="ttl">Train a LoRA on your labeled images (TRL)</span> <span class="lang">python · trl + peft</span></summary>
@@ -1149,6 +1149,49 @@ def label_image(path):
     return processor.decode(out[0][inputs["input_ids"].shape[-1]:], skip_special_tokens=True).strip()
 
 print(label_image("new_ad.jpg"))</code></pre></div>
+    </details>
+
+    <details class="code">
+      <summary><span class="ttl">Fine-tune DINOv3 with LoRA and a regression head</span> <span class="lang">python · transformers + peft</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import torch
+from torch import nn
+from PIL import Image
+from peft import LoraConfig, get_peft_model
+from transformers import AutoImageProcessor, AutoModel
+
+MODEL_ID = "facebook/dinov3-vitb16-pretrain-lvd1689m"   # tested with "facebook/dinov3-vits16-pretrain-lvd1689m", the small one
+processor = AutoImageProcessor.from_pretrained(MODEL_ID)
+backbone = AutoModel.from_pretrained(MODEL_ID, device_map="auto")
+backbone = get_peft_model(backbone, LoraConfig(r=16, lora_alpha=16, lora_dropout=0.05,
+                                               target_modules="all-linear"))   # plain LoRA on every layer
+
+class Regressor(nn.Module):   # one number per image, read off the global embedding
+    def __init__(self, backbone):
+        super().__init__()
+        self.backbone = backbone
+        self.head = nn.Linear(backbone.config.hidden_size, 1)
+    def forward(self, pixel_values):
+        z = self.backbone(pixel_values=pixel_values).pooler_output   # CLS token after the final layer norm
+        return self.head(z).squeeze(-1)
+
+model = Regressor(backbone).to(backbone.device)
+params = [p for p in model.parameters() if p.requires_grad]   # the head and the adapter only
+print("trainable parameters:", sum(p.numel() for p in params))
+opt = torch.optim.AdamW(params, lr=1e-4)   # about 10 times a full fine-tuning rate (see above)
+loss_fn = nn.MSELoss()                     # for a yes/no outcome use nn.BCEWithLogitsLoss()
+
+# train_paths, train_y: images and outcomes (such as log click-through rate) in four of the five folds
+model.train()
+for epoch in range(3):
+    for i in range(0, len(train_paths), 16):
+        imgs = [Image.open(p).convert("RGB") for p in train_paths[i:i + 16]]
+        x = processor(images=imgs, return_tensors="pt").pixel_values.to(backbone.device)
+        y = torch.tensor(train_y[i:i + 16], dtype=torch.float32, device=backbone.device)
+        loss = loss_fn(model(x), y)
+        opt.zero_grad(); loss.backward(); opt.step()
+# Repeat this for each of the five cross-fitting folds and predict only the held-out fold.
+model.backbone.save_pretrained("dinov3-lora")                # saves only the adapter
+torch.save(model.head.state_dict(), "dinov3-lora/head.pt")   # the head is saved separately</code></pre></div>
     </details>
 
     <h3>Getting a number out of a VLM</h3>
