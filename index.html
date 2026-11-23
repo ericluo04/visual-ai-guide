@@ -590,11 +590,11 @@ footer .wrap { display: grid; gap: 6px; }
     options: [
       { label: "Turn images into numbers", hint: "Features for regression, clustering, or search", href: "#represent", next: {
         q: "What will you use the numbers for?", options: [
-          { label: "Group or compare images", hint: "Clusters, typicality, uniqueness", next: leaf("#represent", [
+          { label: "Group or compare images", hint: "Clusters, typicality, uniqueness", next: leaf("#represent-compare-group-and-search-images", [
             p("DINOv3", "open", "Appearance features, one vector per image. Commercial use allowed."),
             p("SigLIP 2", "open", "Content in a space shared with text. Any use."),
             p("Gemini Embedding 2", "closed", "No GPU.")], REG) },
-          { label: "Search images by text", hint: "Short phrases or long queries", next: leaf("#represent", [
+          { label: "Search images by text", hint: "Short phrases or long queries", next: leaf("#represent-compare-group-and-search-images", [
             p("SigLIP 2", "open", "Short phrases, up to 64 tokens. Fast."),
             p("Qwen3-VL-Embedding or WeMM-Embedding", "open", "Long, detailed queries and documents. Needs a GPU."),
             p("Gemini Embedding 2", "closed", "No GPU. Up to 6 images per request.")]) },
@@ -859,6 +859,61 @@ result = client.models.embed_content(
 vectors = [e.values for e in result.embeddings]   # 3 lists of 768 floats</code></pre></div>
     </details>
 
+    <h3 id="represent-compare-group-and-search-images">Compare, group, and search images</h3>
+    <p class="prose">Two images are alike when their global embeddings point in the same direction. Cosine similarity measures that, on a scale from -1 to 1, where 1 means the same direction.</p>
+    <details class="code">
+      <summary><span class="ttl">Compare, group, and search images</span> <span class="lang">python · scikit-learn + transformers</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import numpy as np, torch
+from PIL import Image
+from sklearn.decomposition import PCA
+from sklearn.cluster import HDBSCAN
+from transformers import AutoModel, AutoProcessor
+
+# X: DINOv3 global embeddings, one row per image (n x 768), from embed() in Predict outcomes
+# category: a NumPy array with each image's category, such as its product type
+Z = X / np.linalg.norm(X, axis=1, keepdims=True)   # unit length, so a dot product is a cosine
+S = Z @ Z.T                                         # n x n cosine similarities, from -1 to 1
+nearest = np.argsort(-S[0])[1:6]                    # the 5 images most like image 0
+
+# Typicality: cosine similarity between each image and the mean embedding of its category
+typicality = np.zeros(len(Z))
+for c in np.unique(category):
+    m = category == c
+    proto = Z[m].mean(axis=0)
+    typicality[m] = Z[m] @ (proto / np.linalg.norm(proto))
+
+# Groups. HDBSCAN works poorly in hundreds of dimensions, so reduce them first
+# (umap-learn.readthedocs.io/en/latest/clustering.html). PCA to 50 is the simple route
+# and needs more than 50 images. UMAP to about 10 dimensions is the route those docs use.
+Z50 = PCA(n_components=50, random_state=0).fit_transform(Z)
+groups = HDBSCAN(min_cluster_size=5, copy=True).fit_predict(Z50)
+# HDBSCAN chooses the number of groups itself. Images that fit no group get the label -1:
+# these outliers are the most unusual images in the collection.
+# For a fixed number of groups in a very large collection, use k-means, or e-means
+# (Bessa et al. 2026), a faster version in Faiss: github.com/facebookresearch/faiss/tree/main/contrib/e_means
+
+# Text search. DINOv3 has no text side, so embed the images again with SigLIP 2.
+ckpt = "google/siglip2-so400m-patch16-384"   # tested with "google/siglip2-base-patch16-224", the small one
+model = AutoModel.from_pretrained(ckpt).eval()
+processor = AutoProcessor.from_pretrained(ckpt)
+
+@torch.inference_mode()
+def siglip_images(paths, bs=32):
+    out = []
+    for i in range(0, len(paths), bs):
+        imgs = [Image.open(p).convert("RGB") for p in paths[i:i + bs]]
+        e = model.get_image_features(**processor(images=imgs, return_tensors="pt")).pooler_output
+        out.append(torch.nn.functional.normalize(e, dim=-1))
+    return torch.cat(out)
+
+img_emb = siglip_images(image_paths)                # n x d, unit length
+with torch.inference_mode():
+    t = processor(text=["a red sports car"], padding="max_length", max_length=64, return_tensors="pt")
+    txt_emb = torch.nn.functional.normalize(model.get_text_features(**t).pooler_output, dim=-1)
+scores = (img_emb @ txt_emb.T).squeeze(1)           # cosine of each image with the phrase
+top10 = [image_paths[i] for i in scores.argsort(descending=True)[:10]]</code></pre></div>
+    </details>
+
     <h3>Use embeddings in a regression</h3>
     <div class="prose">
       <p>An embedding has hundreds or thousands of columns, often more than you have images, so ordinary least squares breaks down. Use a high-dimensional regression that shrinks or selects coefficients. Common choices are ridge, lasso, and elastic net, with the amount of shrinkage chosen by cross-validation (try each amount on held-out images and keep the best). Bayesian versions such as spike-and-slab or horseshoe priors do the same job and give a posterior distribution for every coefficient, allowing for uncertainty quantification. Use generalized linear model versions to accommodate various outcome types (e.g., binary, count, skewed positive).</p>
@@ -898,11 +953,46 @@ print(est.effect(), est.effect_interval())   # price effect and its 95% interval
       </ol>
     </div>
     <details class="code">
+      <summary><span class="ttl">TIPSv2: map a phrase onto the image</span> <span class="lang">python · transformers</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import torch, torch.nn.functional as F
+import matplotlib.pyplot as plt
+from transformers import AutoModel, AutoProcessor
+from transformers.image_utils import load_image
+
+ckpt = "google/tipsv2-b14"   # loads natively as Tipsv2Model; tokenizer needs `pip install sentencepiece protobuf`
+model = AutoModel.from_pretrained(ckpt).eval()
+processor = AutoProcessor.from_pretrained(ckpt)
+
+image = load_image("ad.jpg")
+phrases = ["a bottle", "a person", "a logo", "the background"]   # compare maps across phrases
+inputs = processor(text=phrases, images=image, padding="max_length", max_length=64,
+                   return_tensors="pt")              # resizes to 448 px, pixels in 0..1, no normalization
+with torch.inference_mode():
+    img_out = model.get_image_features(pixel_values=inputs.pixel_values)
+    txt_out = model.get_text_features(input_ids=inputs.input_ids, attention_mask=inputs.attention_mask)
+
+R, p = model.config.vision_config.num_register_tokens, model.config.vision_config.patch_size   # 1, 14
+H = W = inputs.pixel_values.shape[-1] // p                                  # 448 / 14 = 32
+patches = F.normalize(img_out.last_hidden_state[0, 1 + R:], dim=-1)        # (1024, 768): skip CLS + register
+text = F.normalize(txt_out.pooler_output, dim=-1)                          # (4, 768), one row per phrase
+maps = (patches @ text.T).T.reshape(len(phrases), H, W)                    # cosine of every patch with every phrase
+
+# Upsample each map to the image size and overlay it, one panel per phrase, on one color scale.
+up = F.interpolate(maps[None], size=image.size[::-1], mode="bilinear")[0]
+fig, axes = plt.subplots(1, len(phrases), figsize=(4 * len(phrases), 4))
+for ax, phrase, m in zip(axes, phrases, up):
+    ax.imshow(image); ax.imshow(m, cmap="jet", alpha=0.5, vmin=up.min(), vmax=up.max())
+    ax.set_title(phrase); ax.axis("off")
+fig.savefig("tipsv2_maps.png", bbox_inches="tight")
+# Google's zero-shot segmentation code (github.com/google-deepmind/tips) also averages each phrase over
+# prompt templates and changes how the last layer combines patches (value attention).</code></pre></div>
+    </details>
+    <details class="code">
       <summary>Outcome heatmap from an embeddings regression <span class="lang">python · scikit-learn</span></summary>
       <div class="codewrap"><pre><code class="language-python">import numpy as np
 from sklearn.linear_model import RidgeCV
 
-# P: a list with one (H*W, d) NumPy array per image: patches[0].numpy() from the snippet above
+# P: a list with one (H*W, d) NumPy array per image: patches[0].numpy() from the DINOv3 snippet above
 # y: the outcome for each image, such as log click-through rate
 X = np.stack([p.mean(axis=0) for p in P])                  # mean-pooled patches, (n, d)
 probe = RidgeCV(alphas=np.logspace(-2, 4, 25)).fit(X, y)
@@ -959,7 +1049,7 @@ heat = (P[0] @ probe.coef_).reshape(H, W)   # per-patch contribution for image 0
       <ol>
         <li>Split your images at random into a development set and a held-out set. Set the held-out set aside.</li>
         <li>On the development set, write a codebook: the question, the allowed answers, and two or three edge cases. The codebook is the prompt you give the model. Revise it as often as you like at this stage.</li>
-        <li>Freeze the prompt and the model version. Run the model on the held-out images and set it to always give its single most likely answer (greedy decoding), so a rerun gives the same labels. Log the model ID and date. For a closed API, call the dated model ID and store every raw response, because a rerun can still differ.</li>
+        <li>Freeze the prompt and the model version. Run the model on the held-out images and set it to always give its single most likely answer (greedy decoding), so a rerun gives the same labels. Record the exact model ID and the date. For a closed API, also store every raw response, because a rerun can still differ.</li>
         <li>Hand-code a random sample of about 400 held-out images and report how often people and the model agree. Also report inter-rater reliability measures such as Krippendorff's alpha.</li>
         <li>If the labels enter a regression, correct for their errors with the <a href="#inference">methods below</a>.</li>
       </ol>
@@ -988,6 +1078,70 @@ def label_image(path):
     out = model.generate(**inputs, max_new_tokens=10, do_sample=False)   # greedy: reproducible
     text = processor.decode(out[0][inputs["input_ids"].shape[-1]:], skip_special_tokens=True)
     return next((l for l in LABELS if l in text.lower()), "unparsed")</code></pre></div>
+    </details>
+
+    <p class="prose">You can ask a VLM to answer several questions about an image at once and return the answers as named fields (JSON), for example whether a person appears, how many people there are, and the price shown: <code>{"has_person": true, "n_people": 2, "price": "4.99"}</code>. VLMs answer this kind of question well when the answer is a category, a small count, or text printed in the ad.</p>
+    <details class="code">
+      <summary><span class="ttl">Label ads through a closed API</span> <span class="lang">python · anthropic</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import base64, datetime, json, mimetypes
+import anthropic
+
+client = anthropic.Anthropic()               # reads ANTHROPIC_API_KEY from the environment
+MODEL_ID = "claude-haiku-5-5"                # the low-cost tier; every Claude model ID is a pinned snapshot
+
+CODEBOOK = """You are coding a display ad. Answer each question about the image.
+has_person: true if at least one person (or part of a person, such as a hand) is visible.
+n_people: the number of people visible; 0 if none.
+ad_type: lifestyle (the product shown in use or in a scene), product-only (the product on a
+plain background), text-heavy (text covers more than half the image), or other.
+price_shown: the price printed in the ad, exactly as printed, or "" if none."""
+
+SCHEMA = {                                   # the answers come back as these named fields
+    "type": "object",
+    "properties": {
+        "has_person": {"type": "boolean"},
+        "n_people": {"type": "integer"},     # no minimum/maximum: the API rejects them
+        "ad_type": {"type": "string", "enum": ["lifestyle", "product-only", "text-heavy", "other"]},
+        "price_shown": {"type": "string"},
+    },
+    "required": ["has_person", "n_people", "ad_type", "price_shown"],
+    "additionalProperties": False,
+}
+
+def build_request(path):
+    with open(path, "rb") as f:
+        data = base64.standard_b64encode(f.read()).decode("utf-8")
+    return dict(
+        model=MODEL_ID,
+        max_tokens=2048,                     # leaves room for the model's thinking before the answer
+        output_config={"effort": "low",      # less thinking, fewer tokens
+                       "format": {"type": "json_schema", "schema": SCHEMA}},
+        # No temperature: current models reject it, so a rerun can differ. Store every raw response.
+        messages=[{"role": "user", "content": [
+            {"type": "image", "source": {"type": "base64",
+                                         "media_type": mimetypes.guess_type(path)[0],  # image/jpeg, image/png
+                                         "data": data}},
+            {"type": "text", "text": CODEBOOK}]}],
+    )
+
+def label_image(path, log_file="labels_raw.jsonl"):
+    response = client.messages.create(**build_request(path))
+    with open(log_file, "a") as log:         # step 3: raw response, model ID, and date
+        log.write(json.dumps({"image": path, "model": response.model,
+                              "date": datetime.date.today().isoformat(),
+                              "raw": response.model_dump(mode="json")}) + "\n")
+    if response.stop_reason != "end_turn":   # "refusal" or "max_tokens": the JSON may be incomplete
+        return "unparsed"
+    text = next(b.text for b in response.content if b.type == "text")   # skip thinking blocks
+    return json.loads(text)                  # {"has_person": True, "n_people": 2, "ad_type": ...}
+
+# The Message Batches API takes the same requests at half the price and returns within 24 hours:
+# from anthropic.types.messages.batch_create_params import Request
+# batch = client.messages.batches.create(requests=[
+#     Request(custom_id=f"ad_{i}", params=build_request(p)) for i, p in enumerate(paths)])
+# Poll client.messages.batches.retrieve(batch.id) until processing_status == "ended", then
+# for r in client.messages.batches.results(batch.id): store r, and parse r.result.message
+# as above. Results come back in any order, so match them by custom_id.</code></pre></div>
     </details>
 
     <div class="mkt">
@@ -1314,6 +1468,45 @@ model = ViTForImageClassification(model.config).eval()</code></pre></div>
         <tr><td><a href="https://www.nature.com/articles/s41467-019-08987-4">SpRAy</a><br><small>Lapuschkin et al. 2019</small></td><td>Groups the local heatmaps of many images to find strategies the model uses again and again, such as relying on a watermark or logo.</td><td>Shown in case studies, including a model that recognized horses by a copyright watermark. No benchmark yet.</td><td><a href="https://github.com/virelay/corelay">CoRelAy</a>. Works on maps from any model, including the Captum maps above.</td></tr>
       </tbody>
     </table></div>
+    <details class="code">
+      <summary><span class="ttl">Concepts behind a prediction with CRAFT</span> <span class="lang">python · xplique</span></summary>
+      <div class="codewrap"><pre><code class="language-python">import glob, sys
+import numpy as np, torch
+from PIL import Image
+from torchvision.models import resnet50, ResNet50_Weights
+from xplique.concepts import CraftTorch
+
+weights = ResNet50_Weights.IMAGENET1K_V2
+model = resnet50(weights=weights).eval()
+preprocess = weights.transforms()            # resize, crop to 224 x 224, normalize
+
+# CRAFT splits the model in two: g maps an image to activations, h maps activations to the score.
+# g must end in a layer whose outputs are never negative (here the ReLU at the end of layer4),
+# because CRAFT factors the activations with non-negative matrix factorization (NMF).
+g = torch.nn.Sequential(*list(model.children())[:-2])   # image -&gt; 2048 x 7 x 7 activations
+h = torch.nn.Sequential(model.avgpool, torch.nn.Flatten(), model.fc)   # activations -&gt; 1000 logits
+
+# For your own predictor, h is your fitted ridge as torch.nn.Linear(n_features, 1) with
+# class_id=0 below. DINOv3 patch embeddings can be negative, so CraftTorch rejects them.
+# Use a ReLU convolutional network as g, or HolisticCraftTorch with factorizer= set to Semi-NMF
+# from the Overcomplete library.
+
+folder = sys.argv[1] if len(sys.argv) &gt; 1 else "ads"
+paths = sorted(glob.glob(f"{folder}/*.*"))[:30]   # about 30 images that share the predicted class
+images = torch.stack([preprocess(Image.open(p).convert("RGB")) for p in paths])
+
+CLASS_ID = 571                               # the output to explain; ImageNet "gas pump" here
+craft = CraftTorch(input_to_latent_model=g, latent_to_logit_model=h,
+                   number_of_concepts=10, patch_size=64, batch_size=32,
+                   device="cuda" if torch.cuda.is_available() else "cpu")
+crops, crops_u, w = craft.fit(images, class_id=CLASS_ID)   # 64-pixel crops and their concept scores
+importances = craft.estimate_importance()    # Sobol total index: how much each concept moves the score
+
+for c in np.argsort(importances)[::-1][:5]:
+    print(f"concept {c}: importance {importances[c]:.3f}")
+craft.plot_concepts_importances()            # bar chart of all concepts
+craft.plot_concepts_crops(nb_crops=10)       # the crops that score highest on each concept</code></pre></div>
+    </details>
   </div>
 </section>
 <section class="s" id="inference">
@@ -1867,7 +2060,7 @@ export_to_video(edited, "ad_0193_white_background.mp4", fps=16)
 
   <div class="note">
     <h4>A VLM or a specialist?</h4>
-    <p>You can ask a VLM to answer several questions about an image at once and return the answers as named fields (JSON), for example whether a person appears, how many people there are, and the price shown: <code>{"has_person": true, "n_people": 2, "price": "4.99"}</code>. VLMs answer this kind of question well when the answer is a category, a small count, or text printed in the ad. They do worse than specialist tools when the answer is measured in pixels, such as where an object sits or how much of the image it covers. On ODinW-13, a benchmark that scores how well predicted boxes match hand-drawn boxes (mAP), Qwen3-VL-235B scores 48.6 and SAM 3 scores 61.0. The two papers score slightly differently, so read the gap as approximate. Use a VLM for category labels and a specialist tool for boxes, outlines (masks), and areas. Either way, check the output against a hand-coded sample.</p>
+    <p>To get several labels as named fields (JSON), see <a href="#label">Label images</a>. VLMs do worse than specialist tools when the answer is measured in pixels, such as where an object sits or how much of the image it covers. On ODinW-13, a benchmark that scores how well predicted boxes match hand-drawn boxes (mAP), Qwen3-VL-235B scores 48.6 and SAM 3 scores 61.0. The two papers score slightly differently, so read the gap as approximate. Use a VLM for category labels and a specialist tool for boxes, outlines (masks), and areas. Either way, check the output against a hand-coded sample.</p>
   </div>
 
   <h3>Detect and segment objects</h3>
