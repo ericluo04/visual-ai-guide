@@ -990,7 +990,7 @@ top10 = [image_paths[i] for i in scores.argsort(descending=True)[:10]]</code></p
     <div class="prose">
       <p>An embedding has hundreds or thousands of columns, often more than you have images, so ordinary least squares breaks down. Use a high-dimensional regression that shrinks or selects coefficients. Common choices are ridge, lasso, and elastic net, with the amount of shrinkage chosen by cross-validation (try each amount on held-out images and keep the best). Bayesian versions such as spike-and-slab or horseshoe priors do the same job and give a posterior distribution for every coefficient, allowing for uncertainty quantification. Use generalized linear model versions to accommodate various outcome types (e.g., binary, count, skewed positive).</p>
       <p>Avoid reducing the embedding to a handful of principal components (PCA) by default. PCA keeps the directions where images vary most, and those need not be the directions that matter for your outcome. A handful of linear components can also drop information that the model stored in other directions or nonlinearly.</p>
-      <p>Often the image is a control and the question is about something else: the effect of price, a promotion, or a person's face in the ad. The image is then a confounder: it is related to both the cause you study and the outcome. <a href="https://arxiv.org/abs/2402.01785">DoubleMLDeep (Klaassen et al. 2024)</a> adjusts for such a confounder with double machine learning, the method in the code below, using image and text controls. The primary concern here for identification is whether overlap is satisfied, so be sure to check for that (e.g., visually with propensity score distribution plots).</p>
+      <p>Often the image is a control and the question is about something else: the effect of price, a promotion, or a person's face in the ad. The image is then a confounder: it is related to both the cause you study and the outcome. <a href="https://arxiv.org/abs/2402.01785">DoubleMLDeep (Klaassen et al. 2024)</a> adjusts for such a confounder with double machine learning, the method in the code below, using image and text controls. For an introduction to double machine learning, including an example that controls for text embeddings, see <a href="https://arxiv.org/abs/2504.08324">Ahrens et al. (forthcoming, Journal of Economic Literature)</a>. The primary concern here for identification is whether overlap is satisfied, so be sure to check for that (e.g., visually with propensity score distribution plots).</p>
     </div>
     <details class="code">
       <summary><span class="ttl">Effect of price, with the image embedding as a control</span> <span class="lang">python · econml</span></summary>
@@ -1002,7 +1002,8 @@ from econml.dml import LinearDML
 est = LinearDML(model_y=LassoCV(), model_t=LassoCV(), cv=5, random_state=0)
 est.fit(y, d, X=None, W=E)       # W = controls; X = variables the effect may vary with
 print(est.effect(), est.effect_interval())   # price effect and its 95% interval
-# DoubleML equivalent: doubleml.DoubleMLPLR(doubleml.DoubleMLData.from_arrays(x=E, y=y, d=d), ...)</code></pre></div>
+# DoubleML equivalent: doubleml.DoubleMLPLR(doubleml.DoubleMLData.from_arrays(x=E, y=y, d=d), ...)
+# R: ddml::ddml_plm from the ddml package (Ahrens et al.), same partially linear model</code></pre></div>
     </details>
     <p class="prose">If a prediction made from embeddings enters a later regression, its errors carry into that regression. See <a href="#inference">inference with predicted variables</a>.</p>
     <div class="mkt">
